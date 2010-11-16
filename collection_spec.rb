@@ -4,16 +4,26 @@ describe "Collection" do
     @collection = window.div
   end
 
-  #direct attribute access
+  # tag(what, *conditions)
 
-  #element filter
+  # attrs(what)
 
-  #find
+  # style
 
-  #attr
+  # states
+  # ------
 
-  # stuff like
-  #   check, only on checkboxes
-  #   enabled, only on "inputs"
+  # checked?
+  # check!
+  # uncheck!
+  # toggle_check!
+
+  # enabled?
+  # enable!
+  # disable!
+
+  # visible?
+  # show!
+  # hide!
 
 end

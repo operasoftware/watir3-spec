@@ -65,8 +65,10 @@ describe "Window" do
       end.shoud be_true
     end
 
-    it "is empty if the selector does not match" do
-      window.css("#hoobaflooba").should be_empty
+    it "gets elements with multiple classes"
+
+    it "is empty if the class does not match" do
+      window.class(:hoobaflooba).should be_empty
     end
   end
 

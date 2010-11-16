@@ -65,7 +65,11 @@ describe "Window" do
       end.shoud be_true
     end
 
-    it "gets elements with multiple classes"
+    it "gets elements with multiple classes" do
+      window.class(:one).all? do |element|
+        element.class.should match /one/
+      end.should be_true
+    end
 
     it "is empty if the class does not match" do
       window.class(:hoobaflooba).should be_empty
@@ -78,5 +82,10 @@ describe "Window" do
 
   # click(x,y)
 
-  # element = tagName(*)
+  describe "#all" do
+    it "contains all elements" do
+
+    end
+  end
+
 end

@@ -1,13 +1,22 @@
 # encoding: utf-8
 require File.expand_path("../spec_helper", __FILE__)
 
-not_compliant_on :watir do
+bug "http://github.com/jarib/watir-webdriver/issues#issue/17", :webdriver do
+
   describe "<frame> Frames" do
 
     before :each do
       browser.goto(WatirSpec.files + "/frames.html")
     end
 
+    bug "http://github.com/jarib/celerity/issues#issue/25", :celerity do
+      describe "with selectors" do
+        it "returns the matching elements" do
+          browser.frames(:name => "frame1").to_a.should == [browser.frame(:class => "frame1")]
+        end
+      end
+    end
+    
     describe "#length" do
       it "returns the correct number of frames" do
         browser.frames.length.should == 2
@@ -16,7 +25,7 @@ not_compliant_on :watir do
 
     describe "#[]" do
       it "returns the frame at the given index" do
-        browser.frames[1].id.should == "frame_1"
+        browser.frames[0].id.should == "frame_1"
       end
     end
 
@@ -25,9 +34,8 @@ not_compliant_on :watir do
         count = 0
 
         browser.frames.each_with_index do |f, index|
-          f.name.should == browser.frame(:index, index+1).name
-          f.id.should ==  browser.frame(:index, index+1).id
-          f.value.should == browser.frame(:index, index+1).value
+          f.id.should ==  browser.frame(:index, index).id
+          f.value.should == browser.frame(:index, index).value
 
           count += 1
         end
@@ -51,7 +59,7 @@ not_compliant_on :watir do
 
     describe "#[]" do
       it "returns the frame at the given index" do
-        browser.frames[1].id.should == "frame_1"
+        browser.frames[0].id.should == "frame_1"
       end
     end
 
@@ -60,9 +68,9 @@ not_compliant_on :watir do
         count = 0
 
         browser.frames.each_with_index do |f, index|
-          f.name.should == browser.frame(:index, index+1).name
-          f.id.should ==  browser.frame(:index, index+1).id
-          f.value.should == browser.frame(:index, index+1).value
+          f.name.should == browser.frame(:index, index).name
+          f.id.should ==  browser.frame(:index, index).id
+          f.value.should == browser.frame(:index, index).value
 
           count += 1
         end

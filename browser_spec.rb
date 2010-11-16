@@ -9,26 +9,34 @@ describe "Browser" do
       browser.should exist
     end
 
-    it "returns false after IE#close" do
-      b = WatirSpec.new_browser
-      b.close
-      b.should_not exist
+    bug "http://github.com/jarib/watir-webdriver/issues/issue/29", [:webdriver, :ie] do
+      it "returns false after Browser#close" do
+        b = WatirSpec.new_browser
+        b.close
+        b.should_not exist
+      end
     end
   end
 
+  # this should be rewritten - the actual string returned varies alot between implementations
   describe "#html" do
-    # what guard we want to use here kind of depends on how other impls. behave
-    not_compliant_on :watir do
-      it "returns the downloaed HTML of the page" do
-        browser.goto(WatirSpec.files + "/non_control_elements.html")
-        browser.html.should == File.read(File.dirname(__FILE__) + "/html/non_control_elements.html")
+    not_compliant_on [:webdriver, :ie] do
+      it "returns the DOM of the page as an HTML string" do
+        browser.goto(WatirSpec.files + "/right_click.html")
+        html = browser.html.downcase # varies between browsers
+
+        html.should =~ /^<html/
+        html.should include('<meta content="text/html; charset=utf-8" http-equiv="content-type" />')
       end
     end
 
-    deviates_on :watir do
+    deviates_on [:webdriver, :ie] do
       it "returns the DOM of the page as an HTML string" do
         browser.goto(WatirSpec.files + "/right_click.html")
-        browser.html.should == "<HTML><HEAD><TITLE>Right Click Test</TITLE>\r\n<META http-equiv=Content-type content=\"text/html; charset=utf-8\">\r\n<SCRIPT src=\"javascript/helpers.js\" type=text/javascript charset=utf-8></SCRIPT>\r\n</HEAD>\r\n<BODY>\r\n<DIV id=messages></DIV>\r\n<DIV oncontextmenu='WatirSpec.addMessage(\"right-clicked\")' id=click>Right click!</DIV></BODY></HTML>"
+        html = browser.html.downcase # varies between browsers
+
+        html.should =~ /^<html/
+        html.should include('<meta content="text/html; charset=utf-8" http-equiv=content-type>')
       end
     end
   end
@@ -41,7 +49,7 @@ describe "Browser" do
   end
 
   describe "#status" do
-    bug "WTR-348", :watir do
+    not_compliant_on :webdriver do # need to set Firefox preference, might do this when selenium-webdriver exposes the profile used
       it "returns the current value of window.status" do
         browser.goto(WatirSpec.files + "/non_control_elements.html")
 
@@ -73,24 +81,14 @@ describe "Browser" do
     end
   end
 
-  describe "#document" do
-    it "returns the underlying object" do
-      browser.goto(WatirSpec.files + "/non_control_elements.html")
-
-      case browser.class.name
-      when "Celerity::Browser"
-        browser.document.should be_instance_of(Java::ComGargoylesoftwareHtmlunitHtml::HtmlHtml)
-      else
-        browser.document.should_not be_nil
+  bug "http://github.com/jarib/watirspec/issues/issue/8", [:webdriver, :ie], [:webdriver, :chrome] do
+    describe ".start" do
+      it "goes to the given URL and return an instance of itself" do
+        browser = WatirSpec.implementation.browser_class.start("#{WatirSpec.files}/non_control_elements.html")
+        browser.should be_instance_of(WatirSpec.implementation.browser_class)
+        browser.title.should == "Non-control elements"
+        browser.close
       end
-    end
-  end
-
-  describe ".start" do
-    it "goes to the given URL and return an instance of itself" do
-      browser = WatirSpec.implementation.browser_class.start(WatirSpec.files + "/non_control_elements.html")
-      browser.should be_instance_of(WatirSpec.implementation.browser_class)
-      browser.title.should == "Non-control elements"
     end
   end
 
@@ -116,10 +114,10 @@ describe "Browser" do
   describe "#refresh" do
     it "refreshes the page" do
       browser.goto(WatirSpec.files + "/non_control_elements.html")
-      browser.span(:name, 'footer').click
-      browser.span(:name, 'footer').text.should include('Javascript')
+      browser.span(:class, 'footer').click
+      browser.span(:class, 'footer').text.should include('Javascript')
       browser.refresh
-      browser.span(:name, 'footer').text.should_not include('Javascript')
+      browser.span(:class, 'footer').text.should_not include('Javascript')
     end
   end
 
@@ -162,9 +160,9 @@ describe "Browser" do
                "#{WatirSpec.host}/forms_with_input_elements.html",
                "#{WatirSpec.host}/definition_lists.html"
       ].map do |page|
-          browser.goto page
-          browser.url
-        end
+        browser.goto page
+        browser.url
+      end
 
       3.times { browser.back }
       browser.url.should == urls.first
@@ -173,66 +171,31 @@ describe "Browser" do
     end
   end
 
-  # Other
-  describe "#contains_text" do
-    before :each do
-      browser.goto(WatirSpec.files + "/non_control_elements.html")
-    end
-
-    it "raises ArgumentError when called with no arguments" do
-      lambda { browser.contains_text }.should raise_error(ArgumentError)
-    end
-
-    it "raises TypeError when called with wrong arguments" do
-      lambda { browser.contains_text(nil) }.should raise_error(TypeError)
-      lambda { browser.contains_text(42) }.should raise_error(TypeError)
-    end
-
-    it "returns the index if the given text exists" do
-        browser.contains_text('Dubito, ergo cogito, ergo sum.').should be_instance_of(Fixnum)
-        browser.contains_text(/Dubito.*sum./).should_not be_nil
-    end
-
-    it "returns nil if the text doesn't exist" do
-      browser.contains_text('no_such_text').should be_nil
-      browser.contains_text(/no_such_text/).should be_nil
-    end
-
-    it "does not raise error on a blank page" do
-      browser = WatirSpec.new_browser
-      lambda { browser.contains_text('') }.should_not raise_error
-    end
-  end
-
   describe "#element_by_xpath" do
     before :each do
       browser.goto(WatirSpec.files + "/forms_with_input_elements.html")
     end
 
-    bug "WTR-343", :watir do
-      it "finds submit buttons matching the given xpath" do
-        browser.element_by_xpath("//input[@type='submit']").should exist
-      end
-
-      it "finds reset buttons matching the given xpath" do
-        browser.element_by_xpath("//input[@type='reset']").should exist
-      end
-
-      it "finds image buttons matching the given xpath" do
-        browser.element_by_xpath("//input[@type='image']").should exist
-      end
-
-      it "finds the element matching the given xpath" do
-        browser.element_by_xpath("//input[@type='password']").should exist
-      end
+    it "finds submit buttons matching the given xpath" do
+      browser.element_by_xpath("//input[@type='submit']").should exist
     end
 
-    bug "WTR-327", :watir do
-      it "will not find elements that doesn't exist" do
-        e = browser.element_by_xpath("//input[@type='foobar']")
-        e.should_not exist
-        lambda { e.set('foo') }.should raise_error(UnknownObjectException)
-      end
+    it "finds reset buttons matching the given xpath" do
+      browser.element_by_xpath("//input[@type='reset']").should exist
+    end
+
+    it "finds image buttons matching the given xpath" do
+      browser.element_by_xpath("//input[@type='image']").should exist
+    end
+
+    it "finds the element matching the given xpath" do
+      browser.element_by_xpath("//input[@type='password']").should exist
+    end
+
+    it "will not find elements that doesn't exist" do
+      e = browser.element_by_xpath("//input[@type='foobar']")
+      e.should_not exist
+      lambda { e.text }.should raise_error(UnknownObjectException)
     end
   end
 
@@ -241,20 +204,28 @@ describe "Browser" do
       browser.goto(WatirSpec.files + "/forms_with_input_elements.html")
     end
 
-    bug "WTR-344", :watir do
+    not_compliant_on [:webdriver, :ie], :celerity do
       it "returns an Array of matching elements" do
         objects = browser.elements_by_xpath("//*[@type='text']")
         objects.should be_kind_of(Array)
+
+        objects.size.should == 5
+      end
+    end
+
+    deviates_on [:webdriver, :ie], :celerity do
+      it "returns an Array of matching elements" do
+        objects = browser.elements_by_xpath("//*[@type='text']")
+        objects.should be_kind_of(Array)
+
         objects.size.should == 6
       end
     end
 
-    bug "WTR-328", :watir do
-      it "returns an empty Array if there are no matching elements" do
-        objects = browser.elements_by_xpath("//*[@type='foobar']")
-        objects.should be_kind_of(Array)
-        objects.size.should == 0
-      end
+    it "returns an empty Array if there are no matching elements" do
+      objects = browser.elements_by_xpath("//*[@type='foobar']")
+      objects.should be_kind_of(Array)
+      objects.size.should == 0
     end
   end
 
@@ -267,10 +238,14 @@ describe "Browser" do
       output = ''
       proc = Proc.new { |browser| output << browser.text }
 
-      browser.add_checker(proc)
-      browser.goto(WatirSpec.files + "/non_control_elements.html")
+      begin
+        browser.add_checker(proc)
+        browser.goto(WatirSpec.files + "/non_control_elements.html")
 
-      output.should include('Dubito, ergo cogito, ergo sum')
+        output.should include('Dubito, ergo cogito, ergo sum')
+      ensure
+        browser.disable_checker(proc)
+      end
     end
   end
 

@@ -1,3 +1,6 @@
+# encoding: utf-8
+require File.expand_path("../../watirspec_helper", __FILE__)
+
 describe "Element" do
   #direct attribute access
   before :each do

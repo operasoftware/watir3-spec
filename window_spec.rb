@@ -29,6 +29,12 @@ describe "Window" do
       end.shoud be_true
     end
 
+    it "contains only elements restricted by the selector" do
+      window.get_elements_by_tag(:div, :title => "Lorem ipsum").all? do |element|
+        element.attr(:title) == "Lorem ipsum"
+      end.should be_true
+    end
+
     it "is empty if the elements do not exist" do
       window.get_elements_by_tag(:hoobaflooba).should be_empty
     end

@@ -4,7 +4,7 @@ require File.expand_path("../../watirspec_helper", __FILE__)
 describe "Collection" do
   before :each do
     browser.goto(fixture('non_control_elements.html'))
-    @collection = window.div
+    @collection = window.get_elements_by_tag(:div)
   end
 
   # tag(what, *conditions)

@@ -5,20 +5,20 @@ describe "Element" do
   #direct attribute access
   before :each do
     browser.goto(fixture('non_control_elements.html'))
-    @element = window.strong(:id => "descartes").first
-    @list = window.ul(:id => "navbar").first
-    @leaf = window.a(:id => "link_2").first
+    @element = window.get_elements_by_id("descartes").first
+    @list = window.get_elements_by_id("navbar").first
+    @leaf = window.get_elements_by_id("link_2").first
   end
 
   # parent
   describe "#parent" do
-    it "is the parent element of this element" do
+    it "is the parent element of an element" do
       # two .parent to get to an IDed element
       @element.parent.parent.attr(:id).should == "promo"
     end
 
     it "is nil for the root element" do
-      window.html.parent.should == nil
+      window.get_elements_by_tag(:html).first.parent.should == nil
     end
   end
 
@@ -28,10 +28,10 @@ describe "Element" do
       @list.children.should_not be_empty
     end
 
-    it "contains the child elements of this element" do
+    it "contains the child elements of an element" do
       @list.children.all? do |child|
         child.parent.attr(:id) == "navbar"
-      end.shoud be_true
+      end.should be_true
     end
 
     it "is empty when the element has no children" do
@@ -57,7 +57,7 @@ describe "Element" do
     end
 
     it "is an empty string when there is no text" do
-      window.body.children.first.text.should == ""
+      window.get_elements_by_tag(:body).first.children.first.text.should == ""
     end
   end
 
@@ -68,7 +68,7 @@ describe "Element" do
     end
 
     it "is an empty string if the element contains no text or html" do
-      window.body.div.first.html.should == ""
+      window.get_elements_by_tag(:body).first.children.first.html.should == ""
     end
   end
 
@@ -79,11 +79,11 @@ describe "Element" do
   describe "#checked?" do
     before :each do
       browser.goto(fixture('non_control_elements.html'))
-      @textbox = window.input(:id => "new_user_username").first
-      @checkbox_checked = window.input(:id => "new_user_interests_books").first
-      @uncheckbox_checked = window.input(:id => "bowling").first
-      @radio_checked = window.input(:id => "new_user_newsletter_yes").first
-      @radio_unchecked = window.input(:id => "new_user_newsletter_no").first
+      @textbox = window.get_elements_by_id("new_user_username").first
+      @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
+      @uncheckbox_checked = window.get_elements_by_id("bowling").first
+      @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
+      @radio_unchecked = window.get_elements_by_id("new_user_newsletter_no").first
     end
 
     # TODO "checked" is available for all <input> and <command>. Change this
@@ -144,19 +144,19 @@ describe "Element" do
     end
 
     it "is true for a visible element" do
-      window.h1.first.should be_true
+      window.get_elements_by_tag(:h1).first.should be_true
     end
 
     it "is false for an element with style attribute 'display:none'" do
-      window.div(:id => "parent").first.visible?.should be_false
+      window.get_elements_by_id("parent").first.visible?.should be_false
     end
 
     it "is false a child of an element with style attribute 'display:none'" do
-      window.div(:id => "child").first.visible?.should be_false
+      window.get_elements_by_id("child").first.visible?.should be_false
     end
 
     it "is false for an element hidden by CSS" do
-      window.div(:id => "hidden_by_css").first.visible?.should be_false
+      window.get_elements_by_id("hidden_by_css").first.visible?.should be_false
     end
 
   end

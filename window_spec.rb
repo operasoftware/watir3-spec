@@ -14,65 +14,65 @@ describe "Window" do
 
       elements.should_not be_empty
       elements.length.should == 1
-      elements.first.id.should == "header"
+      elements.first.attr(:id).should == "header"
     end
   end
 
-  describe "#tag" do
+  describe "#get_elements_by_tag" do
     it "is not empty if the tag exists" do
-      window.tag(:div).should_not be_empty
+      window.get_elements_by_tag(:div).should_not be_empty
     end
 
     it "contains all elements of the tag name" do
-      window.tag(:div).all? do |element|
+      window.get_elements_by_tag(:div).all? do |element|
         element.tag_name == "div"
       end.shoud be_true
     end
 
     it "is empty if the elements do not exist" do
-      window.tag(:hoobaflooba).should be_empty
+      window.get_elements_by_tag(:hoobaflooba).should be_empty
     end
   end
 
   # css
   # we don't want a complete CSS selector test suite here, so just some common
   # selectors
-  describe "#css" do
+  describe "#get_elements_by_css" do
     it "is not empty if an element matches the css selector" do
-      window.css("#outer_container > div").should_not be_empty
+      window.get_elements_by_css("#outer_container > div").should_not be_empty
     end
 
     it "contains all elements selected by the selector" do
-      window.css("#outer_container > div").all? do |element|
-        element.parent.id.should == "outer_container"
+      window.get_elements_by_css("#outer_container > div").all? do |element|
+        element.parent.attr(:id).should == "outer_container"
       end.should be_true
     end
 
     it "is empty if the selector does not match" do
-      window.css("#hoobaflooba").should be_empty
+      window.get_elements_by_css("#hoobaflooba").should be_empty
     end
   end
 
   # class
-  describe "#class" do
+  describe "#get_elements_by_class" do
     it "is not empty if an element matches the class" do
-      window.class(:lead).should_not be_empty
+      window.get_elements_by_class(:lead).should_not be_empty
     end
 
     it "contains all elements with the given class" do
-      window.class(:lead).all? do |element|
-        element.class.should match /lead/
+      window.get_elements_by_class(:lead).all? do |element|
+        element.attr(:class).should match /lead/
       end.shoud be_true
     end
 
     it "gets elements with multiple classes" do
-      window.class(:one).all? do |element|
-        element.class.should match /one/
+      window.get_elements_by_class(:one).all? do |element|
+        element.attr(:class).should match /one/
       end.should be_true
     end
 
     it "is empty if the class does not match" do
-      window.class(:hoobaflooba).should be_empty
+      window.get_elements_by_class(:hoobaflooba).should be_empty
     end
   end
 
@@ -82,10 +82,5 @@ describe "Window" do
 
   # click(x,y)
 
-  describe "#all" do
-    it "contains all elements" do
-
-    end
-  end
-
+  # all
 end

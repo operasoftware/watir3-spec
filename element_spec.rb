@@ -72,6 +72,14 @@ describe "Element" do
     end
   end
 
+  # tag_name
+  describe "#tag_name" do
+    it "is the tag name of an element" do
+      @element.tag_name.should == "strong"
+      @list.tag_name.should == "ul"
+    end
+  end
+
   # states
   # ------
 
@@ -178,7 +186,6 @@ describe "Element" do
   # attributes
   # ----------
 
-  # tag_name
   # style
 
 end

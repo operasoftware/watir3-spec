@@ -62,6 +62,15 @@ describe "Element" do
   end
 
   # html
+  describe "#html" do
+    it "is the inner HTML of the element" do
+      @element.html.should == 'Dubito, <em class="important-class" id="important-id" title="ergo cogito">ergo cogito</em>, ergo sum.'
+    end
+
+    it "is an empty string if the element contains no text or html" do
+      window.body.div.first.html.should == ""
+    end
+  end
 
   # actions
   # -------

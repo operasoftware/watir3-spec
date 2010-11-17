@@ -122,8 +122,7 @@ describe "Element" do
   describe "#enabled?" do
     before :each do
       browser.goto(fixture('non_control_elements.html'))
-      @inputs = window.input
-
+      @inputs = window.get_elements_by_tag(:input)
     end
 
     # "disabled" attribute is available on quite a few obscure elements. Toss
@@ -144,7 +143,7 @@ describe "Element" do
     end
 
     it "is true for a visible element" do
-      window.get_elements_by_tag(:h1).first.should be_true
+      window.get_elements_by_tag(:h1).first.visible?.should be_true
     end
 
     it "is false for an element with style attribute 'display:none'" do

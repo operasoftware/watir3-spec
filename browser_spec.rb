@@ -5,4 +5,11 @@ describe "Browser" do
 
   #goto(), back(), forward(), version, url, get/set prefs()
 
+  describe "#goto" do
+    it "navigates to a url" do
+      browser.goto("http://example.com/")
+      window.url.should == "http://example.com/"
+    end
+  end
+
 end

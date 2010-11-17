@@ -63,8 +63,8 @@ describe "Element" do
 
   # html
   describe "#html" do
-    it "is the inner HTML of the element" do
-      @element.html.should == 'Dubito, <em class="important-class" id="important-id" title="ergo cogito">ergo cogito</em>, ergo sum.'
+    it "is the outer HTML of the element" do
+      @element.html.should == '<strong id="descartes" class="descartes">Dubito, <em class="important-class" id="important-id" title="ergo cogito">ergo cogito</em>, ergo sum.</strong>'
     end
 
     it "is an empty string if the element contains no text or html" do
@@ -87,16 +87,7 @@ describe "Element" do
   # show!
   # hide!
 
-  # states
-  # ------
-
-  # checked?
-
-  # enabled?
-
-  # visible?
-
-  # properties
+  # attributes
   # ----------
 
   # tag_name

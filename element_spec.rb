@@ -72,6 +72,95 @@ describe "Element" do
     end
   end
 
+  # states
+  # ------
+
+  # checked?
+  describe "#checked?" do
+    before :each do
+      browser.goto(fixture('non_control_elements.html'))
+      @textbox = window.input(:id => "new_user_username").first
+      @checkbox_checked = window.input(:id => "new_user_interests_books").first
+      @uncheckbox_checked = window.input(:id => "bowling").first
+      @radio_checked = window.input(:id => "new_user_newsletter_yes").first
+      @radio_unchecked = window.input(:id => "new_user_newsletter_no").first
+    end
+
+    # TODO "checked" is available for all <input> and <command>. Change this
+    # test?
+    it "exists on radio button elements" do
+      @radio_checked.should respond_to :checked?
+    end
+
+    it "exists on checkbox elements" do
+      @checkbox_checked.should respond_to :checked?
+    end
+
+    it "does not exist on non-checkbox or radio button elements" do
+      @textbox.should_not respond_to :checked?
+      @element.should_not respond_to :checked?
+    end
+
+    it "is true if a checkbox is checked" do
+      @checkbox_checked.checked?.should be_true
+    end
+
+    it "is false if a checkbox is not checked" do
+      @checkbox_unchecked.checked?.should be_false
+    end
+
+    it "is true if a radio button is checked" do
+      @radio_checked.checked?.should be_true
+    end
+
+    it "is false if a radio button is not checked" do
+      @radio_unchecked.checked?.should be_false
+    end
+  end
+
+  # enabled?
+  describe "#enabled?" do
+    before :each do
+      browser.goto(fixture('non_control_elements.html'))
+      @inputs = window.input
+
+    end
+
+    # "disabled" attribute is available on quite a few obscure elements. Toss
+    # up between limiting to common ones, all html5, all elements that have a
+    # .disabled property in Javascript, or all elements
+    it "exists on input elements" do
+      @inputs.all? do |input|
+        input.respond_to? :enabled?
+      end.should be_true
+    end
+  end
+
+  # visible?
+  # NOTE should this be false for "visibility: hidden"?
+  describe "#visible?" do
+    before :each do
+      browser.goto(fixture("display.html"))
+    end
+
+    it "is true for a visible element" do
+      window.h1.first.should be_true
+    end
+
+    it "is false for an element with style attribute 'display:none'" do
+      window.div(:id => "parent").first.visible?.should be_false
+    end
+
+    it "is false a child of an element with style attribute 'display:none'" do
+      window.div(:id => "child").first.visible?.should be_false
+    end
+
+    it "is false for an element hidden by CSS" do
+      window.div(:id => "hidden_by_css").first.visible?.should be_false
+    end
+
+  end
+
   # actions
   # -------
 

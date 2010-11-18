@@ -7,6 +7,9 @@ describe "Window" do
     browser.goto(fixture('non_control_elements.html'))
   end
 
+  # element access
+  # --------------
+
   describe "#get_elements_by_id" do
 
     it "returns an element with the given ID" do
@@ -26,7 +29,7 @@ describe "Window" do
     it "contains all elements of the tag name" do
       window.get_elements_by_tag(:div).all? do |element|
         element.tag_name == "div"
-      end.shoud be_true
+      end.should be_true
     end
 
     it "contains only elements restricted by the selector" do
@@ -68,7 +71,7 @@ describe "Window" do
     it "contains all elements with the given class" do
       window.get_elements_by_class(:lead).all? do |element|
         element.attr(:class).should match /lead/
-      end.shoud be_true
+      end.should be_true
     end
 
     it "gets elements with multiple classes" do

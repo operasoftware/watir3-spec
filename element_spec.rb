@@ -39,7 +39,7 @@ describe "Element" do
     end
   end
 
-  # attr(what)
+  # attr(what, value=nil)
   describe "#attr" do
     it "gets the value of the given attribute" do
       @element.attr(:class).should == "descartes"
@@ -47,6 +47,11 @@ describe "Element" do
 
     it "is nil when the attribute does not exist" do
       @element.attr(:hoobaflooba).should == nil
+    end
+
+    it "sets the attribute value when passed a value" do
+      @element.attr(:id => "value")
+      @element.attr(:id).should == "value"
     end
   end
 
@@ -61,6 +66,18 @@ describe "Element" do
     end
   end
 
+  describe "#text=" do
+    it "sets the text content of the element" do
+      @element.children.first.text = "test"
+      @element.text.should == "Dubito, test, ergo sum."
+    end
+
+    it "overwrites child elements" do
+      @element.text = "test"
+      @element.children.should be_empty
+    end
+  end
+
   # html
   describe "#html" do
     it "is the outer HTML of the element" do
@@ -69,6 +86,19 @@ describe "Element" do
 
     it "is an empty string if the element contains no text or html" do
       window.get_elements_by_tag(:body).first.children.first.html.should == ""
+    end
+  end
+
+  describe "#html=" do
+    it "sets the outer HTML of the element" do
+      @element.children.first.html = '<b>test</b>'
+      @element.html.should == '<strong id="descartes" class="descartes">Dubito, <b>test</b>, ergo sum.</strong>'
+    end
+
+    it "creates child elements" do
+      @element.children.first.html = '<b>one</b> <b class="test">two</b>'
+      @element.children.length.should == 2
+      @element.children[1].attr(:class).should == "test"
     end
   end
 

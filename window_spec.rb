@@ -234,10 +234,13 @@ describe 'Window' do
   # -----------------
 
   describe '#maximize' do
+    before :each do
+      # Make sure we aren't already maximized
+      window.restore
+    end
+
     it 'maximizes the window' do
       body = window.find_elements_by_tag(:body).first
-      # make sure we aren't already maximized
-      window.restore
       width = body.width
       window.maximize
       body.width.should be > width
@@ -247,19 +250,11 @@ describe 'Window' do
   describe '#restore' do
     it 'restores (unmaximizes) the window' do
       body = window.get_elements_by_tag(:body).first
-      # make sure we aren't already restored
+      # Make sure we aren't already restored
       window.maximize
       width = body.width
-      window.restore()
+      window.restore
       body.width.should be < width
-    end
-  end
-
-  describe '#close' do
-    it 'destroys the window' do
-      window.close
-      window.exists?.should be_false
-      window.find_elements_by_tag(:title).should raise_error
     end
   end
 
@@ -274,4 +269,18 @@ describe 'Window' do
     end
   end
 
+  describe '#close' do
+    it 'destroys the window' do
+      window.close
+      window.exists?.should be_false
+      window.find_elements_by_tag(:title).should raise_error
+    end
+  end
+
+  describe '#new' do
+    it 'creates a new window' do
+      new_window = browser.url = fixtures('non-control-elements.html')
+      new_window.exists?.should be_true
+    end
+  end
 end

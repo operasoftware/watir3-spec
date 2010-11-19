@@ -10,7 +10,7 @@ describe 'Window' do
   # element access
   # --------------
 
-  describe '#get_elements_by_id' do
+  describe '#find_elements_by_id' do
     it 'returns an element with the given ID' do
       elements = window.find_elements_by_id('header')
 
@@ -20,8 +20,8 @@ describe 'Window' do
     end
   end
 
-  describe '#get_elements_by_tag' do
-    it 'is not empty if the tag exists' do
+  describe '#find_elements_by_tag' do
+    it 'not empty if the tag exists' do
       window.find_elements_by_tag(:div).should_not be_empty
     end
 
@@ -37,7 +37,7 @@ describe 'Window' do
       end.should be_true
     end
 
-    it 'is empty if the elements do not exist' do
+    it 'empty if the elements do not exist' do
       window.find_elements_by_tag(:hoobaflooba).should be_empty
     end
   end
@@ -45,8 +45,8 @@ describe 'Window' do
   # css
   # we don't want a complete CSS selector test suite here, so just some common
   # selectors
-  describe '#get_elements_by_css' do
-    it 'is not empty if an element matches the css selector' do
+  describe '#find_elements_by_css' do
+    it 'not empty if an element matches the css selector' do
       window.find_elements_by_css('#outer_container > div').should_not be_empty
     end
 
@@ -56,13 +56,13 @@ describe 'Window' do
       end.should be_true
     end
 
-    it 'is empty if the selector does not match' do
+    it 'empty if the selector does not match' do
       window.find_elements_by_css('#hoobaflooba').should be_empty
     end
   end
 
   # class
-  describe '#get_elements_by_class' do
+  describe '#find_elements_by_class' do
     it 'not empty if an element matches the class' do
       window.find_elements_by_class(:lead).should_not be_empty
     end

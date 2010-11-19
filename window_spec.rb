@@ -21,7 +21,7 @@ describe 'Window' do
   end
 
   describe '#find_elements_by_tag' do
-    it 'not empty if the tag exists' do
+    it 'is not empty if the tag exists' do
       window.find_elements_by_tag(:div).should_not be_empty
     end
 
@@ -46,7 +46,7 @@ describe 'Window' do
   # we don't want a complete CSS selector test suite here, so just some common
   # selectors
   describe '#find_elements_by_css' do
-    it 'not empty if an element matches the css selector' do
+    it 'is not empty if an element matches the css selector' do
       window.find_elements_by_css('#outer_container > div').should_not be_empty
     end
 
@@ -63,7 +63,7 @@ describe 'Window' do
 
   # class
   describe '#find_elements_by_class' do
-    it 'not empty if an element matches the class' do
+    it 'is not empty if an element matches the class' do
       window.find_elements_by_class(:lead).should_not be_empty
     end
 
@@ -90,7 +90,7 @@ describe 'Window' do
       @headers = window.find_elements_by_xpath('//h1')
     end
 
-    it 'not empty if elements matches the class' do
+    it 'is not empty if elements matches the class' do
       @headers.should_not be_empty
     end
 

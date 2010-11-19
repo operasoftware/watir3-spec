@@ -23,23 +23,23 @@ describe "Window" do
 
   describe "#get_elements_by_tag" do
     it "is not empty if the tag exists" do
-      window.get_elements_by_tag(:div).should_not be_empty
+      window.find_elements_by_tag(:div).should_not be_empty
     end
 
     it "contains all elements of the tag name" do
-      window.get_elements_by_tag(:div).all? do |element|
+      window.find_elements_by_tag(:div).all? do |element|
         element.tag_name == "div"
       end.should be_true
     end
 
     it "contains only elements restricted by the selector" do
-      window.get_elements_by_tag(:div, :title => "Lorem ipsum").all? do |element|
+      window.find_elements_by_tag(:div, :title => "Lorem ipsum").all? do |element|
         element.attr(:title) == "Lorem ipsum"
       end.should be_true
     end
 
     it "is empty if the elements do not exist" do
-      window.get_elements_by_tag(:hoobaflooba).should be_empty
+      window.find_elements_by_tag(:hoobaflooba).should be_empty
     end
   end
 
@@ -48,40 +48,40 @@ describe "Window" do
   # selectors
   describe "#get_elements_by_css" do
     it "is not empty if an element matches the css selector" do
-      window.get_elements_by_css("#outer_container > div").should_not be_empty
+      window.find_elements_by_css("#outer_container > div").should_not be_empty
     end
 
     it "contains all elements selected by the selector" do
-      window.get_elements_by_css("#outer_container > div").all? do |element|
+      window.find_elements_by_css("#outer_container > div").all? do |element|
         element.parent.attr(:id).should == "outer_container"
       end.should be_true
     end
 
     it "is empty if the selector does not match" do
-      window.get_elements_by_css("#hoobaflooba").should be_empty
+      window.find_elements_by_css("#hoobaflooba").should be_empty
     end
   end
 
   # class
   describe "#get_elements_by_class" do
     it "is not empty if an element matches the class" do
-      window.get_elements_by_class(:lead).should_not be_empty
+      window.find_elements_by_class(:lead).should_not be_empty
     end
 
     it "contains all elements with the given class" do
-      window.get_elements_by_class(:lead).all? do |element|
+      window.find_elements_by_class(:lead).all? do |element|
         element.attr(:class).should match /lead/
       end.should be_true
     end
 
     it "gets elements with multiple classes" do
-      window.get_elements_by_class(:one).all? do |element|
+      window.find_elements_by_class(:one).all? do |element|
         element.attr(:class).should match /one/
       end.should be_true
     end
 
     it "is empty if the class does not match" do
-      window.get_elements_by_class(:hoobaflooba).should be_empty
+      window.find_elements_by_class(:hoobaflooba).should be_empty
     end
   end
 
@@ -96,7 +96,7 @@ describe "Window" do
     end
 
     it "changes when the title tag changes" do
-      window.get_elements_by_tag(:title).first.text = "changed"
+      window.find_elements_by_tag(:title).first.text = "changed"
       window.title.should == "changed"
     end
   end
@@ -107,7 +107,7 @@ describe "Window" do
     end
 
     it "is the original source" do
-      window.get_elements_by_tag(:title).first.text = "changed"
+      window.find_elements_by_tag(:title).first.text = "changed"
       window.source.should match /^    <title>Non-control elements<\/title>/
     end
   end
@@ -124,7 +124,7 @@ describe "Window" do
   describe "#url=" do
     it "navigates to the given url" do
       window.url = fixture('forms_with_input_elements.html')
-      window.get_elements_by_tag(:title).first.text.should == "Forms with input elements"
+      window.find_elements_by_tag(:title).first.text.should == "Forms with input elements"
     end
   end
 
@@ -169,7 +169,7 @@ describe "Window" do
 
   describe "#refresh" do
     it "refreshes the current page" do
-      title = window.get_elements_by_tag(:title).first
+      title = window.find_elements_by_tag(:title).first
       title.text = "changed"
       title.text.should == "changed"
 
@@ -217,7 +217,7 @@ describe "Window" do
 
   describe "#maximize" do
     it "maximizes the window" do
-      body = window.get_elements_by_tag(:body).first
+      body = window.find_elements_by_tag(:body).first
       # make sure we aren't already maximized
       window.restore()
       width = body.width
@@ -241,7 +241,7 @@ describe "Window" do
     it "destroys the window" do
       window.close()
       window.exists?.should be_false
-      window.get_elements_by_tag(:title).should raise_error
+      window.find_elements_by_tag(:title).should raise_error
     end
   end
 

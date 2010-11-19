@@ -130,7 +130,7 @@ describe 'Window' do
   describe '#back' do
     it 'goes back one page in history' do
       window.url = fixture('forms_with_input_elements.html')
-      window.back()
+      window.back
       window.url.should == fixture('non_control_elements.html')
     end
 
@@ -148,20 +148,20 @@ describe 'Window' do
   describe '#forward' do
     it 'goes forward one page in history' do
       window.url = fixture('forms_with_input_elements.html')
-      window.back()
-      window.forward()
+      window.back
+      window.forward
       window.url.should == fixture('forms_with_input_elements.html')
     end
 
     # should it raise an exception if it fails instead?
     it 'is true if it is possible to go forward' do
       window.url = fixture('forms_with_input_elements.html')
-      window.back()
-      window.forward().should be_true
+      window.back
+      window.forward.should be_true
     end
 
     it 'is false if there is no page to go forward to' do
-      window.forward().should be_false
+      window.forward.should be_false
     end
 
   end
@@ -172,7 +172,7 @@ describe 'Window' do
       title.text = 'changed'
       title.text.should == 'changed'
 
-      window.refresh()
+      window.refresh
       title.text.should == 'Non-control elements'
     end
   end
@@ -218,9 +218,9 @@ describe 'Window' do
     it 'maximizes the window' do
       body = window.find_elements_by_tag(:body).first
       # make sure we aren't already maximized
-      window.restore()
+      window.restore
       width = body.width
-      window.maximize()
+      window.maximize
       body.width.should be > width
     end
   end
@@ -229,7 +229,7 @@ describe 'Window' do
     it 'restores (unmaximizes) the window' do
       body = window.get_elements_by_tag(:body).first
       # make sure we aren't already restored
-      window.maximize()
+      window.maximize
       width = body.width
       window.restore()
       body.width.should be < width
@@ -238,7 +238,7 @@ describe 'Window' do
 
   describe '#close' do
     it 'destroys the window' do
-      window.close()
+      window.close
       window.exists?.should be_false
       window.find_elements_by_tag(:title).should raise_error
     end
@@ -250,7 +250,7 @@ describe 'Window' do
     end
 
     it 'is false if the window does not exist' do
-      window.close()
+      window.close
       window.exists?.should be_false
     end
   end

@@ -1,14 +1,45 @@
 # encoding: utf-8
-require File.expand_path(''../../watirspec_helper'', __FILE__)
+require File.expand_path('../../watirspec_helper', __FILE__)
 
 describe 'Browser' do
 
-  #goto(), back(), forward(), version, url, get/set prefs()
+  before :all do
+    browser.url = fixture('simple.html')
+  end
 
-  describe '#goto' do
+  #url(), back(), forward(), version, url, get/set prefs()
+
+  describe '#new' do
+    it 'constructs a new instance' do
+      new_browser = OperaWatir::Browser.new
+      new_browser.exists?.should be_true
+    end
+  end
+
+  describe '#name' do
+    it 'is the name of a Watir implementation' do
+      implementations = %w{ ie firefox opera }
+      browser.name.should == implementations
+    end
+  end
+
+  describe '#url=' do  # goto() is an alias
+    it 'opens a new window' do
+      browser.goto fixture('simple.html')
+
+    end
+
     it 'navigates to a url' do
-      window.url = 'http://example.com/'
-      window.url.should == 'http://example.com/'
+      window.url = fixture('simple.html')
+#      window.url.should == ''
+    end
+
+    it 'navigates to a url using goto alias' do
+      window.goto fixture('simple.html')
+    end
+
+    after :each do
+      window.url.should = fixture('simple.html')
     end
   end
 

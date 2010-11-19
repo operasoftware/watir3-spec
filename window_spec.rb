@@ -255,14 +255,6 @@ describe 'Window' do
     end
   end
 
-  describe '#close' do
-    it 'destroys the window' do
-      window.close
-      window.exists?.should be_false
-      window.find_elements_by_tag(:title).should raise_error
-    end
-  end
-
   describe '#exists?' do
     it 'is true if the window exists' do
       window.exists?.should be_true
@@ -274,4 +266,11 @@ describe 'Window' do
     end
   end
 
+  describe '#close' do
+    it 'destroys the window' do
+      window.close
+      window.exists?.should be_false
+      window.find_elements_by_tag(:title).should raise_error
+    end
+  end
 end

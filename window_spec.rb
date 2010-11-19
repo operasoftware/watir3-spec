@@ -1,7 +1,7 @@
 # encoding: utf-8
-require File.expand_path("../../watirspec_helper", __FILE__)
+require File.expand_path('../../watirspec_helper', __FILE__)
 
-describe "Window" do
+describe 'Window' do
 
   before :each do
     browser.goto(fixture('non_control_elements.html'))
@@ -10,35 +10,35 @@ describe "Window" do
   # element access
   # --------------
 
-  describe "#get_elements_by_id" do
+  describe '#get_elements_by_id' do
 
-    it "returns an element with the given ID" do
-      elements = window.find_elements_by_id("header")
+    it 'returns an element with the given ID' do
+      elements = window.find_elements_by_id('header')
 
       elements.should_not be_empty
       elements.length.should == 1
-      elements.first.attr(:id).should == "header"
+      elements.first.attr(:id).should == 'header'
     end
   end
 
-  describe "#get_elements_by_tag" do
-    it "is not empty if the tag exists" do
+  describe '#get_elements_by_tag' do
+    it 'is not empty if the tag exists' do
       window.find_elements_by_tag(:div).should_not be_empty
     end
 
-    it "contains all elements of the tag name" do
+    it 'contains all elements of the tag name' do
       window.find_elements_by_tag(:div).all? do |element|
-        element.tag_name == "div"
+        element.tag_name == 'div'
       end.should be_true
     end
 
-    it "contains only elements restricted by the selector" do
-      window.find_elements_by_tag(:div, :title => "Lorem ipsum").all? do |element|
-        element.attr(:title) == "Lorem ipsum"
+    it 'contains only elements restricted by the selector' do
+      window.find_elements_by_tag(:div, :title => 'Lorem ipsum').all? do |element|
+        element.attr(:title) == 'Lorem ipsum'
       end.should be_true
     end
 
-    it "is empty if the elements do not exist" do
+    it 'is empty if the elements do not exist' do
       window.find_elements_by_tag(:hoobaflooba).should be_empty
     end
   end
@@ -46,41 +46,41 @@ describe "Window" do
   # css
   # we don't want a complete CSS selector test suite here, so just some common
   # selectors
-  describe "#get_elements_by_css" do
-    it "is not empty if an element matches the css selector" do
-      window.find_elements_by_css("#outer_container > div").should_not be_empty
+  describe '#get_elements_by_css' do
+    it 'is not empty if an element matches the css selector' do
+      window.find_elements_by_css('#outer_container > div').should_not be_empty
     end
 
-    it "contains all elements selected by the selector" do
-      window.find_elements_by_css("#outer_container > div").all? do |element|
-        element.parent.attr(:id).should == "outer_container"
+    it 'contains all elements selected by the selector' do
+      window.find_elements_by_css('#outer_container > div').all? do |element|
+        element.parent.attr(:id).should == 'outer_container'
       end.should be_true
     end
 
-    it "is empty if the selector does not match" do
-      window.find_elements_by_css("#hoobaflooba").should be_empty
+    it 'is empty if the selector does not match' do
+      window.find_elements_by_css('#hoobaflooba').should be_empty
     end
   end
 
   # class
-  describe "#get_elements_by_class" do
-    it "is not empty if an element matches the class" do
+  describe '#get_elements_by_class' do
+    it 'is not empty if an element matches the class' do
       window.find_elements_by_class(:lead).should_not be_empty
     end
 
-    it "contains all elements with the given class" do
+    it 'contains all elements with the given class' do
       window.find_elements_by_class(:lead).all? do |element|
         element.attr(:class).should match /lead/
       end.should be_true
     end
 
-    it "gets elements with multiple classes" do
+    it 'gets elements with multiple classes' do
       window.find_elements_by_class(:one).all? do |element|
         element.attr(:class).should match /one/
       end.should be_true
     end
 
-    it "is empty if the class does not match" do
+    it 'is empty if the class does not match' do
       window.find_elements_by_class(:hoobaflooba).should be_empty
     end
   end
@@ -90,24 +90,24 @@ describe "Window" do
   # properties
   # ----------
 
-  describe "#title" do
-    it "is the title of the window" do
-      window.title.should == "Non-control elements"
+  describe '#title' do
+    it 'is the title of the window' do
+      window.title.should == 'Non-control elements'
     end
 
-    it "changes when the title tag changes" do
-      window.find_elements_by_tag(:title).first.text = "changed"
-      window.title.should == "changed"
+    it 'changes when the title tag changes' do
+      window.find_elements_by_tag(:title).first.text = 'changed'
+      window.title.should == 'changed'
     end
   end
 
-  describe "#source" do
-    it "is the source of the page" do
+  describe '#source' do
+    it 'is the source of the page' do
       window.source.should match /^    <title>Non-control elements<\/title>/
     end
 
-    it "is the original source" do
-      window.find_elements_by_tag(:title).first.text = "changed"
+    it 'is the original source' do
+      window.find_elements_by_tag(:title).first.text = 'changed'
       window.source.should match /^    <title>Non-control elements<\/title>/
     end
   end
@@ -115,39 +115,39 @@ describe "Window" do
   # page management
   # ---------------
 
-  describe "#url" do
-    it "is the url of this window" do
+  describe '#url' do
+    it 'is the url of this window' do
       window.url.should == fixture('non_control_elements.html')
     end
   end
 
-  describe "#url=" do
-    it "navigates to the given url" do
+  describe '#url=' do
+    it 'navigates to the given url' do
       window.url = fixture('forms_with_input_elements.html')
-      window.find_elements_by_tag(:title).first.text.should == "Forms with input elements"
+      window.find_elements_by_tag(:title).first.text.should == 'Forms with input elements'
     end
   end
 
-  describe "#back" do
-    it "goes back one page in history" do
+  describe '#back' do
+    it 'goes back one page in history' do
       window.url = fixture('forms_with_input_elements.html')
       window.back()
       window.url.should == fixture('non_control_elements.html')
     end
 
     # should it raise an exception if it fails instead?
-    it "is true if it is possible to go back" do
+    it 'is true if it is possible to go back' do
       window.url = fixture('forms_with_input_elements.html')
       window.back.should be_true
     end
 
-    it "is false if there is no page to go back to" do
+    it 'is false if there is no page to go back to' do
       window.back.should be_false
     end
   end
 
-  describe "#forward" do
-    it "goes forward one page in history" do
+  describe '#forward' do
+    it 'goes forward one page in history' do
       window.url = fixture('forms_with_input_elements.html')
       window.back()
       window.forward()
@@ -155,26 +155,26 @@ describe "Window" do
     end
 
     # should it raise an exception if it fails instead?
-    it "is true if it is possible to go forward" do
+    it 'is true if it is possible to go forward' do
       window.url = fixture('forms_with_input_elements.html')
       window.back()
       window.forward().should be_true
     end
 
-    it "is false if there is no page to go forward to" do
+    it 'is false if there is no page to go forward to' do
       window.forward().should be_false
     end
 
   end
 
-  describe "#refresh" do
-    it "refreshes the current page" do
+  describe '#refresh' do
+    it 'refreshes the current page' do
       title = window.find_elements_by_tag(:title).first
-      title.text = "changed"
-      title.text.should == "changed"
+      title.text = 'changed'
+      title.text.should == 'changed'
 
       window.refresh()
-      title.text.should == "Non-control elements"
+      title.text.should == 'Non-control elements'
     end
   end
 
@@ -183,40 +183,40 @@ describe "Window" do
 
   # click(x,y)
 
-  describe "#eval_js" do
-    it "executes Javascript in the page" do
+  describe '#eval_js' do
+    it 'executes Javascript in the page' do
       window.eval_js('document.title = "test"')
-      window.title.should == "test"
+      window.title.should == 'test'
     end
 
-    it "returns an element when the Javascript does" do
-      window.eval_js('document.createElement("div")').tag_name.should == "div"
+    it 'returns an element when the Javascript does' do
+      window.eval_js('document.createElement("div")').tag_name.should == 'div'
     end
 
-    it "returns a number when the Javascript does" do
+    it 'returns a number when the Javascript does' do
       window.eval_js('Math.abs(-5)').should == 5
     end
 
-    it "returns a boolean when the Javascript does" do
+    it 'returns a boolean when the Javascript does' do
       window.eval_js('(function(){return true;})()').should be_true
     end
 
-    it "returns an array when the Javascript does" do
+    it 'returns an array when the Javascript does' do
       result = window.eval_js('["this", "is", "a", "test"]')
       result.length.should == 4
-      result[3].should == "test"
+      result[3].should == 'test'
     end
 
-    it "returns a string when the result is not one of these types" do
-      window.eval_js('({one:"two"}).toString()').should == "[object Object]"
+    it 'returns a string when the result is not one of these types' do
+      window.eval_js('({one:"two"}).toString()').should == '[object Object]'
     end
   end
 
   # window management
   # -----------------
 
-  describe "#maximize" do
-    it "maximizes the window" do
+  describe '#maximize' do
+    it 'maximizes the window' do
       body = window.find_elements_by_tag(:body).first
       # make sure we aren't already maximized
       window.restore()
@@ -226,8 +226,8 @@ describe "Window" do
     end
   end
 
-  describe "#restore" do
-    it "restores (unmaximizes) the window" do
+  describe '#restore' do
+    it 'restores (unmaximizes) the window' do
       body = window.get_elements_by_tag(:body).first
       # make sure we aren't already restored
       window.maximize()
@@ -237,20 +237,20 @@ describe "Window" do
     end
   end
 
-  describe "#close" do
-    it "destroys the window" do
+  describe '#close' do
+    it 'destroys the window' do
       window.close()
       window.exists?.should be_false
       window.find_elements_by_tag(:title).should raise_error
     end
   end
 
-  describe "#exists?" do
-    it "is true if the window exists" do
+  describe '#exists?' do
+    it 'is true if the window exists' do
       window.exists?.should be_true
     end
 
-    it "is false if the window does not exist" do
+    it 'is false if the window does not exist' do
       window.close()
       window.exists?.should be_false
     end

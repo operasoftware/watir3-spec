@@ -56,17 +56,92 @@ describe 'Collection' do
   # ------
 
   # checked?
+  describe '#checked?' do
+    before :each do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @boxes = window.find_elements_by_tag(:input, :type => 'checkbox')
+    end
+
+    it 'is false if one of the elements is not checked' do
+      @boxes.checked?.should be_false
+    end
+
+    it 'is false if one of the elements is not checked' do
+      @boxes.each do |box|
+        box.check!
+      end
+      @boxes.checked?.should be_true
+    end
+  end
+
   # check!
+  describe '#check!' do
+    it 'checks all of the checkboxes' do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @boxes = window.find_elements_by_tag(:input, :type => 'checkbox')
+
+      @boxes.check!
+      @boxes.all? do |box|
+        box.checked? == true
+      end.should be_true
+    end
+  end
+
   # uncheck!
+  describe '#uncheck!' do
+    it 'unchecks all of the checkboxes' do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @boxes = window.find_elements_by_tag(:input, :type => 'checkbox')
+
+      @boxes.uncheck!
+      @boxes.all? do |box|
+        box.checked? == false
+      end.should be_true
+    end
+  end
+
   # toggle_check!
+  describe '#toggle_check!' do
+    it 'toggles the checked state of all of the checkboxes' do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @boxes = window.find_elements_by_tag(:input, :type => 'checkbox')
+
+      @boxes.toggle_check!
+      @boxes.all? do |box|
+        box.checked? == true
+      end.should be_true
+    end
+  end
 
   # enabled?
   # enable!
   # disable!
 
   # visible?
+  describe '#visible' do
+    it 'is true if all the elements are visible' do
+      window.find_elements_by_tag(:ul).visible?.should be_true
+    end
+
+    it 'is false if not all elements are visible' do
+      @collection.visible?.should be_false
+    end
+  end
   # show!
+  describe '#show!' do
+    it 'shows all the elements' do
+      @collection.show!
+      window.find_elements_by_id('hidden').visible?.should be_true
+    end
+  end
+
   # hide!
+  describe '#hide!' do
+    it 'hides all the elements' do
+      @collection.hide!
+      window.find_elements_by_id('outer_container').visible?.should be_false
+    end
+  end
 
   # actions
   # -------

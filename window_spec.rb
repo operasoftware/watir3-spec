@@ -273,4 +273,11 @@ describe 'Window' do
       window.find_elements_by_tag(:title).should raise_error
     end
   end
+
+  describe '#new' do
+    it 'creates a new window' do
+      new_window = browser.url = fixtures('non-control-elements.html')
+      new_window.exists?.should be_true
+    end
+  end
 end

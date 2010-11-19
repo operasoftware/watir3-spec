@@ -234,10 +234,13 @@ describe 'Window' do
   # -----------------
 
   describe '#maximize' do
+    before :each do
+      # Make sure we aren't already maximized
+      window.restore
+    end
+
     it 'maximizes the window' do
       body = window.find_elements_by_tag(:body).first
-      # make sure we aren't already maximized
-      window.restore
       width = body.width
       window.maximize
       body.width.should be > width
@@ -247,10 +250,10 @@ describe 'Window' do
   describe '#restore' do
     it 'restores (unmaximizes) the window' do
       body = window.get_elements_by_tag(:body).first
-      # make sure we aren't already restored
+      # Make sure we aren't already restored
       window.maximize
       width = body.width
-      window.restore()
+      window.restore
       body.width.should be < width
     end
   end

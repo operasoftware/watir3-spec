@@ -98,8 +98,6 @@ describe 'Window' do
       @headers.all? do |element|
         element.tag.should == 'H1'
       end
-
-      @headers.should_not be_empty
     end
 
     it 'is empty if the query does not match' do

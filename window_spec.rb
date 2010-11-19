@@ -11,7 +11,6 @@ describe 'Window' do
   # --------------
 
   describe '#get_elements_by_id' do
-
     it 'returns an element with the given ID' do
       elements = window.find_elements_by_id('header')
 

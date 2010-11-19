@@ -63,7 +63,7 @@ describe 'Window' do
 
   # class
   describe '#get_elements_by_class' do
-    it 'is not empty if an element matches the class' do
+    it 'not empty if an element matches the class' do
       window.find_elements_by_class(:lead).should_not be_empty
     end
 
@@ -73,7 +73,7 @@ describe 'Window' do
       end.should be_true
     end
 
-    it 'gets elements with multiple classes' do
+    it 'finds elements with multiple classes' do
       window.find_elements_by_class(:one).all? do |element|
         element.attr(:class).should match /one/
       end.should be_true
@@ -85,6 +85,27 @@ describe 'Window' do
   end
 
   # xpath
+  describe '#find_elements_by_xpath' do
+    before :all do
+      @headers = window.find_elements_by_xpath('//h1')
+    end
+
+    it 'not empty if elements matches the class' do
+      @headers.should_not be_empty
+    end
+
+    it 'contains all elements with the given query' do
+      @headers.all? do |element|
+        element.tag.should == 'H1'
+      end
+
+      @headers.should_not be_empty
+    end
+
+    it 'is empty if the query does not match' do
+      window.find_elements_by_xpath('//hoobaflooba').should be_empty
+    end
+  end
 
   # properties
   # ----------

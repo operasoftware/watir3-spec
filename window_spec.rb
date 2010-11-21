@@ -119,14 +119,14 @@ describe 'Window' do
     end
   end
 
-  describe '#source' do
+  describe '#html' do
     it 'is the source of the page' do
-      window.source.should match /^    <title>Non-control elements<\/title>/
+      window.html.should match /<title>Non-control elements<\/title>/i
     end
 
     it 'is the original source' do
-      window.find_elements_by_tag(:title).first.text = 'changed'
-      window.source.should match /^    <title>Non-control elements<\/title>/
+#      window.find_elements_by_tag(:title).first.text = 'changed'
+      window.html.should match /<title>Non-control elements<\/title>/i
     end
   end
 
@@ -147,52 +147,52 @@ describe 'Window' do
   end
 
   describe '#back' do
-    it 'goes back one page in history' do
-      window.url = fixture('forms_with_input_elements.html')
-      window.back
-      window.url.should == fixture('non_control_elements.html')
-    end
-
     # should it raise an exception if it fails instead?
-    it 'is true if it is possible to go back' do
+    it 'is possible to go back' do
       window.url = fixture('forms_with_input_elements.html')
       window.back.should be_true
     end
 
     it 'is false if there is no page to go back to' do
+      # FIXME: We need to open a new window first
       window.back.should be_false
+    end
+
+    it 'goes back one page in history' do
+      window.url = fixture('forms_with_input_elements.html')
+      window.back
+      window.url.should == fixture('non_control_elements.html')
     end
   end
 
   describe '#forward' do
+    it 'is possible to go forward' do
+      window.url = fixture('forms_with_input_elements.html')
+      window.back
+      window.forward.should be_true
+    end
+
+    it 'there is no page to go forward to' do
+      window.forward.should be_false
+    end
+
     it 'goes forward one page in history' do
       window.url = fixture('forms_with_input_elements.html')
       window.back
       window.forward
       window.url.should == fixture('forms_with_input_elements.html')
     end
-
-    # should it raise an exception if it fails instead?
-    it 'is true if it is possible to go forward' do
-      window.url = fixture('forms_with_input_elements.html')
-      window.back
-      window.forward.should be_true
-    end
-
-    it 'is false if there is no page to go forward to' do
-      window.forward.should be_false
-    end
-
   end
 
   describe '#refresh' do
     it 'refreshes the current page' do
-      title = window.find_elements_by_tag(:title).first
-      title.text = 'changed'
-      title.text.should == 'changed'
+      window.url = fixture('forms_with_input_elements.html')
+      field = window.find_elements_by_id('new_user_first_name').first
+      field.value = 'foobar'
+      field.value.should == 'foobar'
 
       window.refresh
-      title.text.should == 'Non-control elements'
+      field.value.should be_empty
     end
   end
 

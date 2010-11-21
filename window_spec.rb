@@ -96,7 +96,7 @@ describe 'Window' do
 
     it 'contains all elements with the given query' do
       @headers.all? do |element|
-        element.tag.should == 'H1'
+        element.tag_name.should match /h1/i
       end
     end
 
@@ -124,6 +124,7 @@ describe 'Window' do
       window.html.should match /<title>Non-control elements<\/title>/i
     end
 
+    # TODO I'm not sure Watir allows DOM manipulation
     it 'is the original source' do
 #      window.find_elements_by_tag(:title).first.text = 'changed'
       window.html.should match /<title>Non-control elements<\/title>/i

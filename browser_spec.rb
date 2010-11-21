@@ -39,6 +39,22 @@ describe 'Browser' do
     end
   end
 
+  describe '#connected?' do
+    it 'checks that the browser is connected' do
+      browser.is_connected?.should be_true
+    end
+  end
+
+  describe '#quit' do
+
+    # I'm not sure this can be tested.
+    #it 'quits the browser' do
+    #  browser.quit
+    #  browser.exists?.should be_false
+    #end
+
+  end
+
   describe '#windows' do
     it 'is not empty' do
       browser.windows.should_not be_empty
@@ -50,14 +66,55 @@ describe 'Browser' do
       end.should be_true
     end
 
+    it 'will close all open windows' do
+      open_windows = browser.windows.length
+      browser.windows.close_all
+      browser.windows.length.should < open_windows
+      browser.windows.length.should == 0
+    end
+
     # TODO: Window selectors
 
   end
 
-  describe '#close' do
-    it 'closes the browser' do
-      browser.close
-      browser.exists?.should be_false
+  describe '#version' do
+    it 'fetches the version number of the driver' do
+      browser.version.should match /\d{1,}\.\d{1,}\.\d{1,}/
+    end
+  end
+
+  describe '#pid' do
+    it 'fetches the PID from the attached browser instance' do
+      browser.pid.should be_numeric
+      browser.pid.should > 0
+    end
+  end
+
+  describe '#platform' do
+    it 'fetches the platform the browser is running on' do
+      # TODO: Improve regexp
+      browser.platform.should match /linux|windows|mac os x|bsd/i
+    end
+  end
+
+  describe '#build' do
+    it 'fetches the build number of the attached browser instance' do
+      browser.build.should be_numeric
+      browser.build.should > 0
+    end
+  end
+
+  describe '#path' do
+    it 'fetches the full path to the binary of the attached browser' do
+      # TODO: Improve regexp
+      browser.path.should match /(\/|\\){2,}/
+    end
+  end
+
+  describe '#ua_string' do
+    it 'fetches the UA string of the browser' do
+      browser.ua_string.should_not be_empty
+      browser.ua_string.size.should > 0
     end
   end
 
@@ -67,8 +124,12 @@ describe 'Browser' do
     end
 
     it 'is false if we are not attached to a browser' do
-      browser.close()
+      browser.close
       browser.exists?.should be_false
+    end
+
+    after :all do
+      browser = OperaWatir::Waiter.browser
     end
   end
 

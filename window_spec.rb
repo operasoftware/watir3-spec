@@ -208,7 +208,7 @@ describe 'Window' do
     end
 
     it 'returns an element when the Javascript does' do
-      window.eval_js('document.createElement("div")').tag_name.should == 'div'
+      window.eval_js('document.createElement("div")').tag_name.should =~ /div/i
     end
 
     it 'returns a number when the Javascript does' do
@@ -221,6 +221,9 @@ describe 'Window' do
 
     it 'returns an array when the Javascript does' do
       result = window.eval_js('["this", "is", "a", "test"]')
+
+      p result
+
       result.length.should == 4
       result[3].should == 'test'
     end

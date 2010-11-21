@@ -249,7 +249,7 @@ describe 'Window' do
 
   describe '#restore' do
     it 'restores (unmaximizes) the window' do
-      body = window.get_elements_by_tag(:body).first
+      body = window.find_elements_by_tag(:body).first
       # Make sure we aren't already restored
       window.maximize
       width = body.width
@@ -279,8 +279,9 @@ describe 'Window' do
 
   describe '#new' do
     it 'creates a new window' do
-      new_window = browser.url = fixtures('non-control-elements.html')
+      new_window = browser.url(fixture('non-control-elements.html'))
       new_window.exists?.should be_true
+      new_window.url.should == fixture('non-control-elements.html')
     end
   end
 end

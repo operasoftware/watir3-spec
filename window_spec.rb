@@ -220,10 +220,7 @@ describe 'Window' do
     end
 
     it 'returns an array when the Javascript does' do
-      result = window.eval_js('["this", "is", "a", "test"]')
-
-      p result
-
+      result = window.eval_js('["this", "is", "a", "test"]')  # WTR-227
       result.length.should == 4
       result[3].should == 'test'
     end

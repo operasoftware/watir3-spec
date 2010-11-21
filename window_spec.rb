@@ -209,7 +209,7 @@ describe 'Window' do
     end
 
     it 'returns an element when the Javascript does' do
-      window.eval_js('document.createElement("div")').tag_name.should =~ /div/i
+      window.eval_js('document.createElement("div")').tag_name.should match /div/i
     end
 
     it 'returns a number when the Javascript does' do

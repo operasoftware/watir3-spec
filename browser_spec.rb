@@ -9,37 +9,33 @@ describe 'Browser' do
 
   #url(), back(), forward(), version, url, get/set prefs()
 
-  describe '#new' do
-    it 'constructs a new instance' do
-      new_browser = OperaWatir::Browser.new
-      new_browser.exists?.should be_true
-    end
-  end
+#  describe '#new' do
+#    it 'constructs a new instance' do
+#      new_browser = OperaWatir::Browser.new
+#      new_browser.exists?.should be_true
+#    end
+#  end
 
   describe '#name' do
+    # FIXME
     it 'is the name of a Watir implementation' do
-      implementations = %w{ ie firefox opera }
-      browser.name.should == implementations
+      browser.name.size.should > 1
     end
   end
 
   describe '#url=' do  # goto() is an alias
     it 'opens a new window' do
-      browser.goto fixture('simple.html')
-
+      new_window = browser.goto fixture('simple.html')
+      new_window.exists?.should be_true
     end
 
     it 'navigates to a url' do
-      window.url = fixture('simple.html')
-#      window.url.should == ''
+      window.url.should == fixture('simple.html')
     end
 
     it 'navigates to a url using goto alias' do
-      window.goto fixture('simple.html')
-    end
-
-    after :each do
-      window.url.should = fixture('simple.html')
+      browser.goto fixture('simple.html')
+      window.url.should == fixture('simple.html')
     end
   end
 

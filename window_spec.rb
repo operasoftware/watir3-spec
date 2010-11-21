@@ -27,10 +27,11 @@ describe 'Window' do
 
     it 'contains all elements of the tag name' do
       window.find_elements_by_tag(:div).all? do |element|
-        element.tag_name == 'div'
+        element.tag_name =~ /div/i
       end.should be_true
     end
 
+    # TODO I'm not convinced that we should be able to filter in finders
     it 'contains only elements restricted by the selector' do
       window.find_elements_by_tag(:div, :title => 'Lorem ipsum').all? do |element|
         element.attr(:title) == 'Lorem ipsum'

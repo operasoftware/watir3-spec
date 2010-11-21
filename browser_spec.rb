@@ -123,20 +123,20 @@ describe 'Browser' do
     end
 
     it 'returns a top block of preferences' do
-      browser.preferences each do |section, option, value|
+      browser.preferences.each do |section, option, value|
         section.should_not be_empty
         option.should_not be_empty
       end
     end
 
     it 'returns a sub block of preferences' do
-      browser.preferences('Cache') each do |option, value|
+      browser.preferences('Cache').each do |option, value|
         option.should_not be_empty
       end
     end
 
     it 'sets an option' do
-      browser.preferences('Cache', 'Application Cache Quota') = 0
+      browser.preferences('Cache', 'Application Cache Quota').value = 0
       browser.preferences('Cache', 'Application Cache Quota').should == 0
     end
 

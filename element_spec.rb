@@ -5,9 +5,9 @@ describe "Element" do
   #direct attribute access
   before :each do
     browser.goto(fixture('non_control_elements.html'))
-    @element = window.get_elements_by_id("descartes").first
-    @list = window.get_elements_by_id("navbar").first
-    @leaf = window.get_elements_by_id("link_2").first
+    @element = window.find_elements_by_id("descartes").first
+    @list = window.find_elements_by_id("navbar").first
+    @leaf = window.find_elements_by_id("link_2").first
   end
 
   # parent
@@ -18,7 +18,7 @@ describe "Element" do
     end
 
     it "is nil for the root element" do
-      window.get_elements_by_tag(:html).first.parent.should == nil
+      window.find_elements_by_tag(:html).first.parent.should == nil
     end
   end
 
@@ -62,7 +62,7 @@ describe "Element" do
     end
 
     it "is an empty string when there is no text" do
-      window.get_elements_by_tag(:body).first.children.first.text.should == ""
+      window.find_elements_by_tag(:body).first.children.first.text.should == ""
     end
   end
 
@@ -85,7 +85,7 @@ describe "Element" do
     end
 
     it "is an empty string if the element contains no text or html" do
-      window.get_elements_by_tag(:body).first.children.first.html.should == ""
+      window.find_elements_by_tag(:body).first.children.first.html.should == ""
     end
   end
 
@@ -116,12 +116,12 @@ describe "Element" do
   # checked?
   describe "#checked?" do
     before :each do
-      browser.goto(fixture('non_control_elements.html'))
-      @textbox = window.get_elements_by_id("new_user_username").first
-      @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
-      @checkbox_unchecked = window.get_elements_by_id("bowling").first
-      @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
-      @radio_unchecked = window.get_elements_by_id("new_user_newsletter_no").first
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @textbox = window.find_elements_by_id("new_user_username").first
+      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
+      @checkbox_unchecked = window.find_elements_by_id("bowling").first
+      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
+      @radio_unchecked = window.find_elements_by_id("new_user_newsletter_no").first
     end
 
     # TODO "checked" is available for all <input> and <command>. Change this
@@ -160,7 +160,7 @@ describe "Element" do
   describe "#enabled?" do
     before :each do
       browser.goto(fixture('non_control_elements.html'))
-      @inputs = window.get_elements_by_tag(:input)
+      @inputs = window.find_elements_by_tag(:input)
     end
 
     # "disabled" attribute is available on quite a few obscure elements. Toss
@@ -180,23 +180,23 @@ describe "Element" do
     end
 
     it "is true for a visible element" do
-      window.get_elements_by_tag(:h1).first.visible?.should be_true
+      window.find_elements_by_tag(:h1).first.visible?.should be_true
     end
 
     it "is false for an element with style attribute 'display:none'" do
-      window.get_elements_by_id("parent").first.visible?.should be_false
+      window.find_elements_by_id("parent").first.visible?.should be_false
     end
 
     it "is false a child of an element with style attribute 'display:none'" do
-      window.get_elements_by_id("child").first.visible?.should be_false
+      window.find_elements_by_id("child").first.visible?.should be_false
     end
 
     it "is false for an element hidden by CSS" do
-      window.get_elements_by_id("hidden_by_css").first.visible?.should be_false
+      window.find_elements_by_id("hidden_by_css").first.visible?.should be_false
     end
 
     it "is true for an element with visibility:hidden" do
-      window.get_elements_by_id("invisible").first.visible?.should be_true
+      window.find_elements_by_id("invisible").first.visible?.should be_true
     end
 
   end
@@ -209,9 +209,9 @@ describe "Element" do
   # check!
   describe '#check!' do
     before :each do
-      browser.goto(fixture('non_control_elements.html'))
-      @checkbox_unchecked = window.get_elements_by_id("bowling").first
-      @radio_unchecked = window.get_elements_by_id("new_user_newsletter_no").first
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @checkbox_unchecked = window.find_elements_by_id("bowling").first
+      @radio_unchecked = window.find_elements_by_id("new_user_newsletter_no").first
     end
 
     it 'checks a checkbox' do
@@ -227,9 +227,9 @@ describe "Element" do
   # uncheck!
   describe '#uncheck!' do
     before :each do
-      browser.goto(fixture('non_control_elements.html'))
-      @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
-      @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
+      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
     end
 
     it 'unchecks a checkbox' do
@@ -246,9 +246,9 @@ describe "Element" do
   # toggle_check!
   describe '#toggle_check!' do
     before :each do
-      browser.goto(fixture('non_control_elements.html'))
-      @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
-      @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
+      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
     end
 
     it 'toggles a checkbox' do

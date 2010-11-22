@@ -10,55 +10,82 @@ describe 'Browser' do
   describe '#new' do
     it 'constructs a new instance' do
       browser.exists?.should be_true
-      browser.respond_to?('new').should be_true
+    end
+  end
+
+  describe '#driver' do
+    it 'returns driver object' do
+      browser.driver.instance_of?(Java::ComOperaCoreSystems::OperaDriver).should be_true
+    end
+
+    it 'can access native driver methods' do
+      browser.driver.getCurrentUrl.should_not be_empty
     end
   end
 
   describe '#name' do
     # FIXME
     it 'is the name of a Watir implementation' do
-      browser.name.length.should > 1
+      browser.name.should_not be_empty
     end
   end
 
   describe '#url=' do  # goto() is an alias
     it 'opens a new window' do
-      new_window = browser.url = fixture('simple.html')
+      new_window = browser.url fixture('simple.html')
       new_window.exists?.should be_true
       new_window.close
     end
 
     it 'navigates to a url' do
+      window.url = fixture('simple.html')
       window.url.should == fixture('simple.html')
     end
 
     it 'navigates to a url using goto alias' do
       browser.goto fixture('simple.html')
-      window.url.should == fixture('simple.html')
+      browser.active_window.url.should == fixture('simple.html')
     end
   end
 
-  describe '#connected?' do
-    it 'checks that the browser is connected' do
-      browser.connected?.should be_true
+  describe '#quit!' do
+    before :each do
+      browser.quit!
     end
 
-    it 'checks that the browser is connected using #is_connected? alias' do
-      browser.is_connected?.should be_true
+    it 'quits the browser' do
+      browser.connected?.should be_false
     end
-  end
 
-  describe '#quit' do
+    it 'window is closed upon quit' do
+      browser.active_window.exists?.should be_false
+    end
 
-    # I'm not sure this can be tested.
-    #it 'quits the browser' do
-    #  browser.quit
-    #  browser.exists?.should be_false
-    #end
+    it 'windows are closed upon quit' do
+      browser.windows.all? do |window|
+        window.exists? == false
+      end.should be_true
+    end
 
+    it 'is not possible to access window properties after quit' do
+      # FIXME
+      browser.active_window.url.should raise_error NativeException
+      browser.active_window.title.should raise_error NativeException
+    end
+
+    after :all do
+      OperaWatir::Waiter.reconnect
+    end
   end
 
   describe '#windows' do
+    before :all do
+      puts 'AFTER QUIT!'
+#      browser = OperaWatir::Browser.new
+      puts "URL IS NOW: #{browser.active_window.url}"
+    end
+
+
     it 'is not empty' do
       browser.windows.should_not be_empty
     end
@@ -120,24 +147,20 @@ describe 'Browser' do
     end
   end
 
-  describe '#exists?' do
-    it 'is true if we are attached to a browser' do
-      browser.exists?.should be_true
+  describe '#connected?' do
+    it 'is attached to a browser instance' do
+      browser.connected?.should be_true
     end
 
-    it 'is false if we are not attached to a browser' do
-      browser.close
-      browser.exists?.should be_false
-    end
-
-    after :all do
-      browser = OperaWatir::Waiter.browser
+    it 'is not attached to a browser instance' do
+      browser.quit!
+      browser.connected?.should be_false
     end
   end
 
   describe '#desktop?' do
     it 'responds with boolean' do
-      browser.desktop?.kind_of?(TrueClass || FalseClass).should be_true
+      (!!browser.desktop? == browser.desktop?).should be_true
     end
   end
 

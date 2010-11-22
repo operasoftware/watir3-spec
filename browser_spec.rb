@@ -215,6 +215,10 @@ describe 'Browser' do
       browser.preferences('Cache', 'Always Check Never-Expiring GET queries').should_not be_true
       browser.preferences('Cache', 'Application Cache Quota').should == -5000
       browser.preferences('Cache', 'SVG Cache Size').should == 2000
+
+      # Making sure setting block didn't affect any other blocks.
+      browser.preferences('Colors', 'Background').should == @preferences['Colors']['Background']
+      browser.preferences('Fonts', 'Dialog').should == @preferences['Fonts']['Dialog']
     end
 
     it 'fetches default value of an option' do

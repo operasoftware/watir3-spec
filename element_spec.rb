@@ -105,8 +105,8 @@ describe "Element" do
   # tag_name
   describe "#tag_name" do
     it "is the tag name of an element" do
-      @element.tag_name.should == "strong"
-      @list.tag_name.should == "ul"
+      @element.tag_name.should match /strong/i
+      @list.tag_name.should match /ul/i
     end
   end
 

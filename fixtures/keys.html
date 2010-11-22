@@ -1,0 +1,38 @@
+<!doctype HTML>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>Keys test</title>
+ <script type="text/javascript">
+function getMessage(e) {
+  var msg = []
+  if (e.altKey)  msg.push('alt');
+  if (e.ctrlKey) msg.push('ctrl');
+  if (e.metaKey) msg.push('meta');
+  if (e.shiftKey) msg.push('shift');
+  if (e.charCode) msg.push(String.fromCharCode(e.charCode));
+  return msg.join(' ');
+}
+
+document.addEventListener('keydown', function(e) {
+  down.innerHTML = getMessage(e)
+});
+
+document.addEventListener('keyup', function(e) {
+  console.log(e)
+  up.innerHTML = getMessage(e)
+});
+
+document.addEventListener('keypress', function(e) {
+  console.log(e)
+  press.innerHTML = getMessage(e)
+});
+ </script>
+</head>
+<body>
+ <h1>Keys test</h1>
+ <p id="down"></p>
+ <p id="up"></p>
+ <p id="press"></p>
+</body>
+</html>

@@ -20,7 +20,7 @@ describe 'Collection' do
     end
 
     it 'contains only elements restricted by the selector' do
-      window.find_elements_by_tag(:span, :title => 'Lorem ipsum').all? do |element|
+      @collection.find_elements_by_tag(:span, :title => 'Lorem ipsum').all? do |element|
         element.attr(:title) == 'Lorem ipsum'
       end.should be_true
     end
@@ -28,6 +28,53 @@ describe 'Collection' do
     it 'is empty if the elements do not exist' do
       window.find_elements_by_tag(:hoobaflooba).should be_empty
     end
+  end
+
+  # sugar
+  describe 'syntactic sugar' do
+    it 'returns all decendants with the given tag' do
+      content = window.find_elements_by_id('content').first.children
+      collection = content.span
+      collection.all? do |element|
+        child = false
+
+        # check that this element is somewhere under div#content
+        until element.parent == nil do
+          element = element.parent
+          if element.attr(:id) == 'content' do
+            return true
+          end
+        end
+
+        return false
+      end.should be_true
+    end
+
+    it 'can be chained' do
+      window.find_elements_by_id('promo').ul.li.all? do |element|
+        element.tag_name.match /li/i && element.parent.tag_name.match /ul/i
+      end.should be_true
+    end
+
+    it 'returns the same as find_elements_by_tag' do
+      @collection.span(:title => 'Lorem ipsum').should == @collection.find_elements_by_tag(:span, :title => 'Lorem ipsum')
+    end
+
+    # This may be unnecessary...
+    it 'responds to html elements' do
+      [:a,:abbr,:address,:area,:article,:aside,:audio,:b,:base,:bdo,:blockquote,:body,
+:br,:button,:canvas,:caption,:cite,:code,:col,:colgroup,:command,:datalist,:dd,
+:del,:details,:dfn,:div,:dl,:dt,:em,:embed,:eventsource,:fieldset,:figcaption,
+:figure,:footer,:form,:h1,:h2,:h3,:h4,:h5,:h6,:head,:header,:hgroup,:hr,:i,
+:iframe,:img,:input,:ins,:kbd,:keygen,:label,:legend,:li,:link,:mark,:map,
+:menu,:meta,:meter,:nav,:noscript,:object,:ol,:optgroup,:option,:output,:p,
+:param,:pre,:progress,:q,:ruby,:rp,:rt,:samp,:script,:section,:select,:small,
+:source,:span,:strong,:style,:sub,:summary,:sup,:table,:tbody,:td,:textarea,
+:tfoot,:th,:thead,:time,:title,:tr,:ul,:var,:video,:wbr].all do |symbol|
+        @collection.respond_to? symbol
+      end.should be_true
+    end
+
   end
 
   # length

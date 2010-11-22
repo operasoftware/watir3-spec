@@ -114,8 +114,43 @@ describe 'Collection' do
   end
 
   # enabled?
+  describe '#enabled?' do
+    before :each do
+      browser.goto(fixture('forms_with_input_elements.html'))
+    end
+
+    it 'returns true if all collection elements are enabled' do
+      fieldset = window.find_elements_by_id('delete_user').first.children.first
+      fieldset.children.enabled?.should be_true
+    end
+
+    it 'returns false if any collection elements are disabled' do
+      fieldset = window.find_elements_by_id('new_user').first.children.first
+      fieldset.children.enabled?.should be_false
+    end
+  end
+
   # enable!
+  describe '#enable!' do
+    it 'enables all elements in the collection' do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      fieldset = window.find_elements_by_id('delete_user').first.children.first
+      fieldset.children.enable!
+      window.find_elements_by_id('new_user_species').enabled?.should be_true
+    end
+  end
+
   # disable!
+  describe '#disable' do
+    it 'disables all elements in the collection' do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      fieldset = window.find_elements_by_id('delete_user').first.children.first
+      fieldset.children.disable!
+      fieldset.children.all? do |element|
+        element.enabled? == false
+      end.should be_true
+    end
+  end
 
   # visible?
   describe '#visible' do

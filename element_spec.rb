@@ -1,110 +1,110 @@
 # encoding: utf-8
-require File.expand_path("../watirspec_helper", __FILE__)
+require File.expand_path('../watirspec_helper', __FILE__)
 
-describe "Element" do
+describe 'Element' do
   #direct attribute access
   before :each do
     browser.goto(fixture('non_control_elements.html'))
-    @element = window.find_elements_by_id("descartes").first
-    @list = window.find_elements_by_id("navbar").first
-    @leaf = window.find_elements_by_id("link_2").first
+    @element = window.find_elements_by_id('descartes').first
+    @list = window.find_elements_by_id('navbar').first
+    @leaf = window.find_elements_by_id('link_2').first
   end
 
   # parent
-  describe "#parent" do
-    it "is the parent element of an element" do
+  describe '#parent' do
+    it 'is the parent element of an element' do
       # two .parent to get to an IDed element
-      @element.parent.parent.attr(:id).should == "promo"
+      @element.parent.parent.attr(:id).should == 'promo'
     end
 
-    it "is nil for the root element" do
+    it 'is nil for the root element' do
       window.find_elements_by_tag(:html).first.parent.should == nil
     end
   end
 
   # children
-  describe "#children" do
-    it "is not empty when there are child elements" do
+  describe '#children' do
+    it 'is not empty when there are child elements' do
       @list.children.should_not be_empty
     end
 
-    it "contains the child elements of an element" do
+    it 'contains the child elements of an element' do
       @list.children.all? do |child|
-        child.parent.attr(:id) == "navbar"
+        child.parent.attr(:id) == 'navbar'
       end.should be_true
     end
 
-    it "is empty when the element has no children" do
+    it 'is empty when the element has no children' do
       @leaf.children.should be_empty
     end
   end
 
   # attr(what, value=nil)
-  describe "#attr" do
-    it "gets the value of the given attribute" do
-      @element.attr(:class).should == "descartes"
+  describe '#attr' do
+    it 'gets the value of the given attribute' do
+      @element.attr(:class).should == 'descartes'
     end
 
-    it "is nil when the attribute does not exist" do
+    it 'is nil when the attribute does not exist' do
       @element.attr(:hoobaflooba).should == nil
     end
 
-    it "sets the attribute value when passed a value" do
-      @element.attr(:id => "value")
-      @element.attr(:id).should == "value"
+    it 'sets the attribute value when passed a value' do
+      @element.attr(:id => 'value')
+      @element.attr(:id).should == 'value'
     end
   end
 
   # text
-  describe "#text" do
-    it "is the text contained by the element" do
-      @element.text.should == "Dubito, ergo cogito, ergo sum."
+  describe '#text' do
+    it 'is the text contained by the element' do
+      @element.text.should == 'Dubito, ergo cogito, ergo sum.'
     end
 
-    it "is an empty string when there is no text" do
-      window.find_elements_by_tag(:body).first.children.first.text.should == ""
+    it 'is an empty string when there is no text' do
+      window.find_elements_by_tag(:body).first.children.first.text.should == ''
     end
   end
 
-  describe "#text=" do
-    it "sets the text content of the element" do
-      @element.children.first.text = "test"
-      @element.text.should == "Dubito, test, ergo sum."
+  describe '#text=' do
+    it 'sets the text content of the element' do
+      @element.children.first.text = 'test'
+      @element.text.should == 'Dubito, test, ergo sum.'
     end
 
-    it "overwrites child elements" do
-      @element.text = "test"
+    it 'overwrites child elements' do
+      @element.text = 'test'
       @element.children.should be_empty
     end
   end
 
   # html
-  describe "#html" do
-    it "is the outer HTML of the element" do
-      @element.html.should == '<strong id="descartes" class="descartes">Dubito, <em class="important-class" id="important-id" title="ergo cogito">ergo cogito</em>, ergo sum.</strong>'
+  describe '#html' do
+    it 'is the outer HTML of the element' do
+      @element.html.should == "<strong id='descartes' class='descartes'>Dubito, <em class='important-class' id='important-id' title='ergo cogito'>ergo cogito</em>, ergo sum.</strong>"
     end
 
-    it "is an empty string if the element contains no text or html" do
-      window.find_elements_by_tag(:body).first.children.first.html.should == ""
+    it 'is an empty string if the element contains no text or html' do
+      window.find_elements_by_tag(:body).first.children.first.html.should == ''
     end
   end
 
-  describe "#html=" do
-    it "sets the outer HTML of the element" do
+  describe '#html=' do
+    it 'sets the outer HTML of the element' do
       @element.children.first.html = '<b>test</b>'
-      @element.html.should == '<strong id="descartes" class="descartes">Dubito, <b>test</b>, ergo sum.</strong>'
+      @element.html.should == "<strong id='descartes' class='descartes'>Dubito, <b>test</b>, ergo sum.</strong>"
     end
 
-    it "creates child elements" do
-      @element.children.first.html = '<b>one</b> <b class="test">two</b>'
+    it 'creates child elements' do
+      @element.children.first.html = "<b>one</b> <b class='test'>two</b>"
       @element.children.length.should == 2
-      @element.children[1].attr(:class).should == "test"
+      @element.children[1].attr(:class).should == 'test'
     end
   end
 
   # tag_name
-  describe "#tag_name" do
-    it "is the tag name of an element" do
+  describe '#tag_name' do
+    it 'is the tag name of an element' do
       @element.tag_name.should match /strong/i
       @list.tag_name.should match /ul/i
     end
@@ -114,59 +114,59 @@ describe "Element" do
   # ------
 
   # checked?
-  describe "#checked?" do
+  describe '#checked?' do
     before :each do
       browser.goto(fixture('forms_with_input_elements.html'))
-      @textbox = window.find_elements_by_id("new_user_username").first
-      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
-      @checkbox_unchecked = window.find_elements_by_id("bowling").first
-      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
-      @radio_unchecked = window.find_elements_by_id("new_user_newsletter_no").first
+      @textbox = window.find_elements_by_id('new_user_username').first
+      @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
+      @checkbox_unchecked = window.find_elements_by_id('bowling').first
+      @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
+      @radio_unchecked = window.find_elements_by_id('new_user_newsletter_no').first
     end
 
-    # TODO "checked" is available for all <input> and <command>. Change this
+    # TODO 'checked' is available for all <input> and <command>. Change this
     # test?
-    it "exists on radio button elements" do
+    it 'exists on radio button elements' do
       @radio_checked.should respond_to :checked?
     end
 
-    it "exists on checkbox elements" do
+    it 'exists on checkbox elements' do
       @checkbox_checked.should respond_to :checked?
     end
 
-    it "does not exist on non-checkbox or radio button elements" do
+    it 'does not exist on non-checkbox or radio button elements' do
       @textbox.should_not respond_to :checked?
       @element.should_not respond_to :checked?
     end
 
-    it "is true if a checkbox is checked" do
+    it 'is true if a checkbox is checked' do
       @checkbox_checked.checked?.should be_true
     end
 
-    it "is false if a checkbox is not checked" do
+    it 'is false if a checkbox is not checked' do
       @checkbox_unchecked.checked?.should be_false
     end
 
-    it "is true if a radio button is checked" do
+    it 'is true if a radio button is checked' do
       @radio_checked.checked?.should be_true
     end
 
-    it "is false if a radio button is not checked" do
+    it 'is false if a radio button is not checked' do
       @radio_unchecked.checked?.should be_false
     end
   end
 
   # enabled?
-  describe "#enabled?" do
+  describe '#enabled?' do
     before :each do
       browser.goto(fixture('non_control_elements.html'))
       @inputs = window.find_elements_by_tag(:input)
     end
 
-    # "disabled" attribute is available on quite a few obscure elements. Toss
+    # 'disabled' attribute is available on quite a few obscure elements. Toss
     # up between limiting to common ones, all html5, all elements that have a
     # .disabled property in Javascript, or all elements
-    it "exists on input elements" do
+    it 'exists on input elements' do
       @inputs.all? do |input|
         input.respond_to? :enabled?
       end.should be_true
@@ -174,29 +174,29 @@ describe "Element" do
   end
 
   # visible?
-  describe "#visible?" do
+  describe '#visible?' do
     before :each do
-      browser.goto(fixture("visible.html"))
+      browser.goto(fixture('visible.html'))
     end
 
-    it "is true for a visible element" do
+    it 'is true for a visible element' do
       window.find_elements_by_tag(:h1).first.visible?.should be_true
     end
 
-    it "is false for an element with style attribute 'display:none'" do
-      window.find_elements_by_id("parent").first.visible?.should be_false
+    it 'is false for an element with style attribute “display:none”' do
+      window.find_elements_by_id('parent').first.visible?.should be_false
     end
 
-    it "is false a child of an element with style attribute 'display:none'" do
-      window.find_elements_by_id("child").first.visible?.should be_false
+    it 'is false a child of an element with style attribute “display:none”' do
+      window.find_elements_by_id('child').first.visible?.should be_false
     end
 
-    it "is false for an element hidden by CSS" do
-      window.find_elements_by_id("hidden_by_css").first.visible?.should be_false
+    it 'is false for an element hidden by CSS' do
+      window.find_elements_by_id('hidden_by_css').first.visible?.should be_false
     end
 
-    it "is true for an element with visibility:hidden" do
-      window.find_elements_by_id("invisible").first.visible?.should be_true
+    it 'is true for an element with visibility:hidden' do
+      window.find_elements_by_id('invisible').first.visible?.should be_true
     end
 
   end
@@ -211,14 +211,14 @@ describe "Element" do
     end
 
     it 'focuses the element' do
-      input = window.find_elements_by_id("new_user_email").first
+      input = window.find_elements_by_id('new_user_email').first
       input.focus!
       window.type('test')
       input.attr(:value).should == 'test'
     end
 
     it 'returns false if the element is disabled' do
-      input = window.find_elements_by_id("new_user_species").first
+      input = window.find_elements_by_id('new_user_species').first
       input.focus!.should be_false
     end
   end
@@ -226,7 +226,7 @@ describe "Element" do
   # click!([x, y]) , x,y relative to element top left
   describe '#click' do
     it 'follows links' do
-      window.find_elements_by_id("link_3").first.click!
+      window.find_elements_by_id('link_3').first.click!
       window.url.should match /forms_with_input_elements\.html$/
     end
 
@@ -241,8 +241,8 @@ describe "Element" do
   describe '#check!' do
     before :each do
       browser.goto(fixture('forms_with_input_elements.html'))
-      @checkbox_unchecked = window.find_elements_by_id("bowling").first
-      @radio_unchecked = window.find_elements_by_id("new_user_newsletter_no").first
+      @checkbox_unchecked = window.find_elements_by_id('bowling').first
+      @radio_unchecked = window.find_elements_by_id('new_user_newsletter_no').first
     end
 
     it 'checks a checkbox' do
@@ -259,8 +259,8 @@ describe "Element" do
   describe '#uncheck!' do
     before :each do
       browser.goto(fixture('forms_with_input_elements.html'))
-      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
-      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
+      @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
+      @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
     end
 
     it 'unchecks a checkbox' do
@@ -278,8 +278,8 @@ describe "Element" do
   describe '#toggle_check!' do
     before :each do
       browser.goto(fixture('forms_with_input_elements.html'))
-      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
-      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
+      @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
+      @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
     end
 
     it 'toggles a checkbox' do
@@ -297,8 +297,8 @@ describe "Element" do
   # enable!
   describe '#enable!' do
     it 'enables a form element' do
-      window.goto(fixture("forms_with_input_elements.html"))
-      disabled = window.find_elements_by_id("new_user_species")
+      window.goto(fixture('forms_with_input_elements.html'))
+      disabled = window.find_elements_by_id('new_user_species')
       disabled.enabled?.should be_false
       disabled.enable!
       disabled.enabled?.should be_true
@@ -307,8 +307,8 @@ describe "Element" do
   # disable!
   describe '#enable!' do
     it 'enables a form element' do
-      window.goto(fixture("forms_with_input_elements.html"))
-      disabled = window.find_elements_by_id("new_user_email")
+      window.goto(fixture('forms_with_input_elements.html'))
+      disabled = window.find_elements_by_id('new_user_email')
       disabled.enabled?.should be_true
       disabled.disable!
       disabled.enabled?.should be_false
@@ -318,7 +318,7 @@ describe "Element" do
   # show!
   describe '#show!' do
     it 'makes the element visible' do
-      hidden = window.find_elements_by_id("hidden").first
+      hidden = window.find_elements_by_id('hidden').first
       hidden.visible?.should be_false
       hidden.show!
       hidden.visible?.should be_true
@@ -326,7 +326,7 @@ describe "Element" do
   end
 
   # hide!
-  describe "#hide!" do
+  describe '#hide!' do
     it 'sets the element to display:none' do
       @element.visible?.should be_true
       hidden.hide!

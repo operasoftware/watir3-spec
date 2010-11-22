@@ -5,9 +5,9 @@ describe "Element" do
   #direct attribute access
   before :each do
     browser.goto(fixture('non_control_elements.html'))
-    @element = window.get_elements_by_id("descartes").first
-    @list = window.get_elements_by_id("navbar").first
-    @leaf = window.get_elements_by_id("link_2").first
+    @element = window.find_elements_by_id("descartes").first
+    @list = window.find_elements_by_id("navbar").first
+    @leaf = window.find_elements_by_id("link_2").first
   end
 
   # parent
@@ -18,7 +18,7 @@ describe "Element" do
     end
 
     it "is nil for the root element" do
-      window.get_elements_by_tag(:html).first.parent.should == nil
+      window.find_elements_by_tag(:html).first.parent.should == nil
     end
   end
 
@@ -62,7 +62,7 @@ describe "Element" do
     end
 
     it "is an empty string when there is no text" do
-      window.get_elements_by_tag(:body).first.children.first.text.should == ""
+      window.find_elements_by_tag(:body).first.children.first.text.should == ""
     end
   end
 
@@ -85,7 +85,7 @@ describe "Element" do
     end
 
     it "is an empty string if the element contains no text or html" do
-      window.get_elements_by_tag(:body).first.children.first.html.should == ""
+      window.find_elements_by_tag(:body).first.children.first.html.should == ""
     end
   end
 
@@ -105,8 +105,8 @@ describe "Element" do
   # tag_name
   describe "#tag_name" do
     it "is the tag name of an element" do
-      @element.tag_name.should == "strong"
-      @list.tag_name.should == "ul"
+      @element.tag_name.should match /strong/i
+      @list.tag_name.should match /ul/i
     end
   end
 
@@ -116,12 +116,12 @@ describe "Element" do
   # checked?
   describe "#checked?" do
     before :each do
-      browser.goto(fixture('non_control_elements.html'))
-      @textbox = window.get_elements_by_id("new_user_username").first
-      @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
-      @uncheckbox_checked = window.get_elements_by_id("bowling").first
-      @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
-      @radio_unchecked = window.get_elements_by_id("new_user_newsletter_no").first
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @textbox = window.find_elements_by_id("new_user_username").first
+      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
+      @checkbox_unchecked = window.find_elements_by_id("bowling").first
+      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
+      @radio_unchecked = window.find_elements_by_id("new_user_newsletter_no").first
     end
 
     # TODO "checked" is available for all <input> and <command>. Change this
@@ -160,7 +160,7 @@ describe "Element" do
   describe "#enabled?" do
     before :each do
       browser.goto(fixture('non_control_elements.html'))
-      @inputs = window.get_elements_by_tag(:input)
+      @inputs = window.find_elements_by_tag(:input)
     end
 
     # "disabled" attribute is available on quite a few obscure elements. Toss
@@ -174,26 +174,29 @@ describe "Element" do
   end
 
   # visible?
-  # NOTE should this be false for "visibility: hidden"?
   describe "#visible?" do
     before :each do
-      browser.goto(fixture("display.html"))
+      browser.goto(fixture("visible.html"))
     end
 
     it "is true for a visible element" do
-      window.get_elements_by_tag(:h1).first.visible?.should be_true
+      window.find_elements_by_tag(:h1).first.visible?.should be_true
     end
 
     it "is false for an element with style attribute 'display:none'" do
-      window.get_elements_by_id("parent").first.visible?.should be_false
+      window.find_elements_by_id("parent").first.visible?.should be_false
     end
 
     it "is false a child of an element with style attribute 'display:none'" do
-      window.get_elements_by_id("child").first.visible?.should be_false
+      window.find_elements_by_id("child").first.visible?.should be_false
     end
 
     it "is false for an element hidden by CSS" do
-      window.get_elements_by_id("hidden_by_css").first.visible?.should be_false
+      window.find_elements_by_id("hidden_by_css").first.visible?.should be_false
+    end
+
+    it "is true for an element with visibility:hidden" do
+      window.find_elements_by_id("invisible").first.visible?.should be_true
     end
 
   end
@@ -201,17 +204,135 @@ describe "Element" do
   # actions
   # -------
 
+  # focus!
+  describe '#focus' do
+    before :each do
+      browser.goto(fixture('forms_with_input_elements.html'))
+    end
+
+    it 'focuses the element' do
+      input = window.find_elements_by_id("new_user_email").first
+      input.focus!
+      window.type('test')
+      input.attr(:value).should == 'test'
+    end
+
+    it 'returns false if the element is disabled' do
+      input = window.find_elements_by_id("new_user_species").first
+      input.focus!.should be_false
+    end
+  end
+
   # click!([x, y]) , x,y relative to element top left
+  describe '#click' do
+    it 'follows links' do
+      window.find_elements_by_id("link_3").first.click!
+      window.url.should match /forms_with_input_elements\.html$/
+    end
+
+    it 'triggers onclick handlers' do
+      div = window.find_elements_by_id('best_language').first
+      div.click!
+      div.html.should == 'Ruby!'
+    end
+  end
 
   # check!
+  describe '#check!' do
+    before :each do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @checkbox_unchecked = window.find_elements_by_id("bowling").first
+      @radio_unchecked = window.find_elements_by_id("new_user_newsletter_no").first
+    end
+
+    it 'checks a checkbox' do
+      @checkbox_unchecked.check!
+      @checkbox_unchecked.checked?.should be_true
+    end
+
+    it 'checks a radio button' do
+      @radio_unchecked.check!
+      @radio_unchecked.checked?.should be_true
+    end
+  end
   # uncheck!
+  describe '#uncheck!' do
+    before :each do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
+      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
+    end
+
+    it 'unchecks a checkbox' do
+      @checkbox_checked.uncheck!
+      @checkbox_checked.checked?.should be_false
+    end
+
+    it 'unchecks a radio button' do
+      @radio_checked.uncheck!
+      @radio_checked.checked?.should be_false
+    end
+  end
+
   # toggle_check!
+  describe '#toggle_check!' do
+    before :each do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      @checkbox_checked = window.find_elements_by_id("new_user_interests_books").first
+      @radio_checked = window.find_elements_by_id("new_user_newsletter_yes").first
+    end
+
+    it 'toggles a checkbox' do
+      @checkbox_checked.toggle_check!
+      @checkbox_checked.checked?.should be_false
+      @checkbox_checked.toggle_check!
+      @checkbox_checked.checked?.should be_true
+    end
+
+    it 'does not toggle appear on a radio button' do
+      @radio_checked.should_not respond_to :toggle_check!
+    end
+  end
 
   # enable!
+  describe '#enable!' do
+    it 'enables a form element' do
+      window.goto(fixture("forms_with_input_elements.html"))
+      disabled = window.find_elements_by_id("new_user_species")
+      disabled.enabled?.should be_false
+      disabled.enable!
+      disabled.enabled?.should be_true
+    end
+  end
   # disable!
+  describe '#enable!' do
+    it 'enables a form element' do
+      window.goto(fixture("forms_with_input_elements.html"))
+      disabled = window.find_elements_by_id("new_user_email")
+      disabled.enabled?.should be_true
+      disabled.disable!
+      disabled.enabled?.should be_false
+    end
+  end
 
   # show!
+  describe '#show!' do
+    it 'makes the element visible' do
+      hidden = window.find_elements_by_id("hidden").first
+      hidden.visible?.should be_false
+      hidden.show!
+      hidden.visible?.should be_true
+    end
+  end
+
   # hide!
+  describe "#hide!" do
+    it 'sets the element to display:none' do
+      @element.visible?.should be_true
+      hidden.hide!
+      hidden.visible?.should be_false
+    end
+  end
 
   # attributes
   # ----------

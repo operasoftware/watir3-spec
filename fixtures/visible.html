@@ -1,0 +1,26 @@
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title>Display test</title>
+  <style type="text/css">
+    #hidden_by_css {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Visibility test</h1>
+
+  <div id="parent" style="display: none">
+    <div id="child">
+      This is hidden.
+    </div>
+  </div>
+
+  <div id="hidden_by_css">
+    Hidden.
+  </div>
+
+  <div id="invisible" style="visibility: hidden;">Invisible</div>
+</body>
+</html>

@@ -23,8 +23,9 @@ describe 'Browser' do
 
   describe '#url=' do  # goto() is an alias
     it 'opens a new window' do
-      new_window = browser.goto fixture('simple.html')
+      new_window = browser.url = fixture('simple.html')
       new_window.exists?.should be_true
+      new_window.close
     end
 
     it 'navigates to a url' do

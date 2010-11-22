@@ -58,7 +58,7 @@ describe 'Collection' do
   describe '#click!' do
     it 'clicks all the elements in this collection' do
       collection = window.find_elements_by_class('footer')
-      #collection.click!
+      collection.click!
       collection.all? do |element|
         element.text.match(/Javascript/) != nil
       end.should be_true

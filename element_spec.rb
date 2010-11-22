@@ -119,7 +119,7 @@ describe "Element" do
       browser.goto(fixture('non_control_elements.html'))
       @textbox = window.get_elements_by_id("new_user_username").first
       @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
-      @uncheckbox_checked = window.get_elements_by_id("bowling").first
+      @checkbox_unchecked = window.get_elements_by_id("bowling").first
       @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
       @radio_unchecked = window.get_elements_by_id("new_user_newsletter_no").first
     end

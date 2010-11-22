@@ -4,7 +4,7 @@ require File.expand_path('../watirspec_helper', __FILE__)
 describe 'Element' do
   #direct attribute access
   before :each do
-    browser.goto(fixture('non_control_elements.html'))
+    browser.url = fixture('non_control_elements.html')
     @element = window.find_elements_by_id('descartes').first
     @list = window.find_elements_by_id('navbar').first
     @leaf = window.find_elements_by_id('link_2').first

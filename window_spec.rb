@@ -43,6 +43,12 @@ describe 'Window' do
     end
   end
 
+  describe '#id' do
+    it 'is an alias for #find_elements_by_id' do
+      window.id.should == window.find_elements_by_id
+    end
+  end
+
   # css
   # we don't want a complete CSS selector test suite here, so just some common
   # selectors
@@ -59,6 +65,12 @@ describe 'Window' do
 
     it 'empty if the selector does not match' do
       window.find_elements_by_css('#hoobaflooba').should be_empty
+    end
+  end
+
+  describe '#selector' do
+    it 'is an alias for #find_elements_by_css' do
+      window.selector.should == window.find_elements_by_css
     end
   end
 
@@ -85,6 +97,12 @@ describe 'Window' do
     end
   end
 
+  describe '#class' do
+    it 'is an alias for #find_elements_by_class' do
+      window.class.should == window.find_elements_by_class
+    end
+  end
+
   # xpath
   describe '#find_elements_by_xpath' do
     before :all do
@@ -103,6 +121,12 @@ describe 'Window' do
 
     it 'is empty if the query does not match' do
       window.find_elements_by_xpath('//hoobaflooba').should be_empty
+    end
+  end
+
+  describe '#xpath' do
+    it 'is an alias for #find_elements_by_xpath' do
+      window.xpath.should == window.find_elements_by_xpath
     end
   end
 

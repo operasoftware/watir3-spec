@@ -17,7 +17,7 @@ describe 'Browser' do
   describe '#name' do
     # FIXME
     it 'is the name of a Watir implementation' do
-      browser.name.size.should > 1
+      browser.name.length.should > 1
     end
   end
 

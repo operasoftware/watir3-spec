@@ -2,18 +2,19 @@
 require File.expand_path('../watirspec_helper', __FILE__)
 
 describe 'Element' do
-  #direct attribute access
+  # Direct attribute access
   before :each do
     browser.url = fixture('non_control_elements.html')
+
     @element = window.find_elements_by_id('descartes').first
-    @list = window.find_elements_by_id('navbar').first
-    @leaf = window.find_elements_by_id('link_2').first
+    @list    = window.find_elements_by_id('navbar').first
+    @leaf    = window.find_elements_by_id('link_2').first
   end
 
   # parent
   describe '#parent' do
     it 'is the parent element of an element' do
-      # two .parent to get to an IDed element
+      # Two .parent to get to an IDed element
       @element.parent.parent.attr(:id).should == 'promo'
     end
 
@@ -116,12 +117,13 @@ describe 'Element' do
   # checked?
   describe '#checked?' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
-      @textbox = window.find_elements_by_id('new_user_username').first
-      @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
+      browser.url = fixture('forms_with_input_elements.html')
+
+      @textbox            = window.find_elements_by_id('new_user_username').first
+      @checkbox_checked   = window.find_elements_by_id('new_user_interests_books').first
       @checkbox_unchecked = window.find_elements_by_id('bowling').first
-      @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
-      @radio_unchecked = window.find_elements_by_id('new_user_newsletter_no').first
+      @radio_checked      = window.find_elements_by_id('new_user_newsletter_yes').first
+      @radio_unchecked    = window.find_elements_by_id('new_user_newsletter_no').first
     end
 
     # TODO 'checked' is available for all <input> and <command>. Change this
@@ -159,13 +161,14 @@ describe 'Element' do
   # enabled?
   describe '#enabled?' do
     before :each do
-      browser.goto(fixture('non_control_elements.html'))
+      browser.url = fixture('non_control_elements.html')
       @inputs = window.find_elements_by_tag(:input)
     end
 
-    # 'disabled' attribute is available on quite a few obscure elements. Toss
-    # up between limiting to common ones, all html5, all elements that have a
-    # .disabled property in Javascript, or all elements
+    # 'disabled' attribute is available on quite a few obscure
+    # elements. Toss up between limiting to common ones, all html5,
+    # all elements that have a .disabled property in Javascript, or
+    # all elements
     it 'exists on input elements' do
       @inputs.all? do |input|
         input.respond_to? :enabled?
@@ -176,7 +179,7 @@ describe 'Element' do
   # visible?
   describe '#visible?' do
     before :each do
-      browser.goto(fixture('visible.html'))
+      browser.url = fixture('visible.html')
     end
 
     it 'is true for a visible element' do
@@ -207,7 +210,7 @@ describe 'Element' do
   # focus!
   describe '#focus' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
     end
 
     it 'focuses the element' do
@@ -240,7 +243,7 @@ describe 'Element' do
   # check!
   describe '#check!' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @checkbox_unchecked = window.find_elements_by_id('bowling').first
       @radio_unchecked = window.find_elements_by_id('new_user_newsletter_no').first
     end
@@ -258,7 +261,7 @@ describe 'Element' do
   # uncheck!
   describe '#uncheck!' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
       @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
     end
@@ -277,7 +280,7 @@ describe 'Element' do
   # toggle_check!
   describe '#toggle_check!' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
       @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
     end
@@ -297,7 +300,7 @@ describe 'Element' do
   # enable!
   describe '#enable!' do
     it 'enables a form element' do
-      window.goto(fixture('forms_with_input_elements.html'))
+      window.url = fixture('forms_with_input_elements.html')
       disabled = window.find_elements_by_id('new_user_species')
       disabled.enabled?.should be_false
       disabled.enable!
@@ -307,7 +310,7 @@ describe 'Element' do
   # disable!
   describe '#enable!' do
     it 'enables a form element' do
-      window.goto(fixture('forms_with_input_elements.html'))
+      window.url = fixture('forms_with_input_elements.html')
       disabled = window.find_elements_by_id('new_user_email')
       disabled.enabled?.should be_true
       disabled.disable!

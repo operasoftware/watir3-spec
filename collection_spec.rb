@@ -4,29 +4,29 @@ require File.expand_path('../watirspec_helper', __FILE__)
 describe 'Collection' do
   before :each do
     browser.goto(fixture('non_control_elements.html'))
-    @collection = window.get_elements_by_tag(:div)
+    @collection = window.find_elements_by_tag(:div)
   end
 
   # elements
-  describe '#get_elements_by_tag' do
+  describe '#find_elements_by_tag' do
     it 'is not empty if the tag exists under the collection' do
-      @collection.get_elements_by_tag(:a).should_not be_empty
+      @collection.find_elements_by_tag(:a).should_not be_empty
     end
 
     it 'contains all elements of the tag name under the collection' do
-      @collection.get_elements_by_tag(:a).all? do |element|
+      @collection.find_elements_by_tag(:a).all? do |element|
         element.tag_name == 'a'
       end.should be_true
     end
 
     it 'contains only elements restricted by the selector' do
-      window.get_elements_by_tag(:span, :title => 'Lorem ipsum').all? do |element|
+      window.find_elements_by_tag(:span, :title => 'Lorem ipsum').all? do |element|
         element.attr(:title) == 'Lorem ipsum'
       end.should be_true
     end
 
     it 'is empty if the elements do not exist' do
-      window.get_elements_by_tag(:hoobaflooba).should be_empty
+      window.find_elements_by_tag(:hoobaflooba).should be_empty
     end
   end
 

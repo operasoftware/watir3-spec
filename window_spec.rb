@@ -4,7 +4,7 @@ require File.expand_path('../watirspec_helper', __FILE__)
 describe 'Window' do
 
   before :each do
-    browser.goto(fixture('non_control_elements.html'))
+    browser.url = fixture('non_control_elements.html')
   end
 
   # element access
@@ -27,10 +27,11 @@ describe 'Window' do
 
     it 'contains all elements of the tag name' do
       window.find_elements_by_tag(:div).all? do |element|
-        element.tag_name == 'div'
+        element.tag_name =~ /div/i
       end.should be_true
     end
 
+    # TODO I'm not convinced that we should be able to filter in finders
     it 'contains only elements restricted by the selector' do
       window.find_elements_by_tag(:div, :title => 'Lorem ipsum').all? do |element|
         element.attr(:title) == 'Lorem ipsum'
@@ -96,7 +97,7 @@ describe 'Window' do
 
     it 'contains all elements with the given query' do
       @headers.all? do |element|
-        element.tag.should == 'H1'
+        element.tag_name.should match /h1/i
       end
     end
 
@@ -119,14 +120,15 @@ describe 'Window' do
     end
   end
 
-  describe '#source' do
+  describe '#html' do
     it 'is the source of the page' do
-      window.source.should match /^    <title>Non-control elements<\/title>/
+      window.html.should match /<title>Non-control elements<\/title>/i
     end
 
+    # TODO I'm not sure Watir allows DOM manipulation
     it 'is the original source' do
-      window.find_elements_by_tag(:title).first.text = 'changed'
-      window.source.should match /^    <title>Non-control elements<\/title>/
+#      window.find_elements_by_tag(:title).first.text = 'changed'
+      window.html.should match /<title>Non-control elements<\/title>/i
     end
   end
 
@@ -147,52 +149,52 @@ describe 'Window' do
   end
 
   describe '#back' do
-    it 'goes back one page in history' do
-      window.url = fixture('forms_with_input_elements.html')
-      window.back
-      window.url.should == fixture('non_control_elements.html')
-    end
-
     # should it raise an exception if it fails instead?
-    it 'is true if it is possible to go back' do
+    it 'is possible to go back' do
       window.url = fixture('forms_with_input_elements.html')
       window.back.should be_true
     end
 
     it 'is false if there is no page to go back to' do
+      # FIXME: We need to open a new window first
       window.back.should be_false
+    end
+
+    it 'goes back one page in history' do
+      window.url = fixture('forms_with_input_elements.html')
+      window.back
+      window.url.should == fixture('non_control_elements.html')
     end
   end
 
   describe '#forward' do
+    it 'is possible to go forward' do
+      window.url = fixture('forms_with_input_elements.html')
+      window.back
+      window.forward.should be_true
+    end
+
+    it 'there is no page to go forward to' do
+      window.forward.should be_false
+    end
+
     it 'goes forward one page in history' do
       window.url = fixture('forms_with_input_elements.html')
       window.back
       window.forward
       window.url.should == fixture('forms_with_input_elements.html')
     end
-
-    # should it raise an exception if it fails instead?
-    it 'is true if it is possible to go forward' do
-      window.url = fixture('forms_with_input_elements.html')
-      window.back
-      window.forward.should be_true
-    end
-
-    it 'is false if there is no page to go forward to' do
-      window.forward.should be_false
-    end
-
   end
 
   describe '#refresh' do
     it 'refreshes the current page' do
-      title = window.find_elements_by_tag(:title).first
-      title.text = 'changed'
-      title.text.should == 'changed'
+      window.url = fixture('forms_with_input_elements.html')
+      field = window.find_elements_by_id('new_user_first_name').first
+      field.value = 'foobar'
+      field.value.should == 'foobar'
 
       window.refresh
-      title.text.should == 'Non-control elements'
+      field.value.should be_empty
     end
   end
 
@@ -208,7 +210,7 @@ describe 'Window' do
     end
 
     it 'returns an element when the Javascript does' do
-      window.eval_js('document.createElement("div")').tag_name.should == 'div'
+      window.eval_js('document.createElement("div")').tag_name.should match /div/i
     end
 
     it 'returns a number when the Javascript does' do
@@ -220,7 +222,7 @@ describe 'Window' do
     end
 
     it 'returns an array when the Javascript does' do
-      result = window.eval_js('["this", "is", "a", "test"]')
+      result = window.eval_js('["this", "is", "a", "test"]')  # WTR-227
       result.length.should == 4
       result[3].should == 'test'
     end
@@ -249,7 +251,7 @@ describe 'Window' do
 
   describe '#restore' do
     it 'restores (unmaximizes) the window' do
-      body = window.get_elements_by_tag(:body).first
+      body = window.find_elements_by_tag(:body).first
       # Make sure we aren't already restored
       window.maximize
       width = body.width
@@ -279,8 +281,9 @@ describe 'Window' do
 
   describe '#new' do
     it 'creates a new window' do
-      new_window = browser.url = fixtures('non-control-elements.html')
+      new_window = browser.url(fixture('non-control-elements.html'))
       new_window.exists?.should be_true
+      new_window.url.should == fixture('non-control-elements.html')
     end
   end
 end

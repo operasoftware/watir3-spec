@@ -174,10 +174,9 @@ describe "Element" do
   end
 
   # visible?
-  # NOTE should this be false for "visibility: hidden"?
   describe "#visible?" do
     before :each do
-      browser.goto(fixture("display.html"))
+      browser.goto(fixture("visible.html"))
     end
 
     it "is true for a visible element" do
@@ -194,6 +193,10 @@ describe "Element" do
 
     it "is false for an element hidden by CSS" do
       window.get_elements_by_id("hidden_by_css").first.visible?.should be_false
+    end
+
+    it "is true for an element with visibility:hidden" do
+      window.get_elements_by_id("invisible").first.visible?.should be_true
     end
 
   end

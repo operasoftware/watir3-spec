@@ -207,14 +207,83 @@ describe "Element" do
   # click!([x, y]) , x,y relative to element top left
 
   # check!
+  describe '#check!' do
+    before :each do
+      browser.goto(fixture('non_control_elements.html'))
+      @checkbox_unchecked = window.get_elements_by_id("bowling").first
+      @radio_unchecked = window.get_elements_by_id("new_user_newsletter_no").first
+    end
+
+    it 'checks a checkbox' do
+      @checkbox_unchecked.check!
+      @checkbox_unchecked.checked?.should be_true
+    end
+
+    it 'checks a radio button' do
+      @radio_unchecked.check!
+      @radio_unchecked.checked?.should be_true
+    end
+  end
   # uncheck!
+  describe '#uncheck!' do
+    before :each do
+      browser.goto(fixture('non_control_elements.html'))
+      @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
+      @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
+    end
+
+    it 'unchecks a checkbox' do
+      @checkbox_checked.uncheck!
+      @checkbox_checked.checked?.should be_false
+    end
+
+    it 'unchecks a radio button' do
+      @radio_checked.uncheck!
+      @radio_checked.checked?.should be_false
+    end
+  end
+
   # toggle_check!
+  describe '#toggle_check!' do
+    before :each do
+      browser.goto(fixture('non_control_elements.html'))
+      @checkbox_checked = window.get_elements_by_id("new_user_interests_books").first
+      @radio_checked = window.get_elements_by_id("new_user_newsletter_yes").first
+    end
+
+    it 'toggles a checkbox' do
+      @checkbox_checked.toggle_check!
+      @checkbox_checked.checked?.should be_false
+      @checkbox_checked.toggle_check!
+      @checkbox_checked.checked?.should be_true
+    end
+
+    it 'does not toggle appear on a radio button' do
+      @radio_checked.should_not respond_to :toggle_check!
+    end
+  end
 
   # enable!
   # disable!
 
   # show!
+  describe '#show!' do
+    it 'makes the element visible' do
+      hidden = window.find_elements_by_id("hidden").first
+      hidden.visible?.should be_false
+      hidden.show!
+      hidden.visible?.should be_true
+    end
+  end
+
   # hide!
+  describe "#hide!" do
+    it 'sets the element to display:none' do
+      @element.visible?.should be_true
+      hidden.hide!
+      hidden.visible?.should be_false
+    end
+  end
 
   # attributes
   # ----------

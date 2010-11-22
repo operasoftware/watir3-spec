@@ -204,6 +204,17 @@ describe "Element" do
   # actions
   # -------
 
+  # focus!
+  describe '#focus' do
+    it 'focuses the element' do
+      browser.goto(fixture('forms_with_input_elements.html'))
+      input = window.find_elements_by_id("new_user_email").first
+      input.focus!
+      window.type('test')
+      input.attr(:value).should == 'test'
+    end
+  end
+
   # click!([x, y]) , x,y relative to element top left
 
   # check!

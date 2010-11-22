@@ -7,14 +7,12 @@ describe 'Browser' do
     browser.url = fixture('simple.html')
   end
 
-  #url(), back(), forward(), version, url, get/set prefs()
-
-#  describe '#new' do
-#    it 'constructs a new instance' do
-#      new_browser = OperaWatir::Browser.new
-#      new_browser.exists?.should be_true
-#    end
-#  end
+  describe '#new' do
+    it 'constructs a new instance' do
+      browser.exists?.should be_true
+      browser.respond_to?('new').should be_true
+    end
+  end
 
   describe '#name' do
     # FIXME
@@ -41,6 +39,10 @@ describe 'Browser' do
 
   describe '#connected?' do
     it 'checks that the browser is connected' do
+      browser.connected?.should be_true
+    end
+
+    it 'checks that the browser is connected using #is_connected? alias' do
       browser.is_connected?.should be_true
     end
   end
@@ -114,7 +116,6 @@ describe 'Browser' do
   describe '#ua_string' do
     it 'fetches the UA string of the browser' do
       browser.ua_string.should_not be_empty
-      browser.ua_string.size.should > 0
     end
   end
 
@@ -130,6 +131,12 @@ describe 'Browser' do
 
     after :all do
       browser = OperaWatir::Waiter.browser
+    end
+  end
+
+  describe '#desktop?' do
+    it 'responds with boolean' do
+      browser.desktop?.kind_of?(TrueClass || FalseClass).should be_true
     end
   end
 
@@ -215,14 +222,19 @@ describe 'Browser' do
       browser.preferences('Cache', 'Always Check Never-Expiring GET queries').should_not be_true
       browser.preferences('Cache', 'Application Cache Quota').should == -5000
       browser.preferences('Cache', 'SVG Cache Size').should == 2000
+
+      # Making sure setting block didn't affect any other blocks.
+      browser.preferences('Colors', 'Background').should == @preferences['Colors']['Background']
+      browser.preferences('Fonts', 'Dialog').should == @preferences['Fonts']['Dialog']
     end
 
     it 'fetches default value of an option' do
-      browser.preferences('Cache', 'SVG Cache Size').reset.should > 2000
+      browser.preferences('Cache', 'SVG Cache Size').default.should > 2000
     end
 
     it 'resets an option to default' do
       browser.preferences('Cache', 'SVG Cache Size').reset!
+      browser.preferences('Cache', 'SVG Cache Size').should == browser.preferences('Cache', 'SVG Cache Size').default
     end
 
     after :all do

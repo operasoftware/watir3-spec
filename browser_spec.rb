@@ -218,11 +218,12 @@ describe 'Browser' do
     end
 
     it 'fetches default value of an option' do
-      browser.preferences('Cache', 'SVG Cache Size').reset.should > 2000
+      browser.preferences('Cache', 'SVG Cache Size').default.should > 2000
     end
 
     it 'resets an option to default' do
       browser.preferences('Cache', 'SVG Cache Size').reset!
+      browser.preferences('Cache', 'SVG Cache Size').should == browser.preferences('Cache', 'SVG Cache Size').default
     end
 
     after :all do

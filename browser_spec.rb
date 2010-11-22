@@ -7,14 +7,12 @@ describe 'Browser' do
     browser.url = fixture('simple.html')
   end
 
-  #url(), back(), forward(), version, url, get/set prefs()
-
-#  describe '#new' do
-#    it 'constructs a new instance' do
-#      new_browser = OperaWatir::Browser.new
-#      new_browser.exists?.should be_true
-#    end
-#  end
+  describe '#new' do
+    it 'constructs a new instance' do
+      browser.exists?.should be_true
+      browser.respond_to?('new').should be_true
+    end
+  end
 
   describe '#name' do
     # FIXME
@@ -130,6 +128,12 @@ describe 'Browser' do
 
     after :all do
       browser = OperaWatir::Waiter.browser
+    end
+  end
+
+  describe '#desktop?' do
+    it 'responds with boolean' do
+      browser.desktop?.kind_of?(TrueClass || FalseClass).should be_true
     end
   end
 

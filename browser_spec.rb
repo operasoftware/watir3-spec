@@ -73,7 +73,7 @@ describe 'Browser' do
       open_windows = browser.windows.length
       browser.windows.close_all
       browser.windows.length.should < open_windows
-      browser.windows.length.should == 0
+      browser.windows.length.should_not be_zero
     end
 
     # TODO: Window selectors
@@ -88,8 +88,8 @@ describe 'Browser' do
 
   describe '#pid' do
     it 'fetches the PID from the attached browser instance' do
-      browser.pid.should be_numeric
-      browser.pid.should > 0
+      browser.pid.should be_integer
+      browser.pid.should_not be_zero
     end
   end
 
@@ -102,8 +102,8 @@ describe 'Browser' do
 
   describe '#build' do
     it 'fetches the build number of the attached browser instance' do
-      browser.build.should be_numeric
-      browser.build.should > 0
+      browser.build.should be_integer
+      browser.build.should_not be_zero
     end
   end
 
@@ -188,7 +188,7 @@ describe 'Browser' do
 
     it 'gets a value of an option' do
       browser.preferences('Cache', 'SVG Cache Size').should be_numeric
-      browser.preferences('Cache', 'SVG Cache Size').should > 0
+      browser.preferences('Cache', 'SVG Cache Size').should_not be_zero
     end
 
     it 'returns a top block of preferences' do

@@ -206,12 +206,20 @@ describe "Element" do
 
   # focus!
   describe '#focus' do
-    it 'focuses the element' do
+    before :each do
       browser.goto(fixture('forms_with_input_elements.html'))
+    end
+
+    it 'focuses the element' do
       input = window.find_elements_by_id("new_user_email").first
       input.focus!
       window.type('test')
       input.attr(:value).should == 'test'
+    end
+
+    it 'returns false if the element is disabled' do
+      input = window.find_elements_by_id("new_user_species").first
+      input.focus!.should be_false
     end
   end
 
@@ -275,7 +283,25 @@ describe "Element" do
   end
 
   # enable!
+  describe '#enable!' do
+    it 'enables a form element' do
+      window.goto(fixture("forms_with_input_elements.html"))
+      disabled = window.find_elements_by_id("new_user_species")
+      disabled.enabled?.should be_false
+      disabled.enable!
+      disabled.enabled?.should be_true
+    end
+  end
   # disable!
+  describe '#enable!' do
+    it 'enables a form element' do
+      window.goto(fixture("forms_with_input_elements.html"))
+      disabled = window.find_elements_by_id("new_user_email")
+      disabled.enabled?.should be_true
+      disabled.disable!
+      disabled.enabled?.should be_false
+    end
+  end
 
   # show!
   describe '#show!' do

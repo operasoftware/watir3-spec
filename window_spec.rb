@@ -281,9 +281,9 @@ describe 'Window' do
 
   describe '#new' do
     it 'creates a new window' do
-      new_window = browser.url(fixture('non-control-elements.html'))
+      new_window = browser.url(fixture('non_control_elements.html'))
       new_window.exists?.should be_true
-      new_window.url.should == fixture('non-control-elements.html')
+      new_window.url.should == fixture('non_control_elements.html')
     end
   end
 end

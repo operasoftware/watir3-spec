@@ -39,6 +39,10 @@ describe 'Browser' do
 
   describe '#connected?' do
     it 'checks that the browser is connected' do
+      browser.connected?.should be_true
+    end
+
+    it 'checks that the browser is connected using #is_connected? alias' do
       browser.is_connected?.should be_true
     end
   end
@@ -112,7 +116,6 @@ describe 'Browser' do
   describe '#ua_string' do
     it 'fetches the UA string of the browser' do
       browser.ua_string.should_not be_empty
-      browser.ua_string.size.should > 0
     end
   end
 

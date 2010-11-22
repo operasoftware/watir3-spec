@@ -203,6 +203,52 @@ describe 'Window' do
 
   # click(x,y)
 
+  describe '#type' do
+    it 'types the given characters' do
+      browser.url = fixture('forms_with_input_elements.html')
+      textbox = window.find_elements_by_id('new_user_first_name').first
+      textbox.focus!
+      window.type('test')
+      textbox.attr(:value).should == 'test'
+    end
+
+    it 'sends keypress events' do
+      browser.url = fixture('keys.html')
+      window.type('hello')
+      window.find_elements_by_id('press').first.text.should == 'o'
+    end
+  end
+
+  describe '#key' do
+    it 'presses the given key' do
+      browser.url = fixture('keys.html')
+      # TODO Is this how we should send ctrl/shift/alt?
+      window.key('ctrl')
+      window.find_elements_by_id('up').first.text.should == 'ctrl'
+    end
+  end
+
+  describe '#key_down' do
+    it 'presses the given key' do
+      browser.url = fixture('keys.html')
+      window.key_down('ctrl')
+      window.key_down('shift')
+      window.find_elements_by_id('down').first.text.should == 'ctrl shift'
+      # Don't leave them pressed down
+      window.key_up('ctrl')
+      window.key_up('shift')
+    end
+  end
+
+  describe '#key_up' do
+    it 'presses the given key' do
+      browser.url = fixture('keys.html')
+      window.key_down('ctrl')
+      window.key_up('ctrl')
+      window.find_elements_by_id('up').first.text.should == 'ctrl'
+    end
+  end
+
   describe '#eval_js' do
     it 'executes Javascript in the page' do
       window.eval_js('document.title = "test"')

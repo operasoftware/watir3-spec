@@ -224,6 +224,18 @@ describe "Element" do
   end
 
   # click!([x, y]) , x,y relative to element top left
+  describe '#click' do
+    it 'follows links' do
+      window.find_elements_by_id("link_3").first.click!
+      window.url.should match /forms_with_input_elements\.html$/
+    end
+
+    it 'triggers onclick handlers' do
+      div = window.find_elements_by_id('best_language').first
+      div.click!
+      div.html.should == 'Ruby!'
+    end
+  end
 
   # check!
   describe '#check!' do

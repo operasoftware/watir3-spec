@@ -222,6 +222,8 @@ describe 'Browser' do
       end
     end
 
+    # I'm not sure if this works, we'll have to extend all returned values
+    # (see 'gets a value of an option') with a .default and .reset! property
     describe '#default' do
       it 'fetches default value of an option' do
         browser.preferences('Cache', 'SVG Cache Size').default.should > 2000

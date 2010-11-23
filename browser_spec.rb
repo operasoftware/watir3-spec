@@ -196,11 +196,6 @@ describe 'Browser' do
   end
 
   describe '#preferences' do
-    before :all do
-      # Caches options that we will tamper with.
-      @preferences = browser.preferences
-    end
-
     it 'is a list of all preferences' do
       browser.preferences.length.should > 10
     end
@@ -227,6 +222,27 @@ describe 'Browser' do
       end
     end
 
+    describe '#default' do
+      it 'fetches default value of an option' do
+        browser.preferences('Cache', 'SVG Cache Size').default.should > 2000
+      end
+    end
+
+    describe '#reset!' do
+      it 'resets an option to default' do
+        browser.preferences('Cache', 'SVG Cache Size').reset!
+        browser.preferences('Cache', 'SVG Cache Size').should == browser.preferences('Cache', 'SVG Cache Size').default
+      end
+    end
+
+  end
+
+  describe '#preferences=' do
+    before :all do
+      # Caches options that we will tamper with.
+      @preferences = browser.preferences
+    end
+
     it 'sets an option' do
       browser.preferences('Cache', 'Application Cache Quota').value = 0
       browser.preferences('Cache', 'Application Cache Quota').should == 0
@@ -250,15 +266,6 @@ describe 'Browser' do
       # Making sure setting block didn't affect any other blocks.
       browser.preferences('Colors', 'Background').should == @preferences['Colors']['Background']
       browser.preferences('Fonts', 'Dialog').should == @preferences['Fonts']['Dialog']
-    end
-
-    it 'fetches default value of an option' do
-      browser.preferences('Cache', 'SVG Cache Size').default.should > 2000
-    end
-
-    it 'resets an option to default' do
-      browser.preferences('Cache', 'SVG Cache Size').reset!
-      browser.preferences('Cache', 'SVG Cache Size').should == browser.preferences('Cache', 'SVG Cache Size').default
     end
 
     after :all do

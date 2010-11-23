@@ -38,6 +38,15 @@ describe 'Element' do
     it 'is empty when the element has no children' do
       @leaf.children.should be_empty
     end
+
+    it 'is a collection' do
+      @list.children.find_elements_by_tag(:li).all? do |element|
+        element.parent == @list
+      end.should be_true
+      # Some example calls
+      @list.should.respond_to? :id
+      @list.should.respond_to? :tag
+    end
   end
 
   # attr(what, value=nil)

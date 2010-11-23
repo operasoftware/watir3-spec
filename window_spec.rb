@@ -25,9 +25,10 @@ describe 'Window' do
     end
   end
 
+  # TODO could be improved
   describe '#id' do
-    it 'is an alias for #find_elements_by_id' do
-      window.id.should == window.find_elements_by_id
+    it 'returns a collection of elements with the given id' do
+      window.id('header').attrs(:id).should == ['header']
     end
   end
 
@@ -55,8 +56,12 @@ describe 'Window' do
   end
 
   describe '#tag' do
-    it 'is an alias for #find_elements_by_tag' do
-      window.tag.should == window.find_elements_by_tag
+    it 'returns a collection of elements of the given tag' do
+      uls = window.tag(:ul)
+      uls.length.should == 2
+      uls.tag(:li).all? do |element|
+        element.parent.tag_name.match(/ul/i)
+      end
     end
   end
 
@@ -80,37 +85,39 @@ describe 'Window' do
   end
 
   describe '#selector' do
-    it 'is an alias for #find_elements_by_css' do
-      window.selector.should == window.find_elements_by_css
+    it 'returns a collection of elements matching the given selector' do
+      window.selector("#outer_container > div").tag(:h1).all? do |element|
+        element.parent.tag_name.match(/div/i)
+      end
     end
   end
 
   # class
   describe '#find_elements_by_class' do
     it 'is not empty if an element matches the class' do
-      window.find_elements_by_class(:lead).should_not be_empty
+      window.find_elements_by_class('lead').should_not be_empty
     end
 
     it 'contains all elements with the given class' do
-      window.find_elements_by_class(:lead).all? do |element|
+      window.find_elements_by_class('lead').all? do |element|
         element.attr(:class).should match /lead/
       end.should be_true
     end
 
     it 'finds elements with multiple classes' do
-      window.find_elements_by_class(:one).all? do |element|
+      window.find_elements_by_class('one').all? do |element|
         element.attr(:class).should match /one/
       end.should be_true
     end
 
     it 'is empty if the class does not match' do
-      window.find_elements_by_class(:hoobaflooba).should be_empty
+      window.find_elements_by_class('hoobaflooba').should be_empty
     end
   end
 
   describe '#class' do
-    it 'is an alias for #find_elements_by_class' do
-      window.class.should == window.find_elements_by_class
+    it 'returns a collection of elements with the given class' do
+      window.class('lead').attrs(:class).should == ['lead','lead','lead','lead']
     end
   end
 
@@ -136,8 +143,8 @@ describe 'Window' do
   end
 
   describe '#xpath' do
-    it 'is an alias for #find_elements_by_xpath' do
-      window.xpath.should == window.find_elements_by_xpath
+    it 'returns a collection of elements which match the given xpath' do
+      window.xpath('//h1').attrs(:id).should == ['first_header', 'header1']
     end
   end
 

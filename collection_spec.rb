@@ -8,6 +8,27 @@ describe 'Collection' do
   end
 
   # elements
+  describe '#find_elements_by_id' do
+    it 'returns an element with the given ID' do
+      elements = @collection.find_elements_by_id('header')
+
+      elements.should_not be_empty
+      elements.length.should == 1
+      elements.first.attr(:id).should == 'header'
+    end
+
+    it 'finds multiple elements with the same id' do
+      elements = @collection.find_elements_by_id('lead')
+      elements.length.should == 4
+    end
+  end
+
+  describe '#id' do
+    it 'is an alias for #find_elements_by_id' do
+      @collection.id.should == @collection.find_elements_by_id
+    end
+  end
+
   describe '#find_elements_by_tag' do
     it 'is not empty if the tag exists under the collection' do
       @collection.find_elements_by_tag(:a).should_not be_empty
@@ -26,7 +47,106 @@ describe 'Collection' do
     end
 
     it 'is empty if the elements do not exist' do
-      window.find_elements_by_tag(:hoobaflooba).should be_empty
+      @collection.find_elements_by_tag(:hoobaflooba).should be_empty
+    end
+  end
+
+  describe '#tag' do
+    it 'is an alias for #find_elements_by_tag' do
+      @collection.tag.should == @collection.find_elements_by_tag
+    end
+  end
+
+  # css
+  # we don't want a complete CSS selector test suite here, so just some common
+  # selectors
+  describe '#find_elements_by_css' do
+    it 'is not empty if an element matches the css selector' do
+      window.find_elements_by_css('ul').should_not be_empty
+    end
+
+    it 'contains all elements selected by the selector' do
+      collection = window.find_elements_by_id('outer_container')
+      collection.find_elements_by_css('> div').all? do |element|
+        element.parent.attr(:id).should == 'outer_container'
+      end.should be_true
+    end
+
+    it 'is empty if the selector does not match' do
+      @collection.find_elements_by_css('#hoobaflooba').should be_empty
+    end
+  end
+
+  describe '#selector' do
+    it 'is an alias for #find_elements_by_css' do
+      @collection..selector.should == @collection.find_elements_by_css
+    end
+  end
+
+  # class
+  describe '#find_elements_by_class' do
+    it 'is not empty if an element matches the class' do
+      @collection.find_elements_by_class(:lead).should_not be_empty
+    end
+
+    it 'contains all elements with the given class' do
+      collection  = window.find_elements_by_id('promo')
+      @collection.find_elements_by_class(:lead).all? do |element|
+        (element.attr(:class).should match /lead/ &&
+          element.parent.attr(:id).should  == 'promo')
+      end.should be_true
+    end
+
+    it 'finds elements with multiple classes' do
+      collection = window.find_elements_by_id('header')
+      collection.find_elements_by_class(:one).all? do |element|
+        (element.attr(:class).should match /one/ &&
+          element.parent.parent.parent.attr(:id).should == 'header')
+      end.should be_true
+    end
+
+    it 'is empty if the class does not match' do
+      @collection.find_elements_by_class(:hoobaflooba).should be_empty
+    end
+  end
+
+  describe '#class' do
+    it 'is an alias for #find_elements_by_class' do
+      @collection.class.should == @collection.find_elements_by_class
+    end
+  end
+
+  # xpath
+  describe '#find_elements_by_xpath' do
+    before :all do
+      @headers = @collection.find_elements_by_xpath('//h1')
+    end
+
+    it 'is not empty if elements matches the class' do
+      @headers.should_not be_empty
+    end
+
+    it 'contains all elements with the given query' do
+      @headers.all? do |element|
+        element.tag_name.should match /h1/i
+      end
+    end
+
+    it 'is empty if the query does not match' do
+      @collection.find_elements_by_xpath('//hoobaflooba').should be_empty
+    end
+
+    it 'finds elements in the current context' do
+      links = @collection.find_elements_by_xpath('a')
+      links.all? do |element|
+        element.parent.tag_name.match /div/i
+      end.should be_true
+    end
+  end
+
+  describe '#xpath' do
+    it 'is an alias for #find_elements_by_xpath' do
+      @collection.xpath.should == @collection.find_elements_by_xpath
     end
   end
 
@@ -41,7 +161,7 @@ describe 'Collection' do
         # check that this element is somewhere under div#content
         until element.parent == nil do
           element = element.parent
-          if element.attr(:id) == 'content' do
+          if element.attr(:id) == 'content'
             return true
           end
         end
@@ -52,7 +172,7 @@ describe 'Collection' do
 
     it 'can be chained' do
       window.find_elements_by_id('promo').ul.li.all? do |element|
-        element.tag_name.match /li/i && element.parent.tag_name.match /ul/i
+        element.tag_name.match(/li/i) && element.parent.tag_name.match(/ul/i)
       end.should be_true
     end
 

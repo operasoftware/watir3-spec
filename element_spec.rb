@@ -55,8 +55,8 @@ describe 'Element' do
       @element.attr(:class).should == 'descartes'
     end
 
-    it 'can access attributes with dashes' do
-      @leaf.attr(:"data-fixture").should == 'leaf'
+    it 'uses underscores instead of dashes' do
+      @leaf.attr(:data_fixture).should == 'leaf'
     end
 
     it 'is nil when the attribute does not exist' do

@@ -6,9 +6,9 @@ describe 'Element' do
   before :each do
     browser.url = fixture('non_control_elements.html')
 
-    @element = window.find_elements_by_id('descartes').first
-    @list    = window.find_elements_by_id('navbar').first
-    @leaf    = window.find_elements_by_id('link_2').first
+    @element = window.id('descartes').first
+    @list    = window.id('navbar').first
+    @leaf    = window.id('link_2').first
   end
 
   # parent
@@ -19,7 +19,7 @@ describe 'Element' do
     end
 
     it 'is nil for the root element' do
-      window.find_elements_by_tag(:html).first.parent.should == nil
+      window.tag(:html).first.parent.should == nil
     end
   end
 
@@ -40,7 +40,7 @@ describe 'Element' do
     end
 
     it 'is a collection' do
-      @list.children.find_elements_by_tag(:li).all? do |element|
+      @list.children.tag(:li).all? do |element|
         element.parent == @list
       end.should be_true
       # Some example calls
@@ -107,7 +107,7 @@ describe 'Element' do
     end
 
     it 'is an empty string when there is no text' do
-      window.find_elements_by_tag(:body).first.children.first.text.should == ''
+      window.tag(:body).first.children.first.text.should == ''
     end
   end
 
@@ -130,7 +130,7 @@ describe 'Element' do
     end
 
     it 'is an empty string if the element contains no text or html' do
-      window.find_elements_by_tag(:body).first.children.first.html.should == ''
+      window.tag(:body).first.children.first.html.should == ''
     end
   end
 
@@ -163,11 +163,11 @@ describe 'Element' do
     before :each do
       browser.url = fixture('forms_with_input_elements.html')
 
-      @textbox            = window.find_elements_by_id('new_user_username').first
-      @checkbox_checked   = window.find_elements_by_id('new_user_interests_books').first
-      @checkbox_unchecked = window.find_elements_by_id('bowling').first
-      @radio_checked      = window.find_elements_by_id('new_user_newsletter_yes').first
-      @radio_unchecked    = window.find_elements_by_id('new_user_newsletter_no').first
+      @textbox            = window.id('new_user_username').first
+      @checkbox_checked   = window.id('new_user_interests_books').first
+      @checkbox_unchecked = window.id('bowling').first
+      @radio_checked      = window.id('new_user_newsletter_yes').first
+      @radio_unchecked    = window.id('new_user_newsletter_no').first
     end
 
     # TODO 'checked' is available for all <input> and <command>. Change this
@@ -206,7 +206,7 @@ describe 'Element' do
   describe '#enabled?' do
     before :each do
       browser.url = fixture('non_control_elements.html')
-      @inputs = window.find_elements_by_tag(:input)
+      @inputs = window.tag(:input)
     end
 
     # 'disabled' attribute is available on quite a few obscure
@@ -227,23 +227,23 @@ describe 'Element' do
     end
 
     it 'is true for a visible element' do
-      window.find_elements_by_tag(:h1).first.visible?.should be_true
+      window.tag(:h1).first.visible?.should be_true
     end
 
     it 'is false for an element with style attribute “display:none”' do
-      window.find_elements_by_id('parent').first.visible?.should be_false
+      window.id('parent').first.visible?.should be_false
     end
 
     it 'is false a child of an element with style attribute “display:none”' do
-      window.find_elements_by_id('child').first.visible?.should be_false
+      window.id('child').first.visible?.should be_false
     end
 
     it 'is false for an element hidden by CSS' do
-      window.find_elements_by_id('hidden_by_css').first.visible?.should be_false
+      window.id('hidden_by_css').first.visible?.should be_false
     end
 
     it 'is true for an element with visibility:hidden' do
-      window.find_elements_by_id('invisible').first.visible?.should be_true
+      window.id('invisible').first.visible?.should be_true
     end
 
   end
@@ -258,14 +258,14 @@ describe 'Element' do
     end
 
     it 'focuses the element' do
-      input = window.find_elements_by_id('new_user_email').first
+      input = window.id('new_user_email').first
       input.focus!
       window.type('test')
       input.attr(:value).should == 'test'
     end
 
     it 'returns false if the element is disabled' do
-      input = window.find_elements_by_id('new_user_species').first
+      input = window.id('new_user_species').first
       input.focus!.should be_false
     end
   end
@@ -273,12 +273,12 @@ describe 'Element' do
   # click!([x, y]) , x,y relative to element top left
   describe '#click!' do
     it 'follows links' do
-      window.find_elements_by_id('link_3').first.click!
+      window.id('link_3').first.click!
       window.url.should match /forms_with_input_elements\.html$/
     end
 
     it 'triggers onclick handlers' do
-      div = window.find_elements_by_id('best_language').first
+      div = window.id('best_language').first
       div.click!
       div.html.should == 'Ruby!'
     end
@@ -288,8 +288,8 @@ describe 'Element' do
   describe '#check!' do
     before :each do
       browser.url = fixture('forms_with_input_elements.html')
-      @checkbox_unchecked = window.find_elements_by_id('bowling').first
-      @radio_unchecked = window.find_elements_by_id('new_user_newsletter_no').first
+      @checkbox_unchecked = window.id('bowling').first
+      @radio_unchecked = window.id('new_user_newsletter_no').first
     end
 
     it 'checks a checkbox' do
@@ -306,8 +306,8 @@ describe 'Element' do
   describe '#uncheck!' do
     before :each do
       browser.url = fixture('forms_with_input_elements.html')
-      @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
-      @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
+      @checkbox_checked = window.id('new_user_interests_books').first
+      @radio_checked = window.id('new_user_newsletter_yes').first
     end
 
     it 'unchecks a checkbox' do
@@ -325,8 +325,8 @@ describe 'Element' do
   describe '#toggle_check!' do
     before :each do
       browser.url = fixture('forms_with_input_elements.html')
-      @checkbox_checked = window.find_elements_by_id('new_user_interests_books').first
-      @radio_checked = window.find_elements_by_id('new_user_newsletter_yes').first
+      @checkbox_checked = window.id('new_user_interests_books').first
+      @radio_checked = window.id('new_user_newsletter_yes').first
     end
 
     it 'toggles a checkbox' do
@@ -345,7 +345,7 @@ describe 'Element' do
   describe '#enable!' do
     it 'enables a form element' do
       window.url = fixture('forms_with_input_elements.html')
-      disabled = window.find_elements_by_id('new_user_species')
+      disabled = window.id('new_user_species')
       disabled.enabled?.should be_false
       disabled.enable!
       disabled.enabled?.should be_true
@@ -355,7 +355,7 @@ describe 'Element' do
   describe '#enable!' do
     it 'enables a form element' do
       window.url = fixture('forms_with_input_elements.html')
-      disabled = window.find_elements_by_id('new_user_email')
+      disabled = window.id('new_user_email')
       disabled.enabled?.should be_true
       disabled.disable!
       disabled.enabled?.should be_false
@@ -365,7 +365,7 @@ describe 'Element' do
   # show!
   describe '#show!' do
     it 'makes the element visible' do
-      hidden = window.find_elements_by_id('hidden').first
+      hidden = window.id('hidden').first
       hidden.visible?.should be_false
       hidden.show!
       hidden.visible?.should be_true

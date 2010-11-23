@@ -75,6 +75,31 @@ describe 'Element' do
     end
   end
 
+  describe 'sugar' do
+    it 'provides direct access to the element\'s attributes' do
+      @element.class.should == @element.attr(:class)
+      @element.id.should == @element.attr(:id)
+    end
+
+    it 'uses underscores instead of dashes' do
+      @leaf.data_fixture.should == 'leaf'
+    end
+
+    it 'is nil when the attribute does not exist' do
+      @element.hoobaflooba.should be_nil
+    end
+
+    it 'allows attributes to be set' do
+      @element.class = 'test'
+      @element.attr(:class).should == 'test'
+      @element.id = 'test'
+      @element.attr(:id).should == 'test'
+
+      @leaf.data_fixture = 'test'
+      @leaf.attr(:data_fixture).should == 'test'
+    end
+  end
+
   # text
   describe '#text' do
     it 'is the text contained by the element' do

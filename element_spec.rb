@@ -55,6 +55,10 @@ describe 'Element' do
       @element.attr(:class).should == 'descartes'
     end
 
+    it 'can access attributes with dashes' do
+      @leaf.attr(:"data-fixture").should == 'leaf'
+    end
+
     it 'is nil when the attribute does not exist' do
       @element.attr(:hoobaflooba).should == nil
     end
@@ -62,6 +66,12 @@ describe 'Element' do
     it 'sets the attribute value when passed a value' do
       @element.attr(:id => 'value')
       @element.attr(:id).should == 'value'
+    end
+
+    it 'sets multiple attributes when passed values' do
+      @element.attr(:id => 'one', :class => 'two')
+      @element.attr(:id).should == 'one'
+      @element.attr(:class).should == 'two'
     end
   end
 
@@ -217,7 +227,7 @@ describe 'Element' do
   # -------
 
   # focus!
-  describe '#focus' do
+  describe '#focus!' do
     before :each do
       browser.url = fixture('forms_with_input_elements.html')
     end
@@ -236,7 +246,7 @@ describe 'Element' do
   end
 
   # click!([x, y]) , x,y relative to element top left
-  describe '#click' do
+  describe '#click!' do
     it 'follows links' do
       window.find_elements_by_id('link_3').first.click!
       window.url.should match /forms_with_input_elements\.html$/

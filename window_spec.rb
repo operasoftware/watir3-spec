@@ -20,6 +20,12 @@ describe 'Window' do
     end
   end
 
+  describe '#id' do
+    it 'is an alias for #find_elements_by_id' do
+      window.id.should == window.find_elements_by_id
+    end
+  end
+
   describe '#find_elements_by_tag' do
     it 'is not empty if the tag exists' do
       window.find_elements_by_tag(:div).should_not be_empty
@@ -43,9 +49,9 @@ describe 'Window' do
     end
   end
 
-  describe '#id' do
-    it 'is an alias for #find_elements_by_id' do
-      window.id.should == window.find_elements_by_id
+  describe '#tag' do
+    it 'is an alias for #find_elements_by_tag' do
+      window.tag.should == window.find_elements_by_tag
     end
   end
 

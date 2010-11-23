@@ -18,6 +18,11 @@ describe 'Window' do
       elements.length.should == 1
       elements.first.attr(:id).should == 'header'
     end
+
+    it 'finds multiple elements with the same id' do
+      elements = window.find_elements_by_id('lead')
+      elements.length.should == 4
+    end
   end
 
   describe '#id' do
@@ -69,7 +74,7 @@ describe 'Window' do
       end.should be_true
     end
 
-    it 'empty if the selector does not match' do
+    it 'is empty if the selector does not match' do
       window.find_elements_by_css('#hoobaflooba').should be_empty
     end
   end

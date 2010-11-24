@@ -262,7 +262,7 @@ describe 'Window' do
   end
 
   describe '#key' do
-    it 'presses the given key' do
+    it 'presses and releases the given key' do
       browser.url = fixture('keys.html')
       # TODO Is this how we should send ctrl/shift/alt?
       window.key('ctrl')
@@ -271,7 +271,7 @@ describe 'Window' do
   end
 
   describe '#key_down' do
-    it 'presses the given key' do
+    it 'presses down the given key' do
       browser.url = fixture('keys.html')
       window.key_down('ctrl')
       window.key_down('shift')
@@ -283,7 +283,7 @@ describe 'Window' do
   end
 
   describe '#key_up' do
-    it 'presses the given key' do
+    it 'releases the given key' do
       browser.url = fixture('keys.html')
       window.key_down('ctrl')
       window.key_up('ctrl')

@@ -3,7 +3,7 @@ require File.expand_path('../watirspec_helper', __FILE__)
 
 describe 'Collection' do
   before :each do
-    browser.goto(fixture('non_control_elements.html'))
+    browser.url fixture('non_control_elements.html')
     @collection = window.tag(:div)
   end
 
@@ -205,7 +205,7 @@ describe 'Collection' do
   # checked?
   describe '#checked?' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
     end
 
@@ -224,7 +224,7 @@ describe 'Collection' do
   # check!
   describe '#check!' do
     it 'checks all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
 
       @boxes.check!
@@ -237,7 +237,7 @@ describe 'Collection' do
   # uncheck!
   describe '#uncheck!' do
     it 'unchecks all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
 
       @boxes.uncheck!
@@ -250,7 +250,7 @@ describe 'Collection' do
   # toggle_check!
   describe '#toggle_check!' do
     it 'toggles the checked state of all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
 
       @boxes.toggle_check!
@@ -263,7 +263,7 @@ describe 'Collection' do
   # enabled?
   describe '#enabled?' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url fixture('forms_with_input_elements.html')
     end
 
     it 'returns true if all collection elements are enabled' do
@@ -280,7 +280,7 @@ describe 'Collection' do
   # enable!
   describe '#enable!' do
     it 'enables all elements in the collection' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url fixture('forms_with_input_elements.html')
       fieldset = window.id('delete_user').first.children.first
       fieldset.children.enable!
       window.id('new_user_species').enabled?.should be_true
@@ -290,7 +290,7 @@ describe 'Collection' do
   # disable!
   describe '#disable' do
     it 'disables all elements in the collection' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url fixture('forms_with_input_elements.html')
       fieldset = window.id('delete_user').first.children.first
       fieldset.children.disable!
       fieldset.children.all? do |element|

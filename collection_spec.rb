@@ -3,8 +3,8 @@ require File.expand_path('../watirspec_helper', __FILE__)
 
 describe 'Collection' do
   before :each do
-    browser.goto(fixture('non_control_elements.html'))
-    @collection = window.tag(:div)
+    browser.url = fixture('non_control_elements.html')
+    @collection = window.div
   end
 
   # elements
@@ -22,6 +22,8 @@ describe 'Collection' do
       elements.length.should == 4
     end
   end
+
+=begin
 
   describe '#tag' do
     it 'is not empty if the tag exists under the collection' do
@@ -152,15 +154,15 @@ describe 'Collection' do
 
     # This may be unnecessary...
     it 'responds to html elements' do
-      [:a,:abbr,:address,:area,:article,:aside,:audio,:b,:base,:bdo,:blockquote,:body,
-:br,:button,:canvas,:caption,:cite,:code,:col,:colgroup,:command,:datalist,:dd,
-:del,:details,:dfn,:div,:dl,:dt,:em,:embed,:eventsource,:fieldset,:figcaption,
-:figure,:footer,:form,:h1,:h2,:h3,:h4,:h5,:h6,:head,:header,:hgroup,:hr,:i,
-:iframe,:img,:input,:ins,:kbd,:keygen,:label,:legend,:li,:link,:mark,:map,
-:menu,:meta,:meter,:nav,:noscript,:object,:ol,:optgroup,:option,:output,:p,
-:param,:pre,:progress,:q,:ruby,:rp,:rt,:samp,:script,:section,:select,:small,
-:source,:span,:strong,:style,:sub,:summary,:sup,:table,:tbody,:td,:textarea,
-:tfoot,:th,:thead,:time,:title,:tr,:ul,:var,:video,:wbr].all do |symbol|
+        [:a,:abbr,:address,:area,:article,:aside,:audio,:b,:base,:bdo,:blockquote,:body,
+       :br,:button,:canvas,:caption,:cite,:code,:col,:colgroup,:command,:datalist,:dd,
+       :del,:details,:dfn,:div,:dl,:dt,:em,:embed,:eventsource,:fieldset,:figcaption,
+       :figure,:footer,:form,:h1,:h2,:h3,:h4,:h5,:h6,:head,:header,:hgroup,:hr,:i,
+       :iframe,:img,:input,:ins,:kbd,:keygen,:label,:legend,:li,:link,:mark,:map,
+       :menu,:meta,:meter,:nav,:noscript,:object,:ol,:optgroup,:option,:output,:p,
+       :param,:pre,:progress,:q,:ruby,:rp,:rt,:samp,:script,:section,:select,:small,
+       :source,:span,:strong,:style,:sub,:summary,:sup,:table,:tbody,:td,:textarea,
+       :tfoot,:th,:thead,:time,:title,:tr,:ul,:var,:video,:wbr].all do |symbol|
         @collection.respond_to? symbol
       end.should be_true
     end
@@ -205,7 +207,7 @@ describe 'Collection' do
   # checked?
   describe '#checked?' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
     end
 
@@ -224,7 +226,7 @@ describe 'Collection' do
   # check!
   describe '#check!' do
     it 'checks all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
 
       @boxes.check!
@@ -237,7 +239,7 @@ describe 'Collection' do
   # uncheck!
   describe '#uncheck!' do
     it 'unchecks all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
 
       @boxes.uncheck!
@@ -250,7 +252,7 @@ describe 'Collection' do
   # toggle_check!
   describe '#toggle_check!' do
     it 'toggles the checked state of all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
 
       @boxes.toggle_check!
@@ -263,7 +265,7 @@ describe 'Collection' do
   # enabled?
   describe '#enabled?' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
     end
 
     it 'returns true if all collection elements are enabled' do
@@ -280,7 +282,7 @@ describe 'Collection' do
   # enable!
   describe '#enable!' do
     it 'enables all elements in the collection' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       fieldset = window.id('delete_user').first.children.first
       fieldset.children.enable!
       window.id('new_user_species').enabled?.should be_true
@@ -290,7 +292,7 @@ describe 'Collection' do
   # disable!
   describe '#disable' do
     it 'disables all elements in the collection' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       fieldset = window.id('delete_user').first.children.first
       fieldset.children.disable!
       fieldset.children.all? do |element|
@@ -324,7 +326,7 @@ describe 'Collection' do
       window.id('outer_container').visible?.should be_false
     end
   end
-
+=end
   # actions
   # -------
 end

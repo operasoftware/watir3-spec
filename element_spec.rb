@@ -6,9 +6,9 @@ describe 'Element' do
   before :each do
     browser.url = fixture('non_control_elements.html')
 
-    @element = window.id('descartes').first
-    @list    = window.id('navbar').first
-    @leaf    = window.id('link_2').first
+    @element = window.strong(:id => 'descartes') #window.id('descartes').first
+#    @list    = window.id('navbar').first
+#    @leaf    = window.id('link_2').first
   end
 
   # parent

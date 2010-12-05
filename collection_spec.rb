@@ -4,7 +4,7 @@ require File.expand_path('../watirspec_helper', __FILE__)
 describe 'Collection' do
   before :each do
     browser.url = fixture('non_control_elements.html')
-    @collection = window.tag(:div)
+    @collection = window.div
   end
 
   # elements
@@ -22,6 +22,8 @@ describe 'Collection' do
       elements.length.should == 4
     end
   end
+
+=begin
 
   describe '#tag' do
     it 'is not empty if the tag exists under the collection' do
@@ -237,7 +239,7 @@ describe 'Collection' do
   # uncheck!
   describe '#uncheck!' do
     it 'unchecks all of the checkboxes' do
-      browser.url fixture('forms_with_input_elements.html')
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.tag(:input, :type => 'checkbox')
 
       @boxes.uncheck!
@@ -324,7 +326,7 @@ describe 'Collection' do
       window.id('outer_container').visible?.should be_false
     end
   end
-
+=end
   # actions
   # -------
 end

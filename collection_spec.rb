@@ -122,22 +122,9 @@ describe 'Collection' do
 
   # sugar
   describe 'syntactic sugar' do
-    it 'returns all decendants with the given tag' do
-      content = window.find_by_id('content').first.children
-      collection = content.span
-      collection.all? do |element|
-        child = false
-
-        # check that this element is somewhere under div#content
-        until element.parent.nil? do
-          element = element.parent
-          if element.attr(:id) == 'content'
-            return true
-          end
-        end
-
-        return false
-      end.should be_true
+    it 'returns all descendants with the given tag' do
+      content = window.find_by_id('promo').span
+      content.length.should == 5
     end
 
     it 'can be chained' do
@@ -271,8 +258,7 @@ describe 'Collection' do
     end
 
     it 'returns false if any collection elements are disabled' do
-      fieldset = window.find_by_id('new_user').first.children.first
-      fieldset.children.enabled?.should be_false
+      window.find_by_id('new_user').input.enabled?.should be_false
     end
   end
 
@@ -280,9 +266,8 @@ describe 'Collection' do
   describe '#enable!' do
     it 'enables all elements in the collection' do
       browser.goto(fixture('forms_with_input_elements.html'))
-      fieldset = window.find_by_id('delete_user').first.children.first
-      fieldset.children.enable!
-      window.find_by_id('new_user_species').enabled?.should be_true
+      window.find_by_id('new_user').input.enable!
+      window.find_by_id('new_user_species').first.enabled?.should be_true
     end
   end
 
@@ -290,11 +275,10 @@ describe 'Collection' do
   describe '#disable' do
     it 'disables all elements in the collection' do
       browser.goto(fixture('forms_with_input_elements.html'))
-      fieldset = window.find_by_id('delete_user').first.children.first
-      fieldset.children.disable!
-      fieldset.children.all? do |element|
-        element.enabled? == false
-      end.should be_true
+      window.find_by_id('new_user').input.disable!
+      window.find_by_id('new_user_species').input.any? do |element|
+        element.enabled?
+      end.should be_false
     end
   end
 

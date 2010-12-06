@@ -140,14 +140,14 @@ describe 'Collection' do
     # This may be unnecessary...
     it 'responds to html elements' do
       [:a,:abbr,:address,:area,:article,:aside,:audio,:b,:base,:bdo,:blockquote,:body,
-:br,:button,:canvas,:caption,:cite,:code,:col,:colgroup,:command,:datalist,:dd,
-:del,:details,:dfn,:div,:dl,:dt,:em,:embed,:eventsource,:fieldset,:figcaption,
-:figure,:footer,:form,:h1,:h2,:h3,:h4,:h5,:h6,:head,:header,:hgroup,:hr,:i,
-:iframe,:img,:input,:ins,:kbd,:keygen,:label,:legend,:li,:link,:mark,:map,
-:menu,:meta,:meter,:nav,:noscript,:object,:ol,:optgroup,:option,:output,:p,
-:param,:pre,:progress,:q,:ruby,:rp,:rt,:samp,:script,:section,:select,:small,
-:source,:span,:strong,:style,:sub,:summary,:sup,:table,:tbody,:td,:textarea,
-:tfoot,:th,:thead,:time,:title,:tr,:ul,:var,:video,:wbr].all do |symbol|
+       :br,:button,:canvas,:caption,:cite,:code,:col,:colgroup,:command,:datalist,:dd,
+       :del,:details,:dfn,:div,:dl,:dt,:em,:embed,:eventsource,:fieldset,:figcaption,
+       :figure,:footer,:form,:h1,:h2,:h3,:h4,:h5,:h6,:head,:header,:hgroup,:hr,:i,
+       :iframe,:img,:input,:ins,:kbd,:keygen,:label,:legend,:li,:link,:mark,:map,
+       :menu,:meta,:meter,:nav,:noscript,:object,:ol,:optgroup,:option,:output,:p,
+       :param,:pre,:progress,:q,:ruby,:rp,:rt,:samp,:script,:section,:select,:small,
+       :source,:span,:strong,:style,:sub,:summary,:sup,:table,:tbody,:td,:textarea,
+       :tfoot,:th,:thead,:time,:title,:tr,:ul,:var,:video,:wbr].all do |symbol|
         @collection.respond_to? symbol
       end.should be_true
     end
@@ -250,7 +250,7 @@ describe 'Collection' do
   # enabled?
   describe '#enabled?' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
     end
 
     it 'returns true if all collection elements are enabled' do
@@ -265,7 +265,7 @@ describe 'Collection' do
   # enable!
   describe '#enable!' do
     it 'enables all elements in the collection' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       window.find_by_id('new_user').input.enable!
       window.find_by_id('new_user_species').first.enabled?.should be_true
     end
@@ -274,7 +274,7 @@ describe 'Collection' do
   # disable!
   describe '#disable' do
     it 'disables all elements in the collection' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       window.find_by_id('new_user').input.disable!
       window.find_by_id('new_user_species').input.any? do |element|
         element.enabled?

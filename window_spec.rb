@@ -26,12 +26,12 @@ describe 'Window' do
   end
 
   # TODO could be improved
-  describe '#id' do
+  describe '#find_by_id' do
     it 'returns a collection of elements with the given id' do
-      window.id('header').attrs(:id).should == ['header']
+      window.find_by_id('header').attrs(:id).should == ['header']
     end
   end
-
+#
   describe '#find_elements_by_tag' do
     it 'is not empty if the tag exists' do
       window.find_elements_by_tag(:div).should_not be_empty
@@ -55,11 +55,11 @@ describe 'Window' do
     end
   end
 
-  describe '#tag' do
+  describe '#find_by_tag' do
     it 'returns a collection of elements of the given tag' do
-      uls = window.tag(:ul)
+      uls = window.find_by_tag(:ul)
       uls.length.should == 2
-      uls.tag(:li).all? do |element|
+      uls.find_by_tag(:li).all? do |element|
         element.parent.tag_name.match(/ul/i)
       end
     end
@@ -84,9 +84,9 @@ describe 'Window' do
     end
   end
 
-  describe '#selector' do
+  describe '#find_by_css' do
     it 'returns a collection of elements matching the given selector' do
-      window.selector("#outer_container > div").tag(:h1).all? do |element|
+      window.find_by_css("#outer_container > div").tag(:h1).all? do |element|
         element.parent.tag_name.match(/div/i)
       end
     end
@@ -115,9 +115,9 @@ describe 'Window' do
     end
   end
 
-  describe '#class' do
+  describe '#find_by_class' do
     it 'returns a collection of elements with the given class' do
-      window.class('lead').attrs(:class).should == ['lead','lead','lead','lead']
+      window.find_by_class('lead').attrs(:class).should == ['lead','lead','lead','lead']
     end
   end
 
@@ -142,9 +142,9 @@ describe 'Window' do
     end
   end
 
-  describe '#xpath' do
+  describe '#find_by_xpath' do
     it 'returns a collection of elements which match the given xpath' do
-      window.xpath('//h1').attrs(:id).should == ['first_header', 'header1']
+      window.find_by_xpath('//h1').attrs(:id).should == ['first_header', 'header1']
     end
   end
 

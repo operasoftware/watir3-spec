@@ -10,9 +10,9 @@ describe 'Window' do
   # element access
   # --------------
 
-  describe '#find_elements_by_id' do
+  describe '#find_by_id' do
     it 'returns an element with the given ID' do
-      elements = window.find_elements_by_id('header')
+      elements = window.find_by_id('header')
 
       elements.should_not be_empty
       elements.length.should == 1
@@ -20,42 +20,16 @@ describe 'Window' do
     end
 
     it 'finds multiple elements with the same id' do
-      elements = window.find_elements_by_id('lead')
+      elements = window.find_by_id('lead')
       elements.length.should == 4
     end
   end
 
-  # TODO could be improved
-  describe '#find_by_id' do
-    it 'returns a collection of elements with the given id' do
-      window.find_by_id('header').attrs(:id).should == ['header']
-    end
-  end
-#
-  describe '#find_elements_by_tag' do
-    it 'is not empty if the tag exists' do
-      window.find_elements_by_tag(:div).should_not be_empty
-    end
-
-    it 'contains all elements of the tag name' do
-      window.find_elements_by_tag(:div).all? do |element|
-        element.tag_name =~ /div/i
-      end.should be_true
-    end
-
-    # TODO I'm not convinced that we should be able to filter in finders
-    it 'contains only elements restricted by the selector' do
-      window.find_elements_by_tag(:div, :title => 'Lorem ipsum').all? do |element|
-        element.attr(:title) == 'Lorem ipsum'
-      end.should be_true
-    end
-
-    it 'empty if the elements do not exist' do
-      window.find_elements_by_tag(:hoobaflooba).should be_empty
-    end
-  end
-
   describe '#find_by_tag' do
+    it 'is not empty if the tag exists' do
+      window.find_by_tag(:div).should_not be_empty
+    end
+
     it 'returns a collection of elements of the given tag' do
       uls = window.find_by_tag(:ul)
       uls.length.should == 2
@@ -63,68 +37,63 @@ describe 'Window' do
         element.parent.tag_name.match(/ul/i)
       end
     end
+
+    # TODO I'm not convinced that we should be able to filter in finders
+    it 'contains only elements restricted by the selector' do
+      window.find_by_tag(:div, :title => 'Lorem ipsum').all? do |element|
+        element.attr(:title) == 'Lorem ipsum'
+      end.should be_true
+    end
+
+    it 'empty if the elements do not exist' do
+      window.find_by_tag(:hoobaflooba).should be_empty
+    end
   end
 
   # css
   # we don't want a complete CSS selector test suite here, so just some common
   # selectors
-  describe '#find_elements_by_css' do
+  describe '#find_by_css' do
     it 'is not empty if an element matches the css selector' do
-      window.find_elements_by_css('#outer_container > div').should_not be_empty
+      window.find_by_css('#outer_container > div').should_not be_empty
     end
 
     it 'contains all elements selected by the selector' do
-      window.find_elements_by_css('#outer_container > div').all? do |element|
+      window.find_by_css('#outer_container > div').all? do |element|
         element.parent.attr(:id).should == 'outer_container'
       end.should be_true
     end
 
     it 'is empty if the selector does not match' do
-      window.find_elements_by_css('#hoobaflooba').should be_empty
-    end
-  end
-
-  describe '#find_by_css' do
-    it 'returns a collection of elements matching the given selector' do
-      window.find_by_css("#outer_container > div").tag(:h1).all? do |element|
-        element.parent.tag_name.match(/div/i)
-      end
+      window.find_by_css('#hoobaflooba').should be_empty
     end
   end
 
   # class
-  describe '#find_elements_by_class' do
+  describe '#find_by_class' do
     it 'is not empty if an element matches the class' do
-      window.find_elements_by_class('lead').should_not be_empty
+      window.find_by_class('lead').should_not be_empty
     end
 
-    it 'contains all elements with the given class' do
-      window.find_elements_by_class('lead').all? do |element|
-        element.attr(:class).should match /lead/
-      end.should be_true
+    it 'returns a collection of elements with the given class' do
+      window.find_by_class('lead').attrs(:class).should == ['lead','lead','lead','lead']
     end
 
     it 'finds elements with multiple classes' do
-      window.find_elements_by_class('one').all? do |element|
+      window.find_by_class('one').all? do |element|
         element.attr(:class).should match /one/
       end.should be_true
     end
 
     it 'is empty if the class does not match' do
-      window.find_elements_by_class('hoobaflooba').should be_empty
-    end
-  end
-
-  describe '#find_by_class' do
-    it 'returns a collection of elements with the given class' do
-      window.find_by_class('lead').attrs(:class).should == ['lead','lead','lead','lead']
+      window.find_by_class('hoobaflooba').should be_empty
     end
   end
 
   # xpath
-  describe '#find_elements_by_xpath' do
+  describe '#find_by_xpath' do
     before :all do
-      @headers = window.find_elements_by_xpath('//h1')
+      @headers = window.find_by_xpath('//h1')
     end
 
     it 'is not empty if elements matches the class' do
@@ -138,13 +107,7 @@ describe 'Window' do
     end
 
     it 'is empty if the query does not match' do
-      window.find_elements_by_xpath('//hoobaflooba').should be_empty
-    end
-  end
-
-  describe '#find_by_xpath' do
-    it 'returns a collection of elements which match the given xpath' do
-      window.find_by_xpath('//h1').attrs(:id).should == ['first_header', 'header1']
+      window.find_by_xpath('//hoobaflooba').should be_empty
     end
   end
 
@@ -157,7 +120,7 @@ describe 'Window' do
     end
 
     it 'changes when the title tag changes' do
-      window.find_elements_by_tag(:title).first.text = 'changed'
+      window.find_by_tag(:title).first.text = 'changed'
       window.title.should == 'changed'
     end
   end
@@ -169,7 +132,7 @@ describe 'Window' do
 
     # TODO I'm not sure Watir allows DOM manipulation
     it 'is the original source' do
-#      window.find_elements_by_tag(:title).first.text = 'changed'
+#      window.find_by_tag(:title).first.text = 'changed'
       window.html.should match /<title>Non-control elements<\/title>/i
     end
   end
@@ -186,7 +149,7 @@ describe 'Window' do
   describe '#url=' do
     it 'navigates to the given url' do
       window.url = fixture('forms_with_input_elements.html')
-      window.find_elements_by_tag(:title).first.text.should == 'Forms with input elements'
+      window.find_by_tag(:title).first.text.should == 'Forms with input elements'
     end
   end
 
@@ -231,7 +194,7 @@ describe 'Window' do
   describe '#refresh' do
     it 'refreshes the current page' do
       window.url = fixture('forms_with_input_elements.html')
-      field = window.find_elements_by_id('new_user_first_name').first
+      field = window.find_by_id('new_user_first_name').first
       field.value = 'foobar'
       field.value.should == 'foobar'
 
@@ -248,7 +211,7 @@ describe 'Window' do
   describe '#type' do
     it 'types the given characters' do
       browser.url = fixture('forms_with_input_elements.html')
-      textbox = window.find_elements_by_id('new_user_first_name').first
+      textbox = window.find_by_id('new_user_first_name').first
       textbox.focus!
       window.type('test')
       textbox.attr(:value).should == 'test'
@@ -257,7 +220,7 @@ describe 'Window' do
     it 'sends keypress events' do
       browser.url = fixture('keys.html')
       window.type('hello')
-      window.find_elements_by_id('press').first.text.should == 'o'
+      window.find_by_id('press').first.text.should == 'o'
     end
   end
 
@@ -266,7 +229,7 @@ describe 'Window' do
       browser.url = fixture('keys.html')
       # TODO Is this how we should send ctrl/shift/alt?
       window.key('ctrl')
-      window.find_elements_by_id('up').first.text.should == 'ctrl'
+      window.find_by_id('up').first.text.should == 'ctrl'
     end
   end
 
@@ -275,7 +238,7 @@ describe 'Window' do
       browser.url = fixture('keys.html')
       window.key_down('ctrl')
       window.key_down('shift')
-      window.find_elements_by_id('down').first.text.should == 'ctrl shift'
+      window.find_by_id('down').first.text.should == 'ctrl shift'
       # Don't leave them pressed down
       window.key_up('ctrl')
       window.key_up('shift')
@@ -287,7 +250,7 @@ describe 'Window' do
       browser.url = fixture('keys.html')
       window.key_down('ctrl')
       window.key_up('ctrl')
-      window.find_elements_by_id('up').first.text.should == 'ctrl'
+      window.find_by_id('up').first.text.should == 'ctrl'
     end
   end
 
@@ -330,7 +293,7 @@ describe 'Window' do
     end
 
     it 'maximizes the window' do
-      body = window.find_elements_by_tag(:body).first
+      body = window.find_by_tag(:body).first
       width = body.width
       window.maximize
       body.width.should be > width
@@ -339,7 +302,7 @@ describe 'Window' do
 
   describe '#restore' do
     it 'restores (unmaximizes) the window' do
-      body = window.find_elements_by_tag(:body).first
+      body = window.find_by_tag(:body).first
       # Make sure we aren't already restored
       window.maximize
       width = body.width
@@ -363,7 +326,7 @@ describe 'Window' do
     it 'destroys the window' do
       window.close
       window.exists?.should be_false
-      window.find_elements_by_tag(:title).should raise_error
+      window.find_by_tag(:title).should raise_error
     end
   end
 

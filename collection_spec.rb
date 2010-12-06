@@ -133,6 +133,10 @@ describe 'Collection' do
       end.should be_true
     end
 
+    it 'can be chained deeply;' do
+      window.body.div.div.ul.li.a.id.should == ['link_2', 'link_3']
+    end
+
     it 'returns the same as #tag' do
       @collection.span(:title => 'Lorem ipsum').should == @collection.find_by_tag(:span, :title => 'Lorem ipsum')
     end
@@ -161,6 +165,14 @@ describe 'Collection' do
     end
   end
 
+  # item access
+  describe '#[]' do
+    it 'accesses the elements in the collection' do
+      @collection[5].attr(:id).should == "best_language"
+      @collection[@collection.length-1].should == "del_tag_test"
+    end
+  end
+
   describe '#attr' do
     it 'returns the given attribute of the first element' do
       @collection.attr(:id).should == 'outer_container'
@@ -173,6 +185,56 @@ describe 'Collection' do
       @collection.attrs(:id)[0].should == 'outer_container'
       @collection.attrs(:id)[1].should == 'header'
       @collection.attrs(:id)[8].should == 'hidden'
+    end
+  end
+
+  # id
+  describe '#id' do
+    it 'is the id attribute if there is one element' do
+      window.find_by_class("primary").id.should == "first_header"
+    end
+
+    it 'is nil if the single element has no id' do
+      window.find_by_class("php").id.should == nil
+    end
+
+    it 'is an array of ids if there is more than one element' do
+      window.find_by_class("external").id.should == ["link_2", "link_3"]
+    end
+  end
+
+  # class
+  # TODO this is the class attribute, so it could have multiple classes, in
+  # which case this name doesn't make much sense
+  describe '#class_name' do
+    it 'is the class attribute if there in one element' do
+      window.find_by_id("favorite_compounds").class_name.should == "chemistry"
+    end
+
+    it 'is nil if the single element has no class' do
+      window.find_by_id("outer_container").class_name.should == nil
+    end
+
+    it 'is an array of class attributes if there is more than one element' do
+      window.find_by_id(/link_[0-9]/).class_name.should == [
+        'external one two', 'external'
+      ]
+    end
+
+    it 'is an array with nil elements when the elements have no class' do
+      window.find_by_tag("a").class_name.should == [
+        nil, 'external one two', 'external', nil
+      ]
+    end
+  end
+
+  describe '#tag_name' do
+    it 'is the tag name if there is one element' do
+      window.find_by_id('header4').tag_name.should == 'h4'
+    end
+
+    it 'is an array if there are more than one elements' do
+      window.find_by_class('lead').tag_name.should == ['span', 'p', 'ins', 'del']
     end
   end
 

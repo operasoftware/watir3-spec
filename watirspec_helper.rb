@@ -32,7 +32,7 @@ module WatirSpec
 
   module Helpers
     def browser
-      OperaWatir::Waiter.browser
+      OperaWatir::Helper.browser
     end
 
     def fixture(*paths)

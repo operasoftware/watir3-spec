@@ -3,7 +3,7 @@ require File.expand_path('../watirspec_helper', __FILE__)
 
 describe 'Collection' do
   before :each do
-    browser.goto(fixture('non_control_elements.html'))
+    browser.url = fixture('non_control_elements.html')
     @collection = window.find_by_tag(:div)
   end
 
@@ -254,7 +254,7 @@ describe 'Collection' do
   # checked?
   describe '#checked?' do
     before :each do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.find_by_tag(:input, :type => 'checkbox')
     end
 
@@ -273,7 +273,7 @@ describe 'Collection' do
   # check!
   describe '#check!' do
     it 'checks all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.find_by_tag(:input, :type => 'checkbox')
 
       @boxes.check!
@@ -286,7 +286,7 @@ describe 'Collection' do
   # uncheck!
   describe '#uncheck!' do
     it 'unchecks all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.find_by_tag(:input, :type => 'checkbox')
 
       @boxes.uncheck!
@@ -299,7 +299,7 @@ describe 'Collection' do
   # toggle_check!
   describe '#toggle_check!' do
     it 'toggles the checked state of all of the checkboxes' do
-      browser.goto(fixture('forms_with_input_elements.html'))
+      browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.find_by_tag(:input, :type => 'checkbox')
 
       @boxes.toggle_check!

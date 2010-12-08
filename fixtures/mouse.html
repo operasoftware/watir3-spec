@@ -1,0 +1,31 @@
+<!doctype HTML>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>Keys test</title>
+</head>
+<body>
+  <h1>Keys test</h1>
+  <pre id="log"></pre>
+
+<script type="text/javascript">
+logEl = document.getElementById("log");
+
+function handler(e) {
+  logEl.innerHTML = logEl.innerHTML + [
+    e.type.substr(5),
+    e.pageX,
+    e.pageY
+  ].join(", ") +
+  "\n";
+
+  console.log(e);
+}
+
+document.addEventListener('mousedown', handler, false);
+document.addEventListener('mouseup', handler, false);
+document.addEventListener('mousemove', handler, false);
+</script>
+
+</body>
+</html>

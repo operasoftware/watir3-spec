@@ -129,6 +129,15 @@ describe 'Element' do
     end
   end
 
+  # hash
+  describe '#hash' do
+    it 'is the MD5 hash of the screenshot of the element' do
+      window.url = fixtures('images.html')
+      # this hash is from from Watir 1
+      image = window.img[1].hash.should == '0x45688373bcf08d9ecf111ecb2bcb7c4e'
+    end
+  end
+
   # states
   # ------
 
@@ -256,6 +265,67 @@ describe 'Element' do
       div.click!
       div.html.should == 'Ruby!'
     end
+
+    it 'toggles checkboxes' do
+      @checkbox = window.find_by_id('bowling').first
+      @checkbox.checked?.should be_false
+      @checkbox.click!
+      @checkbox.checked?.should be_true
+      @checkbox.click!
+      @checkbox.checked?.should be_false
+    end
+
+    # TODO work out whether #selected? exists, and whether it replaces
+    # #checked?
+    it 'can click option elements' do
+      browser.url = fixture('forms_with_input_elements.html')
+
+      select = window.find_by_id('new_user_country')
+      select.click!
+      select.option[0].click!
+      select.option[0].selected?.should be_true
+    end
+  end
+
+  describe '#mouse_down!' do
+    it 'triggers a mousedown event' do
+      browser.url = fixture('mouse.html')
+      log = window.find_by_id('log').first
+      log.mouse_down! 0, 0
+      log.text.should include 'down'
+      log.mouse_up! 0, 0
+    end
+  end
+
+  describe '#mouse_up' do
+    it 'triggers a mouseup event' do
+      browser.url = fixture('mouse.html')
+      log = window.find_by_id('log').first
+      log.mouse_down! 0, 0
+      log.mouse_up! 0, 0
+      log.text.should include 'up'
+    end
+  end
+
+  describe '#mouse_move' do
+    it 'triggers a mousemove event' do
+      browser.url = fixture('mouse.html')
+      log = window.find_by_id('log').first
+      log.mouse_move! 0, 0
+      log.text.should include 'move'
+    end
+
+    it 'moves the mouse' do
+      browser.url = fixture('mouse.html')
+      log = window.find_by_id('log').first
+      h1 = window.find_by_tag('h1').first
+
+      h1.mouse_down! 0, 0
+      h1.mouse_move! 25, 25
+      h1.mouse_up! 50, 50
+
+      window.eval_js('!!document.getSelection()').should be_true
+    end
   end
 
   # check!
@@ -352,6 +422,18 @@ describe 'Element' do
       @element.visible?.should be_true
       hidden.hide!
       hidden.visible?.should be_false
+    end
+  end
+
+  describe '#trigger!' do
+    it 'fires the given event on the element' do
+      window.find_by_id('link_3').first.trigger! 'click'
+      browser.url.should include 'forms_with_input_elements.html'
+    end
+
+    it 'fires event handlers' do
+      window.find_by_id('html_test').first.trigger! 'dblclick'
+      window.find_by_id('messages').first.text.should include 'double clicked'
     end
   end
 

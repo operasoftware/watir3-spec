@@ -3,36 +3,38 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  <title>Keys test</title>
- <script type="text/javascript">
-function getMessage(e) {
-  var msg = []
-  if (e.altKey)  msg.push('alt');
-  if (e.ctrlKey) msg.push('ctrl');
-  if (e.metaKey) msg.push('meta');
-  if (e.shiftKey) msg.push('shift');
-  if (e.charCode) msg.push(String.fromCharCode(e.charCode));
-  return msg.join(' ');
-}
-
-document.addEventListener('keydown', function(e) {
-  down.innerHTML = getMessage(e)
-});
-
-document.addEventListener('keyup', function(e) {
-  console.log(e)
-  up.innerHTML = getMessage(e)
-});
-
-document.addEventListener('keypress', function(e) {
-  console.log(e)
-  press.innerHTML = getMessage(e)
-});
- </script>
 </head>
 <body>
- <h1>Keys test</h1>
- <p id="down"></p>
- <p id="up"></p>
- <p id="press"></p>
+  <h1>Keys test</h1>
+  <pre id="log"></pre>
+
+<script type="text/javascript">
+logEl = document.getElementById("log");
+
+function handler(e) {
+  e.preventDefault();
+
+  var modifiers = []
+  if (e.altKey)  modifiers.push('alt');
+  if (e.ctrlKey) modifiers.push('ctrl');
+  if (e.metaKey) modifiers.push('meta');
+  if (e.shiftKey) modifiers.push('shift');
+
+  logEl.innerHTML = logEl.innerHTML + [
+    e.type.substr(3),
+    e.keyCode,
+    (e.keyCode >= 32) ? String.fromCharCode(e.keyCode) : "",
+    modifiers
+  ].join(", ") +
+  "\n";
+
+  console.log(e);
+}
+
+document.addEventListener('keydown', handler, false);
+document.addEventListener('keyup', handler, false);
+document.addEventListener('keypress', handler, false);
+</script>
+
 </body>
 </html>

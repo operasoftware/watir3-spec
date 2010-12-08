@@ -41,13 +41,14 @@ describe 'Window' do
     # TODO I'm not convinced that we should be able to filter in finders
     it 'contains only elements restricted by the selector' do
       window.find_by_tag(:div, :title => 'Lorem ipsum').all? do |element|
-        element.attr(:title) == 'Lorem ipsum'
+        element.attr(:title) == 'Lorem ipsum' && element.tag_name.match(/div/i)
       end.should be_true
     end
 
     it 'empty if the elements do not exist' do
       window.find_by_tag(:hoobaflooba).should be_empty
     end
+
   end
 
   # css
@@ -220,16 +221,45 @@ describe 'Window' do
     it 'sends keypress events' do
       browser.url = fixture('keys.html')
       window.type('hello')
-      window.find_by_id('press').first.text.should == 'o'
+      window.find_by_id('log').text.should include 'press, 104, h,'
+      window.find_by_id('log').text.should include 'down, 69, E,'
+      window.find_by_id('log').text.should include 'up, 79, O,'
     end
   end
 
   describe '#key' do
-    it 'presses and releases the given key' do
+    before :each do
       browser.url = fixture('keys.html')
+    end
+
+    it 'presses and releases the given key' do
       # TODO Is this how we should send ctrl/shift/alt?
       window.key('ctrl')
-      window.find_by_id('up').first.text.should == 'ctrl'
+
+      window.find_by_id('log').text.should include 'down'
+      window.find_by_id('log').text.should include 'ctrl'
+      window.find_by_id('log').text.should include 'up'
+    end
+
+    it 'can press the home key' do
+      window.key('home')
+      window.find_by_id('log').text.should include 'press, 36'
+    end
+
+    it 'can press the tab key' do
+      window.key('tab')
+      window.find_by_id('log').text.should include 'press, 9'
+    end
+
+    it 'tabs through fields when tab is pressed' do
+      window.url = fixture('forms_with_input_elements.html')
+      window.key('tab')
+      window.find_by_id('new_user_first_name').focused?.should be_true
+    end
+
+    it 'can press the F3 key' do
+      window.key('f3')
+      window.find_by_id('log').text.should include 'press, 114'
     end
   end
 
@@ -238,7 +268,7 @@ describe 'Window' do
       browser.url = fixture('keys.html')
       window.key_down('ctrl')
       window.key_down('shift')
-      window.find_by_id('down').first.text.should == 'ctrl shift'
+      window.find_by_id('log').text.should include 'ctrl,shift'
       # Don't leave them pressed down
       window.key_up('ctrl')
       window.key_up('shift')
@@ -250,7 +280,7 @@ describe 'Window' do
       browser.url = fixture('keys.html')
       window.key_down('ctrl')
       window.key_up('ctrl')
-      window.find_by_id('up').first.text.should == 'ctrl'
+      window.find_by_id('log').text.should include 'up, 17'
     end
   end
 

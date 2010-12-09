@@ -302,9 +302,14 @@ describe 'Collection' do
       browser.url = fixture('forms_with_input_elements.html')
       @boxes = window.find_by_tag(:input, :type => 'checkbox')
 
+      # Store the initial values
+      values = @boxes.map { |el| el.checked? }
+
       @boxes.toggle_check!
-      @boxes.all? do |box|
-        box.checked? == true
+
+      # Check they've all changed
+      (0..values.size-1).all do |i|
+        @boxes[i].checked? == !values[i]
       end.should be_true
     end
   end
@@ -369,7 +374,4 @@ describe 'Collection' do
       window.find_by_id('outer_container').visible?.should be_false
     end
   end
-
-  # actions
-  # -------
 end

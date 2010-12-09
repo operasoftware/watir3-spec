@@ -99,7 +99,7 @@ describe 'Collection' do
 
   # xpath
   describe '#find_by_xpath' do
-    before :all do
+    before :each do
       @headers = @collection.find_by_xpath('//h1')
     end
 
@@ -118,10 +118,14 @@ describe 'Collection' do
     end
 
     it 'finds elements in the current context' do
-      links = @collection.find_by_xpath('a')
-      links.all? do |element|
-        element.parent.tag_name.match /div/i
-      end.should be_true
+      subdivs = @collection.find_by_xpath('div')
+      subdivs.length.should == 7
+
+      # XPath spec says order not guaranteed, so just check they're here
+      ids = subdivs.map { |el| el.id }
+      ids.should include 'promo'
+      ids.should include 'best_language'
+      ids.should include 'hidden'
     end
   end
 

@@ -137,16 +137,17 @@ describe 'Collection' do
     end
 
     it 'can be chained' do
-      window.find_by_id('promo').ul.li.all? do |element|
-        element.tag_name.match(/li/i) && element.parent.tag_name.match(/ul/i)
-      end.should be_true
+      lis = window.find_by_id('promo').ul.li
+      lis[0].text.should == 'Abietic acid, C20H30O2'
+      lis[2].text.should == 'Acenaphthoquinone, C12H6O2'
+      lis[4].text.should == 'Acetaldehyde (ethanal), CH3CHO'
     end
 
-    it 'can be chained deeply;' do
-      window.body.div.div.ul.li.a.id.should == ['link_2', 'link_3']
+    it 'can be chained deeply' do
+      window.body.div.div.ul.li.a.id.should == [nil, 'link_2', 'link_3']
     end
 
-    it 'returns the same as #tag' do
+    it 'returns the same as #find_by_tag' do
       @collection.span(:title => 'Lorem ipsum').should == @collection.find_by_tag(:span, :title => 'Lorem ipsum')
     end
 

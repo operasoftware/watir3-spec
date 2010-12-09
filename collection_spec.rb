@@ -29,8 +29,10 @@ describe 'Collection' do
     end
 
     it 'contains all elements of the tag name under the collection' do
-      @collection.find_by_tag(:a).all? do |element|
-        element.find_by_tag_name == 'a'
+      as = @collection.find_by_tag(:a)
+      as.length.should == 4
+      as.all? do |element|
+        element.tag_name.should match /a/i
       end.should be_true
     end
 
@@ -107,7 +109,7 @@ describe 'Collection' do
 
     it 'contains all elements with the given query' do
       @headers.all? do |element|
-        element.find_by_tag_name.should match /h1/i
+        element.tag_name.should match /h1/i
       end
     end
 
@@ -118,7 +120,7 @@ describe 'Collection' do
     it 'finds elements in the current context' do
       links = @collection.find_by_xpath('a')
       links.all? do |element|
-        element.parent.find_by_tag_name.match /div/i
+        element.parent.tag_name.match /div/i
       end.should be_true
     end
   end
@@ -132,7 +134,7 @@ describe 'Collection' do
 
     it 'can be chained' do
       window.find_by_id('promo').ul.li.all? do |element|
-        element.find_by_tag_name.match(/li/i) && element.parent.find_by_tag_name.match(/ul/i)
+        element.tag_name.match(/li/i) && element.parent.tag_name.match(/ul/i)
       end.should be_true
     end
 

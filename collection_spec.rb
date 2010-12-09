@@ -52,15 +52,15 @@ describe 'Collection' do
   # selectors
   describe '#find_by_css' do
     it 'is not empty if an element matches the css selector' do
-      window.find_by_css('ul').should_not be_empty
+      @collection.find_by_css('ul').should_not be_empty
     end
 
     it 'contains all elements selected by the selector' do
-      collection = window.find_by_id('#outer_container')
+      collection = window.find_by_id('outer_container')
       divs = collection.find_by_css('div')
       divs.length.should == 7
       divs[1].id.should == 'promo'
-      divs[4].id.should == 'best_language'
+      divs[3].id.should == 'best_language'
       divs[6].id.should == 'hidden'
     end
 

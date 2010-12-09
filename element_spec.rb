@@ -427,8 +427,8 @@ describe 'Element' do
     end
   end
   # disable!
-  describe '#enable!' do
-    it 'enables a form element' do
+  describe '#disable!' do
+    it 'disables a form element' do
       window.url = fixture('forms_with_input_elements.html')
       disabled = window.find_by_id('new_user_email')
       disabled.enabled?.should be_true

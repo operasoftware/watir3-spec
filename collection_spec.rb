@@ -55,9 +55,10 @@ describe 'Collection' do
 
     it 'contains all elements selected by the selector' do
       collection = window.find_by_id('outer_container')
-      collection.find_by_css('> div').all? do |element|
-        element.parent.attr(:id).should == 'outer_container'
-      end.should be_true
+      divs = collection.find_by_css('> div')
+      divs.length.should == 5
+      divs[1].id.should == 'outer_container'
+      divs[4].id.should == 'del_tag_test'
     end
 
     it 'is empty if the selector does not match' do
@@ -73,10 +74,12 @@ describe 'Collection' do
 
     it 'contains all elements with the given class' do
       collection  = window.find_by_id('promo')
-      @collection.find_by_class(:lead).all? do |element|
-        (element.attr(:class).should match /lead/ &&
-          element.parent.attr(:id).should  == 'promo')
+      leads = @collection.find_by_class(:lead)
+      leads.length.should == 4
+      leads.all? do |element|
+        element.attr(:class).should match /lead/
       end.should be_true
+
     end
 
     it 'finds elements with multiple classes' do

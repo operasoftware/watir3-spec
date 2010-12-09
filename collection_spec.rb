@@ -56,8 +56,7 @@ describe 'Collection' do
     end
 
     it 'contains all elements selected by the selector' do
-      collection = window.find_by_id('outer_container')
-      divs = collection.find_by_css('> div')
+      divs = collection.find_by_css('#outer_container > div')
       divs.length.should == 5
       divs[1].id.should == 'outer_container'
       divs[4].id.should == 'del_tag_test'

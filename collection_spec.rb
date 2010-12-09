@@ -258,15 +258,15 @@ describe 'Collection' do
       @boxes = window.find_by_tag(:input, :type => 'checkbox')
     end
 
-    it 'is false if one of the elements is not checked' do
-      @boxes.checked?.should be_false
-    end
-
-    it 'is false if one of the elements is not checked' do
+    it 'is true if all of the elements are checked' do
       @boxes.each do |box|
         box.check!
       end
       @boxes.checked?.should be_true
+    end
+
+    it 'is false if one of the elements is not checked' do
+      @boxes.checked?.should be_false
     end
   end
 

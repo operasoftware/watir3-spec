@@ -185,6 +185,37 @@ describe 'Element' do
     end
   end
 
+  describe '#selected?' do
+    before :each do
+      browser.url = fixture('forms_with_input_elements.html')
+      @select = window.find_by_id('new_user_country')
+    end
+
+    it 'is true if an option is selected' do
+      @select[1].selected?.should be_true
+    end
+
+    it 'is false is an option is not selected' do
+      @select[5].selected?.should be_false
+    end
+
+    it 'is true for multiple selected options' do
+      multi = window.find_by_id('new_user_languages')
+      multi[1].selected?.should be_true
+      multi[2].selected?.should be_true
+    end
+
+    it 'is false for unselected in a multiple select' do
+      multi = window.find_by_id('new_user_languages')
+      multi[0].selected?.should be_false
+      multi[3].selected?.should be_false
+    end
+
+    it 'is nil on non-option elements' do
+      @element.selected?.should be_nil
+    end
+  end
+
   # enabled?
   describe '#enabled?' do
     before :each do

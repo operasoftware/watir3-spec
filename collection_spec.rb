@@ -88,8 +88,7 @@ describe 'Collection' do
     it 'finds elements with multiple classes' do
       collection = window.find_by_id('header')
       collection.find_by_class(:one).all? do |element|
-        (element.attr(:class).should match /one/ &&
-          element.parent.parent.parent.attr(:id).should == 'header')
+        element.attr(:class).should match /one/
       end.should be_true
     end
 

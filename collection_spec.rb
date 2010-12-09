@@ -161,7 +161,7 @@ describe 'Collection' do
        :menu,:meta,:meter,:nav,:noscript,:object,:ol,:optgroup,:option,:output,:p,
        :param,:pre,:progress,:q,:ruby,:rp,:rt,:samp,:script,:section,:select,:small,
        :source,:span,:strong,:style,:sub,:summary,:sup,:table,:tbody,:td,:textarea,
-       :tfoot,:th,:thead,:time,:title,:tr,:ul,:var,:video,:wbr].all do |symbol|
+       :tfoot,:th,:thead,:time,:title,:tr,:ul,:var,:video,:wbr].all? do |symbol|
         @collection.respond_to? symbol
       end.should be_true
     end
@@ -226,7 +226,7 @@ describe 'Collection' do
     end
 
     it 'is an array of class attributes if there is more than one element' do
-      window.find_by_id(/link_[0-9]/).class_name.should == [
+      window.find_by_class('external').class_name.should == [
         'external one two', 'external'
       ]
     end
@@ -240,11 +240,11 @@ describe 'Collection' do
 
   describe '#tag_name' do
     it 'is the tag name if there is one element' do
-      window.find_by_id('header4').tag_name.should == 'h4'
+      window.find_by_id('header4').tag_name.should == 'H4'
     end
 
     it 'is an array if there are more than one elements' do
-      window.find_by_class('lead').tag_name.should == ['span', 'p', 'ins', 'del']
+      window.find_by_class('lead').tag_name.should == ['SPAN', 'P', 'INS', 'DEL']
     end
   end
 
@@ -253,7 +253,7 @@ describe 'Collection' do
 
   describe '#click!' do
     it 'clicks all the elements in this collection' do
-      collection = window.class('footer')
+      collection = window.find_by_class('footer')
       collection.click!
       collection.all? do |element|
         element.text.match(/Javascript/) != nil

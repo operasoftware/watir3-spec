@@ -56,10 +56,12 @@ describe 'Collection' do
     end
 
     it 'contains all elements selected by the selector' do
-      divs = collection.find_by_css('#outer_container > div')
-      divs.length.should == 5
-      divs[1].id.should == 'outer_container'
-      divs[4].id.should == 'del_tag_test'
+      collection = window.find_by_id('#outer_container')
+      divs = collection.find_by_css('div')
+      divs.length.should == 7
+      divs[1].id.should == 'promo'
+      divs[4].id.should == 'best_language'
+      divs[6].id.should == 'hidden'
     end
 
     it 'is empty if the selector does not match' do

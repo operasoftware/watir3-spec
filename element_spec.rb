@@ -109,12 +109,12 @@ describe 'Element' do
     end
   end
 
-  # hash
-  describe '#hash' do
-    it 'is the MD5 hash of the screenshot of the element' do
+  # visual_hash
+  describe '#visual_hash' do
+    it 'is the MD5 visual_hash of the screenshot of the element' do
       window.url = fixtures('images.html')
-      # this hash is from from Watir 1
-      image = window.img[1].hash.should == '0x45688373bcf08d9ecf111ecb2bcb7c4e'
+      # this visual_hash is from from Watir 1
+      image = window.img[1].visual_hash.should == '0x45688373bcf08d9ecf111ecb2bcb7c4e'
     end
   end
 

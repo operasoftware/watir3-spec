@@ -40,8 +40,9 @@ describe 'Element' do
 
   describe 'sugar' do
     it 'provides direct access to the element\'s attributes' do
-      @element.class.should == @element.attr(:class)
       @element.id.should == @element.attr(:id)
+      @element.class_name.should == @element.attr(:class)
+      @element.title.should == @element.attr(:title)
     end
 
     it 'uses underscores instead of dashes' do

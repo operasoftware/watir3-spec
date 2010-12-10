@@ -185,16 +185,17 @@ describe 'Collection' do
 
   describe '#attr' do
     it 'returns the given attribute of the first element' do
-      @collection.attr(:id).should == 'outer_container'
+      collection = window.find_by_class('external')
+      collection.attr(:id).should == 'link_2'
     end
   end
 
   # attrs(what)
   describe 'attrs' do
     it 'returns the attributes of each of the elements in the collection' do
-      @collection.attrs(:id)[0].should == 'outer_container'
-      @collection.attrs(:id)[1].should == 'header'
-      @collection.attrs(:id)[8].should == 'hidden'
+      @collection.attrs(:id)[1].should == 'outer_container'
+      @collection.attrs(:id)[2].should == 'header'
+      @collection.attrs(:id)[9].should == 'messages'
     end
   end
 
@@ -360,7 +361,7 @@ describe 'Collection' do
   end
 
   # visible?
-  describe '#visible' do
+  describe '#visible?' do
     it 'is true if all the elements are visible' do
       window.find_by_tag(:ul).visible?.should be_true
     end

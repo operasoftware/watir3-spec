@@ -19,7 +19,7 @@ describe 'Element' do
     end
 
     it 'is nil for the root element' do
-      window.tag(:html).first.parent.should == nil
+      window.find_by_tag(:html).first.parent.should == nil
     end
   end
 
@@ -61,19 +61,19 @@ describe 'Element' do
     end
 
     it 'is an empty string when there is no text' do
-      window.find_by_tag(:body).div.first.text.should == ''
+      window.find_by_tag(:div).first.text.should == ''
     end
   end
 
   describe '#text=' do
     it 'sets the text content of the element' do
-      @element.em.first.text = 'test'
+      window.find_by_tag(:em).first.text = 'test'
       @element.text.should == 'Dubito, test, ergo sum.'
     end
 
     it 'overwrites child elements' do
       @element.text = 'test'
-      @element.em.should be_empty
+      window.find_by_tag(:em).should be_empty
     end
   end
 
@@ -84,7 +84,7 @@ describe 'Element' do
     end
 
     it 'is an empty string if the element contains no text or html' do
-      window.tag(:body).div.first.html.should == ''
+      window.find_by_tag(:body).div.first.html.should == ''
     end
   end
 
@@ -109,12 +109,12 @@ describe 'Element' do
     end
   end
 
-  # visual_hash
+  # hash
   describe '#visual_hash' do
-    it 'is the MD5 visual_hash of the screenshot of the element' do
-      window.url = fixtures('images.html')
-      # this visual_hash is from from Watir 1
-      image = window.img[1].visual_hash.should == '0x45688373bcf08d9ecf111ecb2bcb7c4e'
+    it 'is the MD5 hash of the screenshot of the element' do
+      window.url = fixture('images.html')
+      # this hash is from from Watir 1
+      image = window.find_by_tag(:img)[1].visual_hash.should == '0x45688373bcf08d9ecf111ecb2bcb7c4e'
     end
   end
 
@@ -128,7 +128,7 @@ describe 'Element' do
 
       @textbox            = window.find_by_id('new_user_username').first
       @checkbox_checked   = window.find_by_id('new_user_interests_books').first
-      @checkbox_unchecked = window.find_by_id('bowling').first
+      @checkbox_unchecked = window.find_by_id('new_user_interests_cars').first
       @radio_checked      = window.find_by_id('new_user_newsletter_yes').first
       @radio_unchecked    = window.find_by_id('new_user_newsletter_no').first
     end
@@ -168,25 +168,25 @@ describe 'Element' do
   describe '#selected?' do
     before :each do
       browser.url = fixture('forms_with_input_elements.html')
-      @select = window.find_by_id('new_user_country')
+      @options = window.find_by_id('new_user_country').option
     end
 
     it 'is true if an option is selected' do
-      @select[1].selected?.should be_true
+      @options[1].selected?.should be_true
     end
 
     it 'is false is an option is not selected' do
-      @select[5].selected?.should be_false
+      @options[5].selected?.should be_false
     end
 
     it 'is true for multiple selected options' do
-      multi = window.find_by_id('new_user_languages')
+      multi = window.find_by_id('new_user_languages').option
       multi[1].selected?.should be_true
       multi[2].selected?.should be_true
     end
 
     it 'is false for unselected in a multiple select' do
-      multi = window.find_by_id('new_user_languages')
+      multi = window.find_by_id('new_user_languages').option
       multi[0].selected?.should be_false
       multi[3].selected?.should be_false
     end
@@ -200,7 +200,7 @@ describe 'Element' do
   describe '#enabled?' do
     before :each do
       browser.url = fixture('non_control_elements.html')
-      @inputs = window.tag(:input)
+      @inputs = window.find_by_tag(:input)
     end
 
     # 'disabled' attribute is available on quite a few obscure
@@ -221,7 +221,7 @@ describe 'Element' do
     end
 
     it 'is true for a visible element' do
-      window.tag(:h1).first.visible?.should be_true
+      window.find_by_tag(:h1).first.visible?.should be_true
     end
 
     it 'is false for an element with style attribute “display:none”' do
@@ -274,11 +274,11 @@ describe 'Element' do
     it 'triggers onclick handlers' do
       div = window.find_by_id('best_language').first
       div.click!
-      div.html.should == 'Ruby!'
+      div.text.should == 'Ruby!'
     end
 
     it 'toggles checkboxes' do
-      @checkbox = window.find_by_id('bowling').first
+      @checkbox = window.find_by_id('new_user_interests_cars').first
       @checkbox.checked?.should be_false
       @checkbox.click!
       @checkbox.checked?.should be_true
@@ -343,7 +343,7 @@ describe 'Element' do
   describe '#check!' do
     before :each do
       browser.url = fixture('forms_with_input_elements.html')
-      @checkbox_unchecked = window.find_by_id('bowling').first
+      @checkbox_unchecked = window.find_by_id('new_user_interests_cars').first
       @radio_unchecked = window.find_by_id('new_user_newsletter_no').first
     end
 

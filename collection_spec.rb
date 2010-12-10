@@ -179,7 +179,7 @@ describe 'Collection' do
   describe '#[]' do
     it 'accesses the elements in the collection' do
       @collection[5].attr(:id).should == "best_language"
-      @collection[@collection.length-1].should == "del_tag_test"
+      @collection[@collection.length-1].attr(:id).should == "del_tag_test"
     end
   end
 

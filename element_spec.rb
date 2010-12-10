@@ -36,17 +36,6 @@ describe 'Element' do
     it 'is nil when the attribute does not exist' do
       @element.attr(:hoobaflooba).should == nil
     end
-
-    it 'sets the attribute value when passed a value' do
-      @element.attr(:id => 'value')
-      @element.attr(:id).should == 'value'
-    end
-
-    it 'sets multiple attributes when passed values' do
-      @element.attr(:id => 'one', :class => 'two')
-      @element.attr(:id).should == 'one'
-      @element.attr(:class).should == 'two'
-    end
   end
 
   describe 'sugar' do
@@ -61,16 +50,6 @@ describe 'Element' do
 
     it 'is nil when the attribute does not exist' do
       @element.hoobaflooba.should be_nil
-    end
-
-    it 'allows attributes to be set' do
-      @element.class = 'test'
-      @element.attr(:class).should == 'test'
-      @element.id = 'test'
-      @element.attr(:id).should == 'test'
-
-      @leaf.data_fixture = 'test'
-      @leaf.attr(:data_fixture).should == 'test'
     end
   end
 

@@ -199,7 +199,7 @@ describe 'Element' do
   # enabled?
   describe '#enabled?' do
     before :each do
-      browser.url = fixture('non_control_elements.html')
+      browser.url = fixture('forms_with_input_elements.html')
       @inputs = window.find_by_tag(:input)
     end
 
@@ -278,12 +278,13 @@ describe 'Element' do
     end
 
     it 'toggles checkboxes' do
-      @checkbox = window.find_by_id('new_user_interests_cars').first
-      @checkbox.checked?.should be_false
-      @checkbox.click!
-      @checkbox.checked?.should be_true
-      @checkbox.click!
-      @checkbox.checked?.should be_false
+      browser.url = fixture('forms_with_input_elements.html')
+      checkbox = window.find_by_id('new_user_interests_cars').first
+      checkbox.checked?.should be_false
+      checkbox.click!
+      checkbox.checked?.should be_true
+      checkbox.click!
+      checkbox.checked?.should be_false
     end
 
     # TODO work out whether #selected? exists, and whether it replaces
@@ -370,9 +371,8 @@ describe 'Element' do
       @checkbox_checked.checked?.should be_false
     end
 
-    it 'unchecks a radio button' do
-      @radio_checked.uncheck!
-      @radio_checked.checked?.should be_false
+    it 'cannot uncheck a radio button' do
+      @radio_checked.uncheck!.should raise_error
     end
   end
 
@@ -391,7 +391,7 @@ describe 'Element' do
       @checkbox_checked.checked?.should be_true
     end
 
-    it 'does not toggle appear on a radio button' do
+    it 'does not appear on a radio button' do
       @radio_checked.should_not respond_to :toggle_check!
     end
   end
@@ -400,7 +400,7 @@ describe 'Element' do
   describe '#enable!' do
     it 'enables a form element' do
       window.url = fixture('forms_with_input_elements.html')
-      disabled = window.find_by_id('new_user_species')
+      disabled = window.find_by_id('new_user_species').first
       disabled.enabled?.should be_false
       disabled.enable!
       disabled.enabled?.should be_true
@@ -410,7 +410,7 @@ describe 'Element' do
   describe '#disable!' do
     it 'disables a form element' do
       window.url = fixture('forms_with_input_elements.html')
-      disabled = window.find_by_id('new_user_email')
+      disabled = window.find_by_id('new_user_email').first
       disabled.enabled?.should be_true
       disabled.disable!
       disabled.enabled?.should be_false
@@ -438,12 +438,12 @@ describe 'Element' do
 
   describe '#trigger!' do
     it 'fires the given event on the element' do
-      window.find_by_id('link_3').first.trigger! 'click'
+      window.find_by_id('link_3').first.trigger!('click')
       browser.url.should include 'forms_with_input_elements.html'
     end
 
     it 'fires event handlers' do
-      window.find_by_id('html_test').first.trigger! 'dblclick'
+      window.find_by_id('html_test').first.trigger!('dblclick')
       window.find_by_id('messages').first.text.should include 'double clicked'
     end
   end

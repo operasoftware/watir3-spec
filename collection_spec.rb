@@ -132,8 +132,7 @@ describe 'Collection' do
   # sugar
   describe 'syntactic sugar' do
     it 'returns all descendants with the given tag' do
-      content = window.find_by_id('promo').span
-      content.length.should == 5
+      window.find_by_id('promo').span.length.should == 5
     end
 
     it 'can be chained' do
@@ -350,7 +349,7 @@ describe 'Collection' do
   end
 
   # disable!
-  describe '#disable' do
+  describe '#disable!' do
     it 'disables all elements in the collection' do
       browser.url = fixture('forms_with_input_elements.html')
       window.find_by_id('new_user').input.disable!

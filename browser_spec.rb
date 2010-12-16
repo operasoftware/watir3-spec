@@ -74,7 +74,7 @@ describe 'Browser' do
     end
 
     after :all do
-      OperaWatir::Waiter.reconnect
+#      OperaWatir::Helper.reconnect
     end
   end
 

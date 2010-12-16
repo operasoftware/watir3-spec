@@ -8,6 +8,8 @@ require 'server'
 
 require 'operawatir/helper'
 
+OperaWatir.newandshinyplease!
+
 RSpec.configure do |config|
   config.mock_with :rr
 end
@@ -53,3 +55,4 @@ RSpec.configure do |config|
     Thread.new { WatirSpec::Server.run! }
   end
 end
+

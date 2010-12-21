@@ -8,7 +8,7 @@ require 'server'
 
 require 'operawatir/helper'
 
-OperaWatir.newandshinyplease!
+OperaWatir.use_version 2
 
 RSpec.configure do |config|
   config.mock_with :rr
@@ -35,6 +35,10 @@ module WatirSpec
   module Helpers
     def browser
       OperaWatir::Helper.browser
+    end
+
+    def window
+      browser.active_window
     end
 
     def fixture(*paths)

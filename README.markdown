@@ -1,7 +1,7 @@
 Opera's new Watir spec
 ======================
 
-This repository contains a proposed specification for a successor to the
+This repository contains a specification for a proposed successor to the
 current [Watir API](http://wiki.openqa.org/display/WTR/Summary). It is still in
 development, and we welcome any feedback on our
 [mailing list](https://list.opera.com/mailman/listinfo/operawatir-users).
@@ -9,6 +9,12 @@ development, and we welcome any feedback on our
 We aimed to keep the methods as consistent as possible, i.e. no special cases,
 such as `browser.link` in Watir 1, and to make the common case as simple and as
 concise as possible.
+
+Files
+-----
+
+The specs are in `browser_spec.rb`, `window_spec.rb`, `collection_spec.rb` and
+`element_spec.rb`.
 
 The specs run a small Sinatra webapp (_WatirSpec::Server_) to simulate
 interacting with a web server. However, most specs use the _file://_ scheme to

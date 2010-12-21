@@ -1,55 +1,45 @@
-What
-====
+Opera's new Watir spec
+======================
 
-This repository is intended to be used as a git submodule for projects that want to implement [Watir](http://watir.com)'s API.
-Since the specs were taken from [Celerity](http://github.com/jarib/celerity), making it usable on other implementations (including Watir itself) is a work in progress. Please contribute!
+This repository contains a proposed specification for a successor to the
+current [Watir API](http://wiki.openqa.org/display/WTR/Summary). It is still in
+development, and we welcome any feedback on our
+[mailing list](https://list.opera.com/mailman/listinfo/operawatir-users).
 
-The specs run a small Sinatra webapp (_WatirSpec::Server_) to simulate interacting with a web server. However, most specs use the _file://_ scheme to avoid hitting the server.
+We aimed to keep the methods as consistent as possible, i.e. no special cases,
+such as `browser.link` in Watir 1, and to make the common case as simple and as
+concise as possible.
 
-How to use
-==========
+The specs run a small Sinatra webapp (_WatirSpec::Server_) to simulate
+interacting with a web server. However, most specs use the _file://_ scheme to
+avoid hitting the server.
 
-First add the submodule to _spec/watirspec_:
+A quick guide
+-------------
 
-    $ git submodule add git://github.com/jarib/watirspec.git spec/watirspec
+Start with
 
-The specs will look for *implementation.rb* in its parent directory (i.e. _spec/_). In this file you need to define some details about your implementation that WatirSpec needs to know
+    window = OperaWatir::Browser.new().active_window
 
-Here's an example of what _spec/implementation.rb_ would look like for the imaginary implementation AwesomeWatir:
+Find all `<div>` tags with
 
-    $LOAD_PATH.unshift(«lib folder»)
-    require "awesomewatir"
+    window.div # => Collection of <div>s
+    window.find_by_tag(:div) # => Collection of <div>s
 
-    include AwesomeWatir::Exception # needed for now..
+Find all `<a href="index.html">` links with
 
-    WatirSpec::Implementation do |imp|
-      imp.name = :awesome
-      
-      imp.browser_class = AwesomeWatir::Browser
-      imp.browser_args  = [:some => 'option']
-    end
+    window.a(:href => 'index.html') # => Collection of <a>s with the href attribute equal to 'index.html'
 
-    WatirSpec.persistent_browser = false               # defaults to true, but can be disabled if needed
-    WatirSpec::Server.autorun    = false               # defaults to true, but can be disabled if needed
+Find all `<p>`s which are direct descendants of `<div>`s with (not currently implemented)
 
-    WatirSpec::Server.get("/my_route") { "content" }   # add routes to the server for implementation-specific specs
+    window.div.p # => Collection of <p>s
 
-Implementation-specific specs should be placed at the root of the _spec/_ folder.
-To use the setup code from watirspec, simply require `"watirspec/spec_helper"` (which in turn will load your `spec/spec_helper.rb`).
+Get attributes with
 
-Guards
-------
+    window.div(:id => 'logo').id # => 'logo'
+    window.div(:title => 'Products').title # => ['Products', 'Products', …]
 
-WatirSpec includes a system to guard specs that are failing. 
+Perform actions with gusto!
 
-WRITE ME
-
-- what guards are available (bug, not\_compliant, deviates\_on, ...)
-- setting a custom guard proc 
-    (example in http://github.com/jarib/watir-webdriver/blob/master/spec/implementation.rb)
-
-Where
-=====
-
-* Source : [GitHub](http://github.com/jarib/watirspec/tree/master)
-* Issues : [GitHub](http://github.com/jarib/watirspec/issues)
+    window.div.click! # clicks all the <div>s in the document
+    window.header.trigger! 'mousemove' # triggers a mouse move event on all the <header> elements

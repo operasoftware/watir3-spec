@@ -32,7 +32,7 @@ describe '#keys' do
       browser.keys.send 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
       'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
       'W', 'X', 'Y', 'Z'
-      @two.value.should == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      @one.value.should == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     end
 
     it 'moves the caret using arrow keys' do

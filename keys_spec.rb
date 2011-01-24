@@ -8,55 +8,65 @@ describe '#keys' do
   describe '#send' do
     before :each do
       browser.url = fixture('two_input_fields.html')
-      window.find_by_name('one').click!
+      @one = window.find_by_name('one')
+      @two = window.find_by_name('two')
+      @one.click!
     end
 
     it 'types a single character' do
       browser.keys.send 'A'
-      window.find_by_name('one').text.should == 'A'
+      @one.value.should == 'A'
     end
 
     it 'types a mixed-case string' do
       browser.keys.send 'ABC abc'
-      window.find_by_name('one').text.should == 'ABC abc'
+      @one.value.should == 'ABC abc'
     end
 
     it 'types a string containing multi-byte characters' do
       browser.keys.send 'ルビー 水'
-      window.find_by_name('one').text.should == 'ルビー 水'
+      @one.value.should == 'ルビー 水'
     end
 
     it 'types many single characters in sequence' do
-      browser.keys.send 'A', 'B', 'C', 'D', 'E', 'F',  'G',  'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',  'P',  'Q',  'R',  'S',  'T',  'U', 'V',  'W',  'X',  'Y',  'Z'
-      window.find_by_name('one').text.should == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      browser.keys.send 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+      'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+      'W', 'X', 'Y', 'Z'
+      @two.value.should == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     end
 
     it 'moves the caret using arrow keys' do
       browser.keys.send 'AC', :left, 'B'
-      window.find_by_name('one').text.should == 'ABC'
+      @one.value.should == 'ABC'
     end
 
     it 'switches to a different input element with tab' do
       browser.keys.send 'AB', :tab, 'C'
-      window.find_by_name('one').text.should == 'AB'
-      window.find_by_name('two').text.should == 'C'
+      @one.value.should == 'AB'
+      @two.value.should == 'C'
     end
 
     it 'uses modifier keys' do
       browser.keys.send [:shift, 'a'], 'bc'
-      window.find_by_name('one').text.should == 'Abc'
+      @one.value.should == 'Abc'
     end
 
     it 'uses multiple modifier keys to manipulate selection' do
       browser.keys.send 'ABC 123'
-      browser.keys.send [:shift, :control, :left], :backspace
-      window.find_by_name('one').text.should == 'ABC '
+
+      # Selection using keys works differently on OS X
+      if Config::CONFIG['host_os'] =~ /darwin|mac os/
+        browser.keys.send [:shift, :alt, :left], :backspace
+      else
+        browser.keys.send [:shift, :control, :left], :backspace
+      end
+
+      @one.value.should == 'ABC '
     end
 
-    # TODO: This should return an exception.
-    # it 'presses an invalid key' do
-    #   browser.keys.send :hoobaflooba
-    # end
+    it 'presses an invalid key' do
+      browser.keys.send(:hoobaflooba).should raise_error InvalidKeyException
+    end
   end
 
   describe '#down' do
@@ -66,7 +76,7 @@ describe '#keys' do
       browser.keys.send 'a'
       browser.keys.down :shift
       browser.keys.send 'b'
-      window.find_by_name('one').text.should == 'aB'
+      window.find_by_name('one').value.should == 'aB'
       browser.keys.up :shift
     end
 
@@ -76,7 +86,7 @@ describe '#keys' do
       browser.keys.down 'a'
       sleep 1
       browser.keys.up 'a'
-      window.find_by_name('one').text.should include 'aa' # Two or more characters are expected.
+      window.find_by_name('one').value.should include 'aa'  # Two or more characters are expected.
     end
 
     it 'triggers onkeydown' do
@@ -102,15 +112,13 @@ describe '#keys' do
       browser.keys.up :control
     end
 
-    # TODO: This should return an exception.
-    # it 'presses an invalid key' do
-    #   browser.keys.down :hoobaflooba
-    # end
+    it 'presses an invalid key' do
+      browser.keys.down(:hoobaflooba).should raise_error InvalidKeyException
+    end
 
-    # TODO: This should return an exception.
-    # it 'passes an array instead of a string' do
-    #   browser.keys.down [:shift, :control]
-    # end
+    it 'passes an array instead of a string' do
+      browser.keys.down([:shift, :control]).should raise_error NativeException
+    end
   end
 
   describe '#up' do
@@ -119,10 +127,10 @@ describe '#keys' do
       window.find_by_name('one').click!
       browser.keys.down :shift
       browser.keys.send 'a'
-      browser.keys.send 'b' # Testing that we do not release prematurely
+      browser.keys.send 'b'  # Testing that we do not release prematurely
       browser.keys.up :shift
       browser.keys.send 'c'
-      window.find_by_name('one').text.should == 'ABc'
+      window.find_by_name('one').value.should == 'ABc'
     end
 
     it 'holds down a non-modifier key for one second (but no longer)' do
@@ -133,7 +141,7 @@ describe '#keys' do
       browser.keys.up 'a'
       result_string = window.find_by_name('one')
       sleep 1
-      window.find_by_name('one').text.should == result_string
+      window.find_by_name('one').value.should == result_string
       result_string = nil
     end
 
@@ -161,30 +169,27 @@ describe '#keys' do
       window.find_by_id('log').text.should include 'up, 17'
     end
 
-    # TODO: This should return an exception.
-    # it 'presses an invalid key' do
-    #   browser.keys.down :hoobaflooba
-    # end
+    it 'presses an invalid key' do
+      browser.keys.down(:hoobaflooba).should raise_error InvalidKeyException
+    end
 
-    # TODO: This should return an exception.
-    # it 'passes an array instead of a string' do
-    #   browser.keys.up [:shift, :control]
-    # end
-
+    it 'passes an array instead of a string' do
+      browser.keys.up([:shift, :control]).should raise_error NativeException
+    end
   end
 
   describe '#release' do
     before :each do
       browser.url = fixture('keys.html')
-      window.find_by_name('one').click!
     end
 
     it 'releases one button' do
+      window.find_by_name('one').click!
       browser.keys.down :shift
       browser.keys.send 'a'
       browser.keys.release
       browser.keys.send 'b'
-      window.find_by_name('one').text.should == 'Ab'
+      window.find_by_name('one').value.should == 'Ab'
     end
 
     it 'releases two buttons' do
@@ -194,4 +199,5 @@ describe '#keys' do
       window.find_by_id('log').text.should include 'up, 17'
     end
   end
+
 end

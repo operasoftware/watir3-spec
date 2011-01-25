@@ -12,8 +12,8 @@ describe '#select_all' do
   it 'selects the value of an input field' do
     browser.url = fixture('input_fields_value.html')
     window.find_by_name('one').click!
-	 browser.select_all
-	 window.eval_js('window.getSelection()').to_s should == 'foobar'
+    browser.select_all
+    window.eval_js('window.getSelection()').to_s should == 'foobar'
   end
 end
 
@@ -22,16 +22,16 @@ describe '#copy' do
     Clipboard.clear
     browser.url = fixture('input_fields_value.html')
     window.find_by_name('one').click!
-	 browser.select_all
+    browser.select_all
   end
 
   it 'copies a string to the keyboard' do
-	 browser.copy
-	 Clipboard.paste.should == 'foobar'
+    browser.copy
+    Clipboard.paste.should == 'foobar'
   end
 
   it 'leaves the copied string alone' do
-	 browser.copy
+    browser.copy
     window.find_by_name('one').value.should == 'foobar'
   end
 end
@@ -41,16 +41,16 @@ describe '#cut!' do
     Clipboard.clear
     browser.url = fixture('input_fields_value.html')
     window.find_by_name('one').click!
-	 browser.select_all
+    browser.select_all
   end
 
   it 'copies a string to the keyboard' do
-	 browser.cut!
-	 Clipboard.paste.should == 'foobar'
+    browser.cut!
+    Clipboard.paste.should == 'foobar'
   end
 
   it 'removes the cut string' do
-	 browser.cut!
+    browser.cut!
     window.find_by_name('one').value.should == ''
   end
 end
@@ -60,20 +60,20 @@ describe '#paste' do
     Clipboard.clear
     browser.url = fixture('input_fields_value.html')
     window.find_by_name('one').click!
-	 browser.select_all
+    browser.select_all
   end
 
   it 'pastes a copied string' do
-	 browser.copy
+    browser.copy
     window.find_by_name('two').click!
-	 browser.paste
+    browser.paste
     window.find_by_name('two').value.should == 'foobar'
   end
 
   it 'pastes a cut string' do
-	 browser.cut
+    browser.cut
     window.find_by_name('two').click!
-	 browser.paste
+    browser.paste
     window.find_by_name('two').value.should == 'foobar'
   end
 end

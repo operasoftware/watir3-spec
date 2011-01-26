@@ -5,6 +5,10 @@ require File.expand_path('../watirspec_helper', __FILE__)
 # ---------------
 describe '#keys' do
 
+  after :each do
+    browser.keys.release
+  end
+
   describe '#send' do
     before :each do
       browser.url = fixture('two_input_fields.html')
@@ -65,6 +69,7 @@ describe '#keys' do
     end
 
     it 'presses an invalid key' do
+      p browser.driver.key('hoobaflooba')
       browser.keys.send(:hoobaflooba).should raise_error InvalidKeyException
     end
   end
@@ -139,7 +144,7 @@ describe '#keys' do
       browser.keys.down 'a'
       sleep 1
       browser.keys.up 'a'
-      result_string = window.find_by_name('one')
+      result_string = window.find_by_name('one').value
       sleep 1
       window.find_by_name('one').value.should == result_string
       result_string = nil
@@ -179,11 +184,8 @@ describe '#keys' do
   end
 
   describe '#release' do
-    before :each do
-      browser.url = fixture('keys.html')
-    end
-
     it 'releases one button' do
+      browser.url = fixture('two_input_fields.html')
       window.find_by_name('one').click!
       browser.keys.down :shift
       browser.keys.send 'a'
@@ -193,6 +195,7 @@ describe '#keys' do
     end
 
     it 'releases two buttons' do
+      browser.url = fixture('keys.html')
       browser.keys.down :shift, :control
       browser.keys.release
       window.find_by_id('log').text.should include 'up, 16'

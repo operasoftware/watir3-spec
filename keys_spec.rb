@@ -1,10 +1,9 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 require File.expand_path('../watirspec_helper', __FILE__)
 
 # keyboard input
 # ---------------
-describe '#keys' do
-
+describe 'Keys' do
   after :each do
     browser.keys.release
   end
@@ -69,7 +68,6 @@ describe '#keys' do
     end
 
     it 'presses an invalid key' do
-      p browser.driver.key('hoobaflooba')
       browser.keys.send(:hoobaflooba).should raise_error InvalidKeyException
     end
   end

@@ -40,7 +40,7 @@ describe 'Browser' do
     end
 
     it 'removes the cut string' do
-      browser.cut!
+      browser.cut
       window.find_by_id('one').value.should == ''
     end
   end

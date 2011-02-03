@@ -1,79 +1,64 @@
-# encoding: utf-8
 require File.expand_path('../watirspec_helper', __FILE__)
 
-# These tests use the clipboard gem. On Linux, this gem requires
-# the xclip package to be installed.
+# These tests use the clipboard gem.  On GNU/Linux, this gem requires
+# the xclip package to be installed.  On Windows and Mac, it should
+# work out of the box.
 require 'clipboard'
 
+describe 'Browser' do
 
-# Clipboard API
-# ---------------
-describe '#select_all' do
-  it 'selects the value of an input field' do
-    browser.url = fixture('input_fields_value.html')
-    window.find_by_name('one').click
-    browser.select_all
-    window.eval_js('window.getSelection()').to_s should == 'foobar'
-  end
-end
-
-describe '#copy' do
   before :each do
     Clipboard.clear
     browser.url = fixture('input_fields_value.html')
-    window.find_by_name('one').click
+    window.find_by_id('one').click
     browser.select_all
   end
 
-  it 'copies a string to the keyboard' do
-    browser.copy
-    Clipboard.paste.should == 'foobar'
+  describe '#select_all' do
+    it 'selects the value of an input field' do
+      window.eval_js('one = document.getElementById("one");')
+      window.eval_js('one.value.substr(one.selectionStart, one.selectionEnd - one.selectionStart)').to_s.should == 'foobar'
+    end
   end
 
-  it 'leaves the copied string alone' do
-    browser.copy
-    window.find_by_name('one').value.should == 'foobar'
-  end
-end
+  describe '#copy' do
+    it 'copies a string to the keyboard' do
+      browser.copy
+      Clipboard.paste.should == 'foobar'
+    end
 
-describe '#cut!' do
-  before :each do
-    Clipboard.clear
-    browser.url = fixture('input_fields_value.html')
-    window.find_by_name('one').click
-    browser.select_all
+    it 'leaves the copied string alone' do
+      browser.copy
+      window.find_by_id('one').value.should == 'foobar'
+    end
   end
 
-  it 'copies a string to the keyboard' do
-    browser.cut!
-    Clipboard.paste.should == 'foobar'
+  describe '#cut' do
+    it 'copies a string to the keyboard' do
+      browser.cut
+      Clipboard.paste.should == 'foobar'
+    end
+
+    it 'removes the cut string' do
+      browser.cut
+      window.find_by_id('one').value.should == ''
+    end
   end
 
-  it 'removes the cut string' do
-    browser.cut!
-    window.find_by_name('one').value.should == ''
-  end
-end
+  describe '#paste' do
+    it 'pastes a copied string' do
+      browser.copy
+      window.find_by_id('two').click
+      browser.paste
+      window.find_by_id('two').value.should == 'foobar'
+    end
 
-describe '#paste' do
-  before :each do
-    Clipboard.clear
-    browser.url = fixture('input_fields_value.html')
-    window.find_by_name('one').click
-    browser.select_all
-  end
-
-  it 'pastes a copied string' do
-    browser.copy
-    window.find_by_name('two').click
-    browser.paste
-    window.find_by_name('two').value.should == 'foobar'
+    it 'pastes a cut string' do
+      browser.cut
+      window.find_by_id('two').click
+      browser.paste
+      window.find_by_id('two').value.should == 'foobar'
+    end
   end
 
-  it 'pastes a cut string' do
-    browser.cut
-    window.find_by_name('two').click
-    browser.paste
-    window.find_by_name('two').value.should == 'foobar'
-  end
 end

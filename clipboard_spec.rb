@@ -1,21 +1,16 @@
-# encoding: utf-8
 require File.expand_path('../watirspec_helper', __FILE__)
 
-# These tests use the clipboard gem. On Linux, this gem requires
-# the xclip package to be installed. On Win and Mac, it should
+# These tests use the clipboard gem.  On GNU/Linux, this gem requires
+# the xclip package to be installed.  On Windows and Mac, it should
 # work out of the box.
 require 'clipboard'
-
-
-# Clipboard API
-# ---------------
 
 describe 'Browser' do
 
   before :each do
     Clipboard.clear
     browser.url = fixture('input_fields_value.html')
-    window.find_by_id('one').click!
+    window.find_by_id('one').click
     browser.select_all
   end
 
@@ -38,9 +33,9 @@ describe 'Browser' do
     end
   end
 
-  describe '#cut!' do
+  describe '#cut' do
     it 'copies a string to the keyboard' do
-      browser.cut!
+      browser.cut
       Clipboard.paste.should == 'foobar'
     end
 
@@ -53,14 +48,14 @@ describe 'Browser' do
   describe '#paste' do
     it 'pastes a copied string' do
       browser.copy
-      window.find_by_id('two').click!
+      window.find_by_id('two').click
       browser.paste
       window.find_by_id('two').value.should == 'foobar'
     end
 
     it 'pastes a cut string' do
-      browser.cut!
-      window.find_by_id('two').click!
+      browser.cut
+      window.find_by_id('two').click
       browser.paste
       window.find_by_id('two').value.should == 'foobar'
     end

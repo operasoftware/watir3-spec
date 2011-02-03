@@ -13,7 +13,7 @@ describe 'Keys' do
       browser.url = fixture('two_input_fields.html')
       @one = window.find_by_name('one')
       @two = window.find_by_name('two')
-      @one.click!
+      @one.click
     end
 
     it 'types a single character' do
@@ -75,7 +75,7 @@ describe 'Keys' do
   describe '#down' do
     it 'types a mixed-case string by holding shift' do
       browser.url = fixture('two_input_fields.html')
-      window.find_by_name('one').click!
+      window.find_by_name('one').click
       browser.keys.send 'a'
       browser.keys.down :shift
       browser.keys.send 'b'
@@ -85,7 +85,7 @@ describe 'Keys' do
 
     it 'holds down a non-modifier key for one second' do
       browser.url = fixture('two_input_fields.html')
-      window.find_by_name('one').click!
+      window.find_by_name('one').click
       browser.keys.down 'a'
       sleep 1
       browser.keys.up 'a'
@@ -127,7 +127,7 @@ describe 'Keys' do
   describe '#up' do
     it 'types a mixed-case string by holding shift' do
       browser.url = fixture('two_input_fields.html')
-      window.find_by_name('one').click!
+      window.find_by_name('one').click
       browser.keys.down :shift
       browser.keys.send 'a'
       browser.keys.send 'b'  # Testing that we do not release prematurely
@@ -138,7 +138,7 @@ describe 'Keys' do
 
     it 'holds down a non-modifier key for one second (but no longer)' do
       browser.url = fixture('two_input_fields.html')
-      window.find_by_name('one').click!
+      window.find_by_name('one').click
       browser.keys.down 'a'
       sleep 1
       browser.keys.up 'a'
@@ -184,7 +184,7 @@ describe 'Keys' do
   describe '#release' do
     it 'releases one button' do
       browser.url = fixture('two_input_fields.html')
-      window.find_by_name('one').click!
+      window.find_by_name('one').click
       browser.keys.down :shift
       browser.keys.send 'a'
       browser.keys.release

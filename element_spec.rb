@@ -264,16 +264,16 @@ describe 'Element' do
     end
   end
 
-  # click!([x, y]) , x,y relative to element top left
-  describe '#click!' do
+  # click([x, y]) , x,y relative to element top left
+  describe '#click' do
     it 'follows links' do
-      window.find_by_id('link_3').first.click!
+      window.find_by_id('link_3').first.click
       window.url.should match /forms_with_input_elements\.html$/
     end
 
     it 'triggers onclick handlers' do
       div = window.find_by_id('best_language').first
-      div.click!
+      div.click
       div.text.should == 'Ruby!'
     end
 
@@ -281,9 +281,9 @@ describe 'Element' do
       browser.url = fixture('forms_with_input_elements.html')
       checkbox = window.find_by_id('new_user_interests_cars').first
       checkbox.checked?.should be_false
-      checkbox.click!
+      checkbox.click
       checkbox.checked?.should be_true
-      checkbox.click!
+      checkbox.click
       checkbox.checked?.should be_false
     end
 
@@ -293,8 +293,8 @@ describe 'Element' do
       browser.url = fixture('forms_with_input_elements.html')
 
       select = window.find_by_id('new_user_country')
-      select.click!
-      select.option[0].click!
+      select.click
+      select.option[0].click
       select.option[0].selected?.should be_true
     end
   end

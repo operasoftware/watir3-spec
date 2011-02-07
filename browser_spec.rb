@@ -48,9 +48,9 @@ describe 'Browser' do
     end
   end
 
-  describe '#quit!' do
+  describe '#quit' do
     before :each do
-      browser.quit!
+      browser.quit
     end
 
     it 'quits the browser' do
@@ -78,6 +78,7 @@ describe 'Browser' do
     end
   end
 
+=begin
   describe '#windows' do
     before :all do
       puts 'AFTER QUIT!'
@@ -106,6 +107,7 @@ describe 'Browser' do
     # TODO: Window selectors
 
   end
+=end
 
   describe '#version' do
     it 'fetches the version number of the driver' do
@@ -153,7 +155,7 @@ describe 'Browser' do
     end
 
     it 'is not attached to a browser instance' do
-      browser.quit!
+      browser.quit
       browser.connected?.should be_false
     end
   end

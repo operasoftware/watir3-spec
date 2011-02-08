@@ -2,10 +2,14 @@ require File.expand_path('../watirspec_helper', __FILE__)
 
 describe 'Preferences' do
 
-  before :all { @prefs = browser.preferences }
+  before :all do
+    @prefs = browser.preferences
+  end
 
   describe '#new' do
-    it 'constructs a new instance' { @prefs.exist? should be_true }
+    it 'constructs a new instance' do
+      @prefs.exist?.should be_true
+    end
   end
 
   describe '#to_s' do; end
@@ -24,10 +28,14 @@ describe 'Preferences' do
 
   describe 'Section' do  # Entry / Preferences#method_missing
 
-    before :all { @section = @prefs.link }
+    before :all do
+      @section = @prefs.link
+    end
       
     describe '#new' do
-      it 'constructs a new instance' { @section.exist? should be_true }
+      it 'constructs a new instance' do
+        @section.exist?.should be_true
+      end
     end
 
     describe '#value' do; end
@@ -37,22 +45,39 @@ describe 'Preferences' do
     describe '#each_key' do; end  # #each is an alias
 
     describe '#is_section?' do
-      it 'is a section' { @section.is_section? should be_true }
+      it 'is a section' do
+        @section.is_section?.should be_true
+      end
     end
 
     describe 'Keys' do  # Entry / Entry#method_missing
 
-      before :all { @key = @section.expiry }
+      before :all do
+        @key = @section.expiry
+      end
 
       describe '#type' do
-        it { @key.type.should include 'Integer' }
-        it { @section.color.type.should include 'Boolean' }
-        it { @prefs.opera_account.server_address.should include 'String' }
+        it '`expiry` is a type integer' do
+          @key.type.should include 'Integer'
+        end
+
+        it '`color` is a type boolean' do
+          @section.color.type.should include 'Boolean'
+        end
+
+        it '`opera_account.server_address` is a type string' do
+          @prefs.opera_account.server_address.should include 'String'
+        end
       end
 
       describe '#value' do
-        it { @key.value.should_not be_empty }
-        it { @key.value.should be_numeric }
+        it 'is not empty' do
+          @key.value.should_not be_empty
+        end
+
+        it 'is numeric' do
+          @key.value.should be_numeric
+        end
       end
 
       describe '#value=' do
@@ -100,7 +125,9 @@ describe 'Preferences' do
       describe '#each_key' do; end  # #each is an alias
 
       describe '#is_section?' do
-        it 'is not a section' { @key.is_section? should be_false }
+        it 'is not a section' do
+          @key.is_section?.should be_false
+        end
       end
 
     end
@@ -110,6 +137,8 @@ describe 'Preferences' do
   describe '#cleanup' do; end
   describe '#cleanup!' do; end
 
-  after :all { @prefs.cleanup! }
+  after :all do
+    @prefs.cleanup!
+  end
 
 end

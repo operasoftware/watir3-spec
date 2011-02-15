@@ -453,4 +453,31 @@ describe 'Element' do
 
   # style
 
+
+
+  # drag and drop
+  # -------------
+
+  describe '#drag_and_drop_by' do
+    it 'drags an element 100 pixels right and down' do
+      browser.url = fixture('draggable.html')
+      @draggable = window.find_by_id('draggable')
+
+      @draggable.location.to_s.should == 'x100y100'
+      @draggable.drag_and_drop_by(100,100)
+      @draggable.location.to_s.should == 'x200y200'
+    end
+  end
+
+  describe '#drag_and_drop_on' do
+    it 'drags one element onto another, triggering the correct events' do
+      browser.url = fixture('draggable.html')
+      @draggable = window.find_by_id('draggable')
+      @droppable = window.find_by_id('droppable')
+
+      @draggable.drag_and_drop_on(@droppable)
+      @droppable.text.should include 'Om nom nom!'
+    end
+  end
+
 end

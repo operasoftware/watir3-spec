@@ -284,32 +284,32 @@ describe 'Window' do
     end
   end
 
-  describe '#eval_js' do
+  describe '#execute_script' do
     it 'executes Javascript in the page' do
-      window.eval_js('document.title = "test"')
+      window.execute_script('document.title = "test"')
       window.title.should == 'test'
     end
 
     it 'returns an element when the Javascript does' do
-      window.eval_js('document.createElement("div")').tag_name.should match /div/i
+      window.execute_script('document.createElement("div")').tag_name.should match /div/i
     end
 
     it 'returns a number when the Javascript does' do
-      window.eval_js('Math.abs(-5)').should == 5
+      window.execute_script('Math.abs(-5)').should == 5
     end
 
     it 'returns a boolean when the Javascript does' do
-      window.eval_js('(function(){return true;})()').should be_true
+      window.execute_script('(function(){return true;})()').should be_true
     end
 
     it 'returns an array when the Javascript does' do
-      result = window.eval_js('["this", "is", "a", "test"]')  # WTR-227
+      result = window.execute_script('["this", "is", "a", "test"]')  # WTR-227
       result.length.should == 4
       result[3].should == 'test'
     end
 
     it 'returns a string when the result is not one of these types' do
-      window.eval_js('({one:"two"}).toString()').should == '[object Object]'
+      window.execute_script('({one:"two"}).toString()').should == '[object Object]'
     end
   end
 

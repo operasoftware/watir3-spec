@@ -427,14 +427,14 @@ describe 'Element' do
     end
   end
 
-  describe '#trigger!' do
+  describe '#fire_event' do
     it 'fires the given event on the element' do
-      window.find_by_id('link_3').first.trigger!('click')
+      window.find_by_id('link_3').fire_event :click
       browser.url.should include 'forms_with_input_elements.html'
     end
 
     it 'fires event handlers' do
-      window.find_by_id('html_test').first.trigger!('dblclick')
+      window.find_by_id('html_test').first.fire_event :dblclick
       window.find_by_id('messages').first.text.should include 'double clicked'
     end
   end

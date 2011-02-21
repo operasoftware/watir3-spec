@@ -121,7 +121,7 @@ describe 'Window' do
     end
 
     it 'changes when the title tag changes' do
-      window.find_by_tag(:title).first.text = 'changed'
+      window.execute_script('document.title = "changed"')
       window.title.should == 'changed'
     end
   end

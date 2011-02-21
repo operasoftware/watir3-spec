@@ -118,13 +118,6 @@ describe 'Browser' do
     end
   end
 
-  describe '#pid' do
-    it 'fetches the PID from the attached browser instance' do
-      browser.pid.should be_integer
-      browser.pid.should_not be_zero
-    end
-  end
-
   describe '#platform' do
     it 'fetches the platform the browser is running on' do
       # TODO: Improve regexp

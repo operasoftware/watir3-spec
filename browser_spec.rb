@@ -47,8 +47,13 @@ describe 'Browser' do
       browser.active_window.url.should == fixture('simple.html')
     end
   end
-=begin
+
   describe '#quit' do
+    it 'exists' do
+      browser.should respond_to :quit
+    end
+
+=begin
     before :each do
       browser.quit
     end
@@ -76,9 +81,10 @@ describe 'Browser' do
     after :all do
 #      OperaWatir::Helper.reconnect
     end
+=end
+
   end
 
-=end
 
 
 =begin

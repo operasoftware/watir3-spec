@@ -142,11 +142,12 @@ describe 'Browser' do
     it 'is attached to a browser instance' do
       browser.connected?.should be_true
     end
-
+=begin
     it 'is not attached to a browser instance' do
       browser.quit
       browser.connected?.should be_false
     end
+=end
   end
 
   describe '#desktop?' do

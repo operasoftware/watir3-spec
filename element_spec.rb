@@ -358,6 +358,7 @@ describe 'Element' do
       @radio_unchecked.checked?.should be_true
     end
   end
+  
   # uncheck!
   describe '#uncheck!' do
     before :each do
@@ -376,6 +377,7 @@ describe 'Element' do
     end
   end
 
+=begin
   # toggle_check!
   describe '#toggle_check!' do
     before :each do
@@ -406,6 +408,7 @@ describe 'Element' do
       disabled.enabled?.should be_true
     end
   end
+
   # disable!
   describe '#disable!' do
     it 'disables a form element' do
@@ -435,15 +438,16 @@ describe 'Element' do
       hidden.visible?.should be_false
     end
   end
+=end
 
-  describe '#trigger!' do
+  describe '#fire_event' do
     it 'fires the given event on the element' do
-      window.find_by_id('link_3').first.trigger!('click')
+      window.find_by_id('link_3').first.fire_event :click
       browser.url.should include 'forms_with_input_elements.html'
     end
 
     it 'fires event handlers' do
-      window.find_by_id('html_test').first.trigger!('dblclick')
+      window.find_by_id('html_test').first.fire_event :dblclick
       window.find_by_id('messages').first.text.should include 'double clicked'
     end
   end

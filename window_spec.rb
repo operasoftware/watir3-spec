@@ -121,7 +121,7 @@ describe 'Window' do
     end
 
     it 'changes when the title tag changes' do
-      window.find_by_tag(:title).first.text = 'changed'
+      window.execute_script('document.title = "changed"')
       window.title.should == 'changed'
     end
   end
@@ -209,107 +209,32 @@ describe 'Window' do
 
   # click(x,y)
 
-  describe '#type' do
-    it 'types the given characters' do
-      browser.url = fixture('forms_with_input_elements.html')
-      textbox = window.find_by_id('new_user_first_name').first
-      textbox.focus!
-      window.type('test')
-      textbox.attr(:value).should == 'test'
-    end
-
-    it 'sends keypress events' do
-      browser.url = fixture('keys.html')
-      window.type('hello')
-      window.find_by_id('log').text.should include 'press, 104, h,'
-      window.find_by_id('log').text.should include 'down, 69, E,'
-      window.find_by_id('log').text.should include 'up, 79, O,'
-    end
-  end
-
-  describe '#key' do
-    before :each do
-      browser.url = fixture('keys.html')
-    end
-
-    it 'presses and releases the given key' do
-      # TODO Is this how we should send ctrl/shift/alt?
-      window.key('ctrl')
-
-      window.find_by_id('log').text.should include 'down'
-      window.find_by_id('log').text.should include 'ctrl'
-      window.find_by_id('log').text.should include 'up'
-    end
-
-    it 'can press the home key' do
-      window.key('home')
-      window.find_by_id('log').text.should include 'press, 36'
-    end
-
-    it 'can press the tab key' do
-      window.key('tab')
-      window.find_by_id('log').text.should include 'press, 9'
-    end
-
-    it 'tabs through fields when tab is pressed' do
-      window.url = fixture('forms_with_input_elements.html')
-      window.key('tab')
-      window.find_by_id('new_user_first_name').focused?.should be_true
-    end
-
-    it 'can press the F3 key' do
-      window.key('f3')
-      window.find_by_id('log').text.should include 'press, 114'
-    end
-  end
-
-  describe '#key_down' do
-    it 'presses down the given key' do
-      browser.url = fixture('keys.html')
-      window.key_down('ctrl')
-      window.key_down('shift')
-      window.find_by_id('log').text.should include 'ctrl,shift'
-      # Don't leave them pressed down
-      window.key_up('ctrl')
-      window.key_up('shift')
-    end
-  end
-
-  describe '#key_up' do
-    it 'releases the given key' do
-      browser.url = fixture('keys.html')
-      window.key_down('ctrl')
-      window.key_up('ctrl')
-      window.find_by_id('log').text.should include 'up, 17'
-    end
-  end
-
-  describe '#eval_js' do
+  describe '#execute_script' do
     it 'executes Javascript in the page' do
-      window.eval_js('document.title = "test"')
+      window.execute_script('document.title = "test"')
       window.title.should == 'test'
     end
 
     it 'returns an element when the Javascript does' do
-      window.eval_js('document.createElement("div")').tag_name.should match /div/i
+      window.execute_script('document.createElement("div")').tag_name.should match /div/i
     end
 
     it 'returns a number when the Javascript does' do
-      window.eval_js('Math.abs(-5)').should == 5
+      window.execute_script('Math.abs(-5)').should == 5
     end
 
     it 'returns a boolean when the Javascript does' do
-      window.eval_js('(function(){return true;})()').should be_true
+      window.execute_script('(function(){return true;})()').should be_true
     end
 
     it 'returns an array when the Javascript does' do
-      result = window.eval_js('["this", "is", "a", "test"]')  # WTR-227
+      result = window.execute_script('["this", "is", "a", "test"]')  # WTR-227
       result.length.should == 4
       result[3].should == 'test'
     end
 
     it 'returns a string when the result is not one of these types' do
-      window.eval_js('({one:"two"}).toString()').should == '[object Object]'
+      window.execute_script('({one:"two"}).toString()').should == '[object Object]'
     end
   end
 

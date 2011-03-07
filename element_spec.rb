@@ -109,15 +109,6 @@ describe 'Element' do
     end
   end
 
-  # hash
-  describe '#visual_hash' do
-    it 'is the MD5 hash of the screenshot of the element' do
-      window.url = fixture('images.html')
-      # this hash is from from Watir 1
-      image = window.find_by_tag(:img)[1].visual_hash.should == '0x45688373bcf08d9ecf111ecb2bcb7c4e'
-    end
-  end
-
   # states
   # ------
 
@@ -358,7 +349,7 @@ describe 'Element' do
       @radio_unchecked.checked?.should be_true
     end
   end
-  
+
   # uncheck!
   describe '#uncheck!' do
     before :each do
@@ -442,7 +433,7 @@ describe 'Element' do
 
   describe '#fire_event' do
     it 'fires the given event on the element' do
-      window.find_by_id('link_3').first.fire_event :click
+      window.find_by_id('link_3').fire_event :click
       browser.url.should include 'forms_with_input_elements.html'
     end
 
@@ -456,5 +447,32 @@ describe 'Element' do
   # ----------
 
   # style
+
+
+
+  # drag and drop
+  # -------------
+
+  describe '#drag_and_drop_by' do
+    it 'drags an element 100 pixels right and down' do
+      browser.url = fixture('draggable.html')
+      @draggable = window.find_by_id('draggable')
+
+      @draggable.location.to_s.should == 'x100y100'
+      @draggable.drag_and_drop_by(100,100)
+      @draggable.location.to_s.should == 'x200y200'
+    end
+  end
+
+  describe '#drag_and_drop_on' do
+    it 'drags one element onto another, triggering the correct events' do
+      browser.url = fixture('draggable.html')
+      @draggable = window.find_by_id('draggable')
+      @droppable = window.find_by_id('droppable')
+
+      @draggable.drag_and_drop_on(@droppable)
+      @droppable.text.should include 'Om nom nom!'
+    end
+  end
 
 end

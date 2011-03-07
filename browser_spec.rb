@@ -48,15 +48,14 @@ describe 'Browser' do
   end
 
   describe '#quit' do
+    it 'exists' do
+      browser.should respond_to :quit
+    end
 =begin
     before :each do
       browser.quit
     end
-=end
-    it 'responds' do
-      browser.should respond_to :quit
-    end
-=begin
+
     it 'quits the browser' do
       browser.connected?.should be_false
     end
@@ -111,30 +110,10 @@ describe 'Browser' do
   end
 =end
 
-  describe '#version' do
-    it 'fetches the version number of the driver' do
-      browser.version.should match /\d{1,}\.\d{1,}\.\d{1,}/
-    end
-  end
-
-  describe '#pid' do
-    it 'fetches the PID from the attached browser instance' do
-      browser.pid.should be_integer
-      browser.pid.should_not be_zero
-    end
-  end
-
   describe '#platform' do
     it 'fetches the platform the browser is running on' do
       # TODO: Improve regexp
       browser.platform.should match /linux|windows|mac os x|bsd/i
-    end
-  end
-
-  describe '#build' do
-    it 'fetches the build number of the attached browser instance' do
-      browser.build.should be_integer
-      browser.build.should_not be_zero
     end
   end
 
@@ -155,11 +134,10 @@ describe 'Browser' do
     it 'returns a valid type' do
       browser.connected?.should be_kind_of (TrueClass || FalseClass)
     end
-    
+
     it 'is attached to a browser instance' do
       browser.connected?.should be_true
     end
-
 =begin
     it 'is not attached to a browser instance' do
       browser.quit

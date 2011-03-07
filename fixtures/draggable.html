@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<title>Draggable and drop (jQuery)</title>
+<style>
+  div {
+    border: 1px solid black;
+    padding: 10px;
+    position: absolute;
+  }
+
+  div#draggable {
+    height: 100px;
+    width: 100px;
+    top: 100px;
+    left: 100px;
+	}
+  div#droppable {
+    height: 200px;
+    width: 200px;
+    top: 300px;
+    left: 300px;
+  }
+</style>
+
+<script src='./javascript/jquery-1.4.4.min.js'></script>
+<script src='./javascript/jquery-ui-1.8.9.custom.min.js'></script>
+<script>
+  $(function() {
+    $("#draggable" ).draggable();
+
+    $( "#droppable" ).droppable({
+      drop: function( event, ui ) {
+        $( this )
+          .html( "Om nom nom!" );
+        }
+    });
+  });
+</script>
+
+
+<div id='draggable'>I am draggable.</div>
+
+<div id='droppable'>You can drop stuff here.</div>
+

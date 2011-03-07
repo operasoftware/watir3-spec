@@ -16,8 +16,8 @@ describe 'Browser' do
 
   describe '#select_all' do
     it 'selects the value of an input field' do
-      window.eval_js('one = document.getElementById("one");')
-      window.eval_js('one.value.substr(one.selectionStart, one.selectionEnd - one.selectionStart)').to_s.should == 'foobar'
+      window.execute_script('one = document.getElementById("one");')
+      window.execute_script('one.value.substr(one.selectionStart, one.selectionEnd - one.selectionStart)').to_s.should == 'foobar'
     end
   end
 

@@ -8,7 +8,7 @@ require 'server'
 
 require 'operawatir/helper'
 
-OperaWatir.api = 3
+OperaWatir.api = 2
 
 RSpec.configure do |config|
   config.mock_with :rr

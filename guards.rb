@@ -33,7 +33,7 @@ module WatirSpec
         yield unless guard.guarded?(OperaWatir::Helper.browser)
       end
     end
-        
+    
   end
 end
 

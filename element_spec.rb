@@ -355,6 +355,7 @@ describe 'Element' do
       @radio_unchecked.checked?.should be_true
     end
   end
+
   # uncheck!
   describe '#uncheck!' do
     before :each do
@@ -373,6 +374,7 @@ describe 'Element' do
     end
   end
 
+=begin
   # toggle_check!
   describe '#toggle_check!' do
     before :each do
@@ -403,6 +405,7 @@ describe 'Element' do
       disabled.enabled?.should be_true
     end
   end
+
   # disable!
   describe '#disable!' do
     it 'disables a form element' do
@@ -432,6 +435,7 @@ describe 'Element' do
       hidden.visible?.should be_false
     end
   end
+=end
 
   describe '#fire_event' do
     it 'fires the given event on the element' do

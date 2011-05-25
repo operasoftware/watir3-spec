@@ -369,6 +369,7 @@ describe 'Collection' do
       @collection.visible?.should be_false
     end
   end
+  
   # show!
   describe '#show!' do
     it 'shows all the elements' do

@@ -288,6 +288,12 @@ describe 'Element' do
       select.option[0].click
       select.option[0].selected?.should be_true
     end
+
+    it 'submits form when clicking a LABEL element tied to form submission' do
+      browser.url = fixture('label_submit.html')
+      window.find_by_tag('label').click
+      window.text.should include 'PASS'
+    end
   end
 
   describe '#mouse_down!' do

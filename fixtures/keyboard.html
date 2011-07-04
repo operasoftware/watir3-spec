@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Keyboard</title>
+  </head>
+  <body>
+    <h1>Keyboard</h1>
+
+    <p>
+      <span id="modifier"></span> <span id="key"></span>
+    </p>
+
+    <pre id="log"></pre>
+
+    <script src="keyboard.js"></script>
+
+    <script>
+      document.addEventListener("keydown", handler, false);
+      document.addEventListener("keyup", handler, false);
+      document.addEventListener("keypress", handler, false);
+    </script>
+  </body>
+</html>
